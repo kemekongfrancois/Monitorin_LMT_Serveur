@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Telnet.findAll", query = "SELECT t FROM Telnet t"),
     @NamedQuery(name = "Telnet.findByIdTache", query = "SELECT t FROM Telnet t WHERE t.idTache = :idTache"),
     @NamedQuery(name = "Telnet.findByPeriodeVerrification", query = "SELECT t FROM Telnet t WHERE t.periodeVerrification = :periodeVerrification"),
-    @NamedQuery(name = "Telnet.findByNom", query = "SELECT t FROM Telnet t WHERE t.nom = :nom"),
     @NamedQuery(name = "Telnet.findByStatue", query = "SELECT t FROM Telnet t WHERE t.statue = :statue")})
 public class Telnet implements Serializable {
 
@@ -40,12 +39,8 @@ public class Telnet implements Serializable {
     @NotNull
     @Column(name = "id_tache")
     private Integer idTache;
-    @Size(max = 254)
     @Column(name = "periode_verrification")
-    private String periodeVerrification;
-    @Size(max = 254)
-    @Column(name = "nom")
-    private String nom;
+    private Integer periodeVerrification;
     @Size(max = 254)
     @Column(name = "statue")
     private String statue;
@@ -68,20 +63,12 @@ public class Telnet implements Serializable {
         this.idTache = idTache;
     }
 
-    public String getPeriodeVerrification() {
+    public Integer getPeriodeVerrification() {
         return periodeVerrification;
     }
 
-    public void setPeriodeVerrification(String periodeVerrification) {
+    public void setPeriodeVerrification(Integer periodeVerrification) {
         this.periodeVerrification = periodeVerrification;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public String getStatue() {

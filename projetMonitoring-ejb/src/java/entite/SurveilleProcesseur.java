@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "SurveilleProcesseur.findAll", query = "SELECT s FROM SurveilleProcesseur s"),
     @NamedQuery(name = "SurveilleProcesseur.findByIdTache", query = "SELECT s FROM SurveilleProcesseur s WHERE s.idTache = :idTache"),
     @NamedQuery(name = "SurveilleProcesseur.findByPeriodeVerrification", query = "SELECT s FROM SurveilleProcesseur s WHERE s.periodeVerrification = :periodeVerrification"),
-    @NamedQuery(name = "SurveilleProcesseur.findByNom", query = "SELECT s FROM SurveilleProcesseur s WHERE s.nom = :nom"),
     @NamedQuery(name = "SurveilleProcesseur.findByStatue", query = "SELECT s FROM SurveilleProcesseur s WHERE s.statue = :statue")})
 public class SurveilleProcesseur implements Serializable {
 
@@ -40,12 +39,8 @@ public class SurveilleProcesseur implements Serializable {
     @NotNull
     @Column(name = "id_tache")
     private Integer idTache;
-    @Size(max = 254)
     @Column(name = "periode_verrification")
-    private String periodeVerrification;
-    @Size(max = 254)
-    @Column(name = "nom")
-    private String nom;
+    private Integer periodeVerrification;
     @Size(max = 254)
     @Column(name = "statue")
     private String statue;
@@ -68,20 +63,12 @@ public class SurveilleProcesseur implements Serializable {
         this.idTache = idTache;
     }
 
-    public String getPeriodeVerrification() {
+    public Integer getPeriodeVerrification() {
         return periodeVerrification;
     }
 
-    public void setPeriodeVerrification(String periodeVerrification) {
+    public void setPeriodeVerrification(Integer periodeVerrification) {
         this.periodeVerrification = periodeVerrification;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public String getStatue() {

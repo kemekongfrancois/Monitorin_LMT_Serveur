@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Pings.findAll", query = "SELECT p FROM Pings p"),
     @NamedQuery(name = "Pings.findByIdTache", query = "SELECT p FROM Pings p WHERE p.idTache = :idTache"),
     @NamedQuery(name = "Pings.findByPeriodeVerrification", query = "SELECT p FROM Pings p WHERE p.periodeVerrification = :periodeVerrification"),
-    @NamedQuery(name = "Pings.findByNom", query = "SELECT p FROM Pings p WHERE p.nom = :nom"),
     @NamedQuery(name = "Pings.findByStatue", query = "SELECT p FROM Pings p WHERE p.statue = :statue")})
 public class Pings implements Serializable {
 
@@ -44,12 +43,8 @@ public class Pings implements Serializable {
     @NotNull
     @Column(name = "id_tache")
     private Integer idTache;
-    @Size(max = 254)
     @Column(name = "periode_verrification")
-    private String periodeVerrification;
-    @Size(max = 254)
-    @Column(name = "nom")
-    private String nom;
+    private Integer periodeVerrification;
     @Size(max = 254)
     @Column(name = "statue")
     private String statue;
@@ -74,20 +69,12 @@ public class Pings implements Serializable {
         this.idTache = idTache;
     }
 
-    public String getPeriodeVerrification() {
+    public Integer getPeriodeVerrification() {
         return periodeVerrification;
     }
 
-    public void setPeriodeVerrification(String periodeVerrification) {
+    public void setPeriodeVerrification(Integer periodeVerrification) {
         this.periodeVerrification = periodeVerrification;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public String getStatue() {

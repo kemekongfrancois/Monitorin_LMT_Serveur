@@ -31,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "SurveilleFichierExiste.findByIdTache", query = "SELECT s FROM SurveilleFichierExiste s WHERE s.idTache = :idTache"),
     @NamedQuery(name = "SurveilleFichierExiste.findByCheminDuFichier", query = "SELECT s FROM SurveilleFichierExiste s WHERE s.cheminDuFichier = :cheminDuFichier"),
     @NamedQuery(name = "SurveilleFichierExiste.findByPeriodeVerrification", query = "SELECT s FROM SurveilleFichierExiste s WHERE s.periodeVerrification = :periodeVerrification"),
-    @NamedQuery(name = "SurveilleFichierExiste.findByNom", query = "SELECT s FROM SurveilleFichierExiste s WHERE s.nom = :nom"),
     @NamedQuery(name = "SurveilleFichierExiste.findByStatue", query = "SELECT s FROM SurveilleFichierExiste s WHERE s.statue = :statue")})
 public class SurveilleFichierExiste implements Serializable {
 
@@ -44,12 +43,8 @@ public class SurveilleFichierExiste implements Serializable {
     @Size(max = 254)
     @Column(name = "chemin_du_fichier")
     private String cheminDuFichier;
-    @Size(max = 254)
     @Column(name = "periode_verrification")
-    private String periodeVerrification;
-    @Size(max = 254)
-    @Column(name = "nom")
-    private String nom;
+    private Integer periodeVerrification;
     @Size(max = 254)
     @Column(name = "statue")
     private String statue;
@@ -80,20 +75,12 @@ public class SurveilleFichierExiste implements Serializable {
         this.cheminDuFichier = cheminDuFichier;
     }
 
-    public String getPeriodeVerrification() {
+    public Integer getPeriodeVerrification() {
         return periodeVerrification;
     }
 
-    public void setPeriodeVerrification(String periodeVerrification) {
+    public void setPeriodeVerrification(Integer periodeVerrification) {
         this.periodeVerrification = periodeVerrification;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public String getStatue() {

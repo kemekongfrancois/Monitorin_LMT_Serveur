@@ -6,16 +6,14 @@
 package entite;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,27 +26,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SurveillerDd.findAll", query = "SELECT s FROM SurveillerDd s"),
-    @NamedQuery(name = "SurveillerDd.findByIdTache", query = "SELECT s FROM SurveillerDd s WHERE s.idTache = :idTache"),
+    @NamedQuery(name = "SurveillerDd.findByIdTache", query = "SELECT s FROM SurveillerDd s WHERE s.surveillerDdPK.idTache = :idTache"),
+    @NamedQuery(name = "SurveillerDd.findByStatue", query = "SELECT s FROM SurveillerDd s WHERE s.statue = :statue"),
+    @NamedQuery(name = "SurveillerDd.findByLettrePartition", query = "SELECT s FROM SurveillerDd s WHERE s.surveillerDdPK.lettrePartition = :lettrePartition"),
     @NamedQuery(name = "SurveillerDd.findByPeriodeVerrification", query = "SELECT s FROM SurveillerDd s WHERE s.periodeVerrification = :periodeVerrification"),
-    @NamedQuery(name = "SurveillerDd.findByNom", query = "SELECT s FROM SurveillerDd s WHERE s.nom = :nom"),
-    @NamedQuery(name = "SurveillerDd.findByStatue", query = "SELECT s FROM SurveillerDd s WHERE s.statue = :statue")})
+    @NamedQuery(name = "SurveillerDd.findBySeuilPourAlerte", query = "SELECT s FROM SurveillerDd s WHERE s.seuilPourAlerte = :seuilPourAlerte")})
 public class SurveillerDd implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_tache")
-    private Integer idTache;
-    @Size(max = 254)
-    @Column(name = "periode_verrification")
-    private String periodeVerrification;
-    @Size(max = 254)
-    @Column(name = "nom")
-    private String nom;
+    @EmbeddedId
+    protected SurveillerDdPK surveillerDdPK;
     @Size(max = 254)
     @Column(name = "statue")
     private String statue;
+    @Column(name = "periode_verrification")
+    private Integer periodeVerrification;
+    @Column(name = "seuil_pour_alerte")
+    private Integer seuilPourAlerte;
     @JoinColumn(name = "id_machine", referencedColumnName = "id_machine")
     @ManyToOne
     private Machine idMachine;
@@ -56,32 +50,20 @@ public class SurveillerDd implements Serializable {
     public SurveillerDd() {
     }
 
-    public SurveillerDd(Integer idTache) {
-        this.idTache = idTache;
+    public SurveillerDd(SurveillerDdPK surveillerDdPK) {
+        this.surveillerDdPK = surveillerDdPK;
     }
 
-    public Integer getIdTache() {
-        return idTache;
+    public SurveillerDd(int idTache, String lettrePartition) {
+        this.surveillerDdPK = new SurveillerDdPK(idTache, lettrePartition);
     }
 
-    public void setIdTache(Integer idTache) {
-        this.idTache = idTache;
+    public SurveillerDdPK getSurveillerDdPK() {
+        return surveillerDdPK;
     }
 
-    public String getPeriodeVerrification() {
-        return periodeVerrification;
-    }
-
-    public void setPeriodeVerrification(String periodeVerrification) {
-        this.periodeVerrification = periodeVerrification;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setSurveillerDdPK(SurveillerDdPK surveillerDdPK) {
+        this.surveillerDdPK = surveillerDdPK;
     }
 
     public String getStatue() {
@@ -90,6 +72,22 @@ public class SurveillerDd implements Serializable {
 
     public void setStatue(String statue) {
         this.statue = statue;
+    }
+
+    public Integer getPeriodeVerrification() {
+        return periodeVerrification;
+    }
+
+    public void setPeriodeVerrification(Integer periodeVerrification) {
+        this.periodeVerrification = periodeVerrification;
+    }
+
+    public Integer getSeuilPourAlerte() {
+        return seuilPourAlerte;
+    }
+
+    public void setSeuilPourAlerte(Integer seuilPourAlerte) {
+        this.seuilPourAlerte = seuilPourAlerte;
     }
 
     public Machine getIdMachine() {
@@ -103,7 +101,7 @@ public class SurveillerDd implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idTache != null ? idTache.hashCode() : 0);
+        hash += (surveillerDdPK != null ? surveillerDdPK.hashCode() : 0);
         return hash;
     }
 
@@ -114,7 +112,7 @@ public class SurveillerDd implements Serializable {
             return false;
         }
         SurveillerDd other = (SurveillerDd) object;
-        if ((this.idTache == null && other.idTache != null) || (this.idTache != null && !this.idTache.equals(other.idTache))) {
+        if ((this.surveillerDdPK == null && other.surveillerDdPK != null) || (this.surveillerDdPK != null && !this.surveillerDdPK.equals(other.surveillerDdPK))) {
             return false;
         }
         return true;
@@ -122,7 +120,7 @@ public class SurveillerDd implements Serializable {
 
     @Override
     public String toString() {
-        return "entite.SurveillerDd[ idTache=" + idTache + " ]";
+        return "entite.SurveillerDd[ surveillerDdPK=" + surveillerDdPK + " ]";
     }
     
 }
