@@ -11,6 +11,7 @@ import entite.Machine;
 import entite.Tache;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -26,7 +27,7 @@ import until.Until;
  */
 @WebService(serviceName = "WsMonitoring")
 public class WsMonitoring {
-    private final String DEFAUL_PERIODE_CHECK_MACHINE = "2 * * * * ?";//represente la valeur par defaut de la période de check des machine
+    private final String DEFAUL_PERIODE_CHECK_MACHINE = "* * * * * ?";//represente la valeur par defaut de la période de check des machine
     private final String PAUSE = "PAUSE";
     private final String START = "START";
     private final String STOP = "STOP";
@@ -40,22 +41,22 @@ public class WsMonitoring {
      */
     @WebMethod(operationName = "hello")
     public String hello(@WebParam(name = "name") String txt) {
+        String adressTest = "172.16.4.2";
+        String periodeCLient = " 0-30 * * * * ?";
+        int SeuilAlertDD = 80;
+        
         String resultat = "";
        
-        //resultat += "\ncreation de la machine"+creerMachine("172.16.4.2", "8088", "Windows", "KEF");
-        //resultat += "\ncreation de la machine"+creerTacheSurveilleDD("172.16.4.2", "2 * * * * ?",80, "c");
+        //resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8080", DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
+        resultat += "\ncreation de la tache DD"+bean.creerTacheSurveilleDD(adressTest, periodeCLient, "c:", SeuilAlertDD, START);     
         
-        
-       WSClientMonitoring ws = appelWSClient("172.16.4.2", "8088");
-       resultat += "\n"+ ws.hello(PAUSE);
+       //WSClientMonitoring ws = appelWSClient(adressTest, "8088");
+       //resultat += "\n"+ ws.hello(PAUSE);
         
         return "Hello je suis le WSServeur " + txt + " !" + resultat ;
     }
     /**
-     * cette fonction permet d'ouvrire une connection web service ver un client
-     * @param adresse
-     * @param port
-     * @return 
+     * cette fonction permet d'ouvrire une connection web service ver un client 
      */
     private WSClientMonitoring appelWSClient(String adresse, String port){
         URL url = null;
@@ -86,6 +87,16 @@ public class WsMonitoring {
         return bean.verifiOuCreerMachine(AdresIP,port, DEFAUL_PERIODE_CHECK_MACHINE, nonOS, nomMachine);
     }
     
+    @WebMethod
+    public Machine getMachine(@WebParam(name = "AdresIP")String AdresIP){
+        return bean.getMachine(AdresIP);
+    }
+    
+    @WebMethod
+    public List<Tache> getListTacheMachine(@WebParam(name = "AdresIP")String ipAdresse){
+        return bean.getListTacheMachine(ipAdresse);
+    }
+    /*
     public Tache creerTacheSurveilleDD(
             @WebParam(name = "adresIpMachine") String adresIpMachine, 
             @WebParam(name = "periode") String periode,
@@ -94,4 +105,5 @@ public class WsMonitoring {
             @WebParam(name = "lettre_partition") String lettre_partition){
         return bean.creerTacheSurveilleDD(adresIpMachine, periode, lettre_partition,seuil, STOP);
     }
+    */
 }
