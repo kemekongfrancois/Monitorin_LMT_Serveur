@@ -6,14 +6,15 @@
 package sessionBean;
 
 import entite.Machine;
-import entite.SurveillerDd;
-import entite.SurveillerDdPK;
+import entite.Tache;
+import entite.TachePK;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import until.Until;
 
 /**
  *
@@ -21,9 +22,10 @@ import javax.persistence.Query;
  */
 @Stateless
 public class Bean {
-    public static String OSWINDOWS = "Windows";
-    public static String OSLinux= "Linux";
-    public static String OK = "ok";
+    public static final String OSWINDOWS = "Windows";
+    public static final String OSLinux= "Linux";
+    public static final String OK = "ok";
+    public static final String TACHE_DD = "surveiller_dd";
             
 
     @PersistenceContext(unitName = "projetMonitoring-ejbPU")
@@ -35,12 +37,13 @@ public class Bean {
             return OK;
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
+            Until.savelog("impossible d'écrire dans la BD \n"+e, Until.fichieLog);
             return "ko"+ e;
         }
     }
 
  
-    public Machine creerMachine(String AdresIP,String port,int periodeCheck, String nonOS, String nomMachine) {
+    public Machine creerMachine(String AdresIP,String port,String periodeCheck, String nonOS, String nomMachine) {
         Machine machine = new Machine();
         machine.setAdresseIP(AdresIP);
         machine.setPortEcoute(port);
@@ -71,7 +74,7 @@ public class Bean {
      * @param nomMachine
      * @return null en cas de pb
      */
-    public Machine verifiOuCreerMachine(String adresIP,String port,int periodeCheck, String nonOS, String nomMachine){
+    public Machine verifiOuCreerMachine(String adresIP,String port,String periodeCheck, String nonOS, String nomMachine){
         Machine machine = getMachine(adresIP);
         if(machine==null){//la machine n'existe pas on la créer
             return creerMachine(adresIP,port,periodeCheck, nonOS, nomMachine);//on créer l'objet dans la BD
@@ -80,27 +83,27 @@ public class Bean {
         }   
     }
     
-    private SurveillerDd getSurveillerDd(int IdMachine, String lettre_partition){
-        SurveillerDdPK cle = new SurveillerDdPK(IdMachine, lettre_partition);
-        return em.find(SurveillerDd.class, cle);
+    private Tache getTache(int IdMachine, String cleTache){
+        TachePK cle = new TachePK(IdMachine, cleTache);
+        return em.find(Tache.class, cle);
     }
     
-    public SurveillerDd creerTacheSurveilleDD(String adresIpMachine, int periode, String lettre_partition,int seuil, String statue){
-        SurveillerDd tacheDD = new SurveillerDd();
+    public Tache creerTacheSurveilleDD(String adresIpMachine, String periodeVerrification, String lettre_partition,int seuil, String statue){
+        Tache tacheDD = new Tache();
         Machine machine = getMachine(adresIpMachine);
         if(machine==null){
             String msg = "machine inexistante";
             System.out.println(msg);
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, msg);
             return null;
         }else{//la machine existe on creer la tache
-            tacheDD.setIdMachine(machine);
-            tacheDD.setSurveillerDdPK(new SurveillerDdPK(machine.getIdMachine(), lettre_partition));
-            tacheDD.setPeriodeVerrification(periode);
-            tacheDD.setSeuilPourAlerte(seuil);
+            tacheDD.setTypeTache(TACHE_DD);
+            tacheDD.setTachePK(new TachePK(machine.getIdMachine(), lettre_partition));
+            tacheDD.setSeuilAlerte(seuil);
+            tacheDD.setPeriodeVerrification(periodeVerrification);
             tacheDD.setStatue(statue);
+            
             persist(tacheDD);//on enregistre la tache dans la BD
-            return getSurveillerDd(machine.getIdMachine(), lettre_partition);
+            return getTache(machine.getIdMachine(), lettre_partition);
         }    
     }  
 }

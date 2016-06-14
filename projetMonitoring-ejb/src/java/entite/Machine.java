@@ -8,6 +8,7 @@ package entite;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -59,20 +60,11 @@ public class Machine implements Serializable {
     @Size(max = 254)
     @Column(name = "type_OS")
     private String typeOS;
+    @Size(max = 254)
     @Column(name = "periode_de_check")
-    private Integer periodeDeCheck;
-    @OneToMany(mappedBy = "idMachine")
-    private List<SurveilleProcesseur> surveilleProcesseurList;
-    @OneToMany(mappedBy = "idMachine")
-    private List<SurveillerDd> surveillerDdList;
-    @OneToMany(mappedBy = "idMachine")
-    private List<SurveilleFichierTaille> surveilleFichierTailleList;
-    @OneToMany(mappedBy = "idMachine")
-    private List<Telnet> telnetList;
-    @OneToMany(mappedBy = "idMachine")
-    private List<Pings> pingsList;
-    @OneToMany(mappedBy = "idMachine")
-    private List<SurveilleFichierExiste> surveilleFichierExisteList;
+    private String periodeDeCheck;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "machine")
+    private List<Tache> tacheList;
 
     public Machine() {
     }
@@ -126,66 +118,21 @@ public class Machine implements Serializable {
         this.typeOS = typeOS;
     }
 
-    public Integer getPeriodeDeCheck() {
+    public String getPeriodeDeCheck() {
         return periodeDeCheck;
     }
 
-    public void setPeriodeDeCheck(Integer periodeDeCheck) {
+    public void setPeriodeDeCheck(String periodeDeCheck) {
         this.periodeDeCheck = periodeDeCheck;
     }
 
     @XmlTransient
-    public List<SurveilleProcesseur> getSurveilleProcesseurList() {
-        return surveilleProcesseurList;
+    public List<Tache> getTacheList() {
+        return tacheList;
     }
 
-    public void setSurveilleProcesseurList(List<SurveilleProcesseur> surveilleProcesseurList) {
-        this.surveilleProcesseurList = surveilleProcesseurList;
-    }
-
-    @XmlTransient
-    public List<SurveillerDd> getSurveillerDdList() {
-        return surveillerDdList;
-    }
-
-    public void setSurveillerDdList(List<SurveillerDd> surveillerDdList) {
-        this.surveillerDdList = surveillerDdList;
-    }
-
-    @XmlTransient
-    public List<SurveilleFichierTaille> getSurveilleFichierTailleList() {
-        return surveilleFichierTailleList;
-    }
-
-    public void setSurveilleFichierTailleList(List<SurveilleFichierTaille> surveilleFichierTailleList) {
-        this.surveilleFichierTailleList = surveilleFichierTailleList;
-    }
-
-    @XmlTransient
-    public List<Telnet> getTelnetList() {
-        return telnetList;
-    }
-
-    public void setTelnetList(List<Telnet> telnetList) {
-        this.telnetList = telnetList;
-    }
-
-    @XmlTransient
-    public List<Pings> getPingsList() {
-        return pingsList;
-    }
-
-    public void setPingsList(List<Pings> pingsList) {
-        this.pingsList = pingsList;
-    }
-
-    @XmlTransient
-    public List<SurveilleFichierExiste> getSurveilleFichierExisteList() {
-        return surveilleFichierExisteList;
-    }
-
-    public void setSurveilleFichierExisteList(List<SurveilleFichierExiste> surveilleFichierExisteList) {
-        this.surveilleFichierExisteList = surveilleFichierExisteList;
+    public void setTacheList(List<Tache> tacheList) {
+        this.tacheList = tacheList;
     }
 
     @Override

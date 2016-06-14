@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author KEF10
  */
 @Entity
-@Table(name = "adresse_ping")
+@Table(name = "adresse_telnet")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AdressePing.findAll", query = "SELECT a FROM AdressePing a"),
-    @NamedQuery(name = "AdressePing.findByAdresseIP", query = "SELECT a FROM AdressePing a WHERE a.adresseIP = :adresseIP"),
-    @NamedQuery(name = "AdressePing.findByNom", query = "SELECT a FROM AdressePing a WHERE a.nom = :nom")})
-public class AdressePing implements Serializable {
+    @NamedQuery(name = "AdresseTelnet.findAll", query = "SELECT a FROM AdresseTelnet a"),
+    @NamedQuery(name = "AdresseTelnet.findByAdresseIP", query = "SELECT a FROM AdresseTelnet a WHERE a.adresseIP = :adresseIP"),
+    @NamedQuery(name = "AdresseTelnet.findByNom", query = "SELECT a FROM AdresseTelnet a WHERE a.nom = :nom")})
+public class AdresseTelnet implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,12 +47,12 @@ public class AdressePing implements Serializable {
         @JoinColumn(name = "id_machine", referencedColumnName = "id_machine"),
         @JoinColumn(name = "cle_tache", referencedColumnName = "cle_tache")})
     @ManyToOne(optional = false)
-    private Pings pings;
+    private Telnet telnet;
 
-    public AdressePing() {
+    public AdresseTelnet() {
     }
 
-    public AdressePing(String adresseIP) {
+    public AdresseTelnet(String adresseIP) {
         this.adresseIP = adresseIP;
     }
 
@@ -72,12 +72,12 @@ public class AdressePing implements Serializable {
         this.nom = nom;
     }
 
-    public Pings getPings() {
-        return pings;
+    public Telnet getTelnet() {
+        return telnet;
     }
 
-    public void setPings(Pings pings) {
-        this.pings = pings;
+    public void setTelnet(Telnet telnet) {
+        this.telnet = telnet;
     }
 
     @Override
@@ -90,10 +90,10 @@ public class AdressePing implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AdressePing)) {
+        if (!(object instanceof AdresseTelnet)) {
             return false;
         }
-        AdressePing other = (AdressePing) object;
+        AdresseTelnet other = (AdresseTelnet) object;
         if ((this.adresseIP == null && other.adresseIP != null) || (this.adresseIP != null && !this.adresseIP.equals(other.adresseIP))) {
             return false;
         }
@@ -102,7 +102,7 @@ public class AdressePing implements Serializable {
 
     @Override
     public String toString() {
-        return "entite.AdressePing[ adresseIP=" + adresseIP + " ]";
+        return "entite.AdresseTelnet[ adresseIP=" + adresseIP + " ]";
     }
     
 }

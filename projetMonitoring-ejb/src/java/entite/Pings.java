@@ -7,19 +7,16 @@ package entite;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumns;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,57 +29,38 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Pings.findAll", query = "SELECT p FROM Pings p"),
-    @NamedQuery(name = "Pings.findByIdTache", query = "SELECT p FROM Pings p WHERE p.idTache = :idTache"),
-    @NamedQuery(name = "Pings.findByPeriodeVerrification", query = "SELECT p FROM Pings p WHERE p.periodeVerrification = :periodeVerrification"),
-    @NamedQuery(name = "Pings.findByStatue", query = "SELECT p FROM Pings p WHERE p.statue = :statue")})
+    @NamedQuery(name = "Pings.findByIdMachine", query = "SELECT p FROM Pings p WHERE p.pingsPK.idMachine = :idMachine"),
+    @NamedQuery(name = "Pings.findByCleTache", query = "SELECT p FROM Pings p WHERE p.pingsPK.cleTache = :cleTache")})
 public class Pings implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_tache")
-    private Integer idTache;
-    @Column(name = "periode_verrification")
-    private Integer periodeVerrification;
-    @Size(max = 254)
-    @Column(name = "statue")
-    private String statue;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTache")
+    @EmbeddedId
+    protected PingsPK pingsPK;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pings")
     private List<AdressePing> adressePingList;
-    @JoinColumn(name = "id_machine", referencedColumnName = "id_machine")
-    @ManyToOne
-    private Machine idMachine;
+    @JoinColumns({
+        @JoinColumn(name = "id_machine", referencedColumnName = "id_machine", insertable = false, updatable = false),
+        @JoinColumn(name = "cle_tache", referencedColumnName = "cle_tache", insertable = false, updatable = false)})
+    @OneToOne(optional = false)
+    private Tache tache;
 
     public Pings() {
     }
 
-    public Pings(Integer idTache) {
-        this.idTache = idTache;
+    public Pings(PingsPK pingsPK) {
+        this.pingsPK = pingsPK;
     }
 
-    public Integer getIdTache() {
-        return idTache;
+    public Pings(int idMachine, String cleTache) {
+        this.pingsPK = new PingsPK(idMachine, cleTache);
     }
 
-    public void setIdTache(Integer idTache) {
-        this.idTache = idTache;
+    public PingsPK getPingsPK() {
+        return pingsPK;
     }
 
-    public Integer getPeriodeVerrification() {
-        return periodeVerrification;
-    }
-
-    public void setPeriodeVerrification(Integer periodeVerrification) {
-        this.periodeVerrification = periodeVerrification;
-    }
-
-    public String getStatue() {
-        return statue;
-    }
-
-    public void setStatue(String statue) {
-        this.statue = statue;
+    public void setPingsPK(PingsPK pingsPK) {
+        this.pingsPK = pingsPK;
     }
 
     @XmlTransient
@@ -94,18 +72,18 @@ public class Pings implements Serializable {
         this.adressePingList = adressePingList;
     }
 
-    public Machine getIdMachine() {
-        return idMachine;
+    public Tache getTache() {
+        return tache;
     }
 
-    public void setIdMachine(Machine idMachine) {
-        this.idMachine = idMachine;
+    public void setTache(Tache tache) {
+        this.tache = tache;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idTache != null ? idTache.hashCode() : 0);
+        hash += (pingsPK != null ? pingsPK.hashCode() : 0);
         return hash;
     }
 
@@ -116,7 +94,7 @@ public class Pings implements Serializable {
             return false;
         }
         Pings other = (Pings) object;
-        if ((this.idTache == null && other.idTache != null) || (this.idTache != null && !this.idTache.equals(other.idTache))) {
+        if ((this.pingsPK == null && other.pingsPK != null) || (this.pingsPK != null && !this.pingsPK.equals(other.pingsPK))) {
             return false;
         }
         return true;
@@ -124,7 +102,7 @@ public class Pings implements Serializable {
 
     @Override
     public String toString() {
-        return "entite.Pings[ idTache=" + idTache + " ]";
+        return "entite.Pings[ pingsPK=" + pingsPK + " ]";
     }
     
 }
