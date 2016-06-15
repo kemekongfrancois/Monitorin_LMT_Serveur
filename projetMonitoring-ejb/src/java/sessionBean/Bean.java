@@ -38,7 +38,7 @@ public class Bean {
             return OK;
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
-            Until.savelog("impossible d'écrire dans la BD \n" + e, Until.fichieLog);
+            //Until.savelog("impossible d'écrire dans la BD \n" + e, Until.fichieLog);
             return "ko" + e;
         }
     }

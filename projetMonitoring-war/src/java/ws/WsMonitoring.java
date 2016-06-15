@@ -66,7 +66,7 @@ public class WsMonitoring {
             url = new URL("http://" + adresse + ":" + port + "/WSClientMonitoring?wsdl");
         } catch (MalformedURLException ex) {
             Logger.getLogger(WsMonitoring.class.getName()).log(Level.SEVERE, null, ex);
-            Until.savelog("Adresse du serveur ou port invalide \n"+ex, Until.fichieLog);
+            //Until.savelog("Adresse du serveur ou port invalide \n"+ex, Until.fichieLog);
         }
         WSClientMonitoringService service = new WSClientMonitoringService(url);
         return service.getWSClientMonitoringPort();

@@ -69,7 +69,7 @@ public class Until {
      * @param msg
      * @param nomfichier
      */
-    public static void savelog(String msg, String nomfichier) {
+    private static void savelog(String msg, String nomfichier) {
         BufferedWriter bufWriter = null;
         FileWriter fileWriter = null;
         try {
