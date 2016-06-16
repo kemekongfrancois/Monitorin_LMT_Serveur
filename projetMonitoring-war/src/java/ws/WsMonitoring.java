@@ -27,7 +27,7 @@ import until.Until;
  */
 @WebService(serviceName = "WsMonitoring")
 public class WsMonitoring {
-    private final String DEFAUL_PERIODE_CHECK_MACHINE = "* * * * * ?";//represente la valeur par defaut de la période de check des machine
+    private final String DEFAUL_PERIODE_CHECK_MACHINE = "* * * * * ?";//represente la valeur par defaut de la période de check des machine 
     private final String PAUSE = "PAUSE";
     private final String START = "START";
     private final String STOP = "STOP";
