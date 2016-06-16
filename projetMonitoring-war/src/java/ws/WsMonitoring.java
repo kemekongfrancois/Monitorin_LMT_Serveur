@@ -47,11 +47,11 @@ public class WsMonitoring {
         
         String resultat = "";
        
-        //resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8080", DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
+        resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8080", DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
         resultat += "\ncreation de la tache DD"+bean.creerTacheSurveilleDD(adressTest, periodeCLient, "c:", SeuilAlertDD, START);     
         
-       //WSClientMonitoring ws = appelWSClient(adressTest, "8088");
-       //resultat += "\n"+ ws.hello(PAUSE);
+       WSClientMonitoring ws = appelWSClient(adressTest, "8088");
+       resultat += "\n l'autre "+ ws.hello(PAUSE);
         
         return "Hello je suis le WSServeur " + txt + " !" + resultat ;
     }

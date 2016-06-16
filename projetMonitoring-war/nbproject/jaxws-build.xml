@@ -59,21 +59,5 @@
         <delete dir="${build.generated.sources.dir}/jax-ws/clientWS"/>
         <delete dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
     </target>
-    <target name="wsimport-client-WSClientMonitoring_1" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring_1"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring_1" destdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring_1" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/WSClientMonitoring_1/wsdl/172.16.4.2_8088/WSClientMonitoring.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://172.16.4.2:8088/WSClientMonitoring?wsdl" xnocompile="true" xendorsed="true" package="ws.wsClient">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/WSClientMonitoring_1/wsdl/172.16.4.2_8088/WSClientMonitoring.wsdl"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring_1"/>
-        </wsimport>
-        <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring_1">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="wsimport-client-clean-WSClientMonitoring_1" depends="-init-project">
-        <delete dir="${build.generated.sources.dir}/jax-ws/ws/wsClient"/>
-        <delete dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring_1"/>
-    </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-WSClientMonitoring, wsimport-client-WSClientMonitoring_1"/>
+    <target name="wsimport-client-generate" depends="wsimport-client-WSClientMonitoring"/>
 </project>

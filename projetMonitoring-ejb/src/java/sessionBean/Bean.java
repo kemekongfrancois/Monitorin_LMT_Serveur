@@ -37,14 +37,28 @@ public class Bean {
             em.persist(object);
             return OK;
         } catch (Exception e) {
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, object+": impossible d'écrire cet objet dans la BD", e);
             //Until.savelog("impossible d'écrire dans la BD \n" + e, Until.fichieLog);
             return "ko" + e;
         }
     }
 
+    /**
+     * si ladresse ip es déja donnée à une machine on retourne null
+     * @param AdresIP
+     * @param port
+     * @param periodeCheck
+     * @param nonOS
+     * @param nomMachine
+     * @return 
+     */
     public Machine creerMachine(String AdresIP, String port, String periodeCheck, String nonOS, String nomMachine) {
-        Machine machine = new Machine();
+        Machine machine = getMachine(AdresIP);
+        if(machine!=null){//l'adresse ip es déja utilisé
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE,AdresIP+ ": cette adresse es déja utilisé");
+            return null;
+        }
+        machine = new Machine();
         machine.setAdresseIP(AdresIP);
         machine.setPortEcoute(port);
         machine.setNomMachine(nomMachine);
@@ -63,8 +77,7 @@ public class Bean {
         Query query = em.createNamedQuery("Machine.findByAdresseIP");
         query.setParameter("adresseIP", AdresIP);
         if (query.getResultList().isEmpty()) {
-            String msg = "machine inexistante";
-            System.out.println(msg);
+            Logger.getLogger(Bean.class.getName()).log(Level.WARNING,"machine inexistante");
             return null;
         } else {
             return (Machine) query.getSingleResult();
@@ -95,8 +108,7 @@ public class Bean {
         TachePK cle = new TachePK(IdMachine, cleTache);
         Tache tache = em.find(Tache.class, cle);
         if (tache==null){
-            String msg = "Tache inexistante";
-            System.out.println(msg);
+            Logger.getLogger(Bean.class.getName()).log(Level.WARNING,"Tache inexistante");
             return null;
         }else{
             return tache;
@@ -114,7 +126,6 @@ public class Bean {
     public List<Tache> getListTacheMachine(String ipAdresse) {
         Machine machine = getMachine(ipAdresse);
         if (machine != null) {
-            
             return machine.getTacheList();
         } else {
             return null;
@@ -122,6 +133,11 @@ public class Bean {
     }
 
     public Tache creerTacheSurveilleDD(String adresIpMachine, String periodeVerrification, String lettre_partition, int seuil, String statue) {
+        Machine machine = getMachine(adresIpMachine);
+        if(getTache(machine.getIdMachine(), lettre_partition)!=null){//cette tache existait déja
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE,lettre_partition+ ": cette tache existe déja sur la machine: "+adresIpMachine);
+            return null;
+        }
         return creerTache(adresIpMachine, TACHE_DD, null, periodeVerrification, lettre_partition, seuil, statue);
     }
 

@@ -10,15 +10,34 @@
 <message name="helloResponse">
 <part name="parameters" element="tns:helloResponse"></part>
 </message>
+<message name="arreterLeScheduler">
+<part name="parameters" element="tns:arreterLeScheduler"></part>
+</message>
+<message name="arreterLeSchedulerResponse">
+<part name="parameters" element="tns:arreterLeSchedulerResponse"></part>
+</message>
 <portType name="WSClientMonitoring">
 <operation name="hello">
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/helloRequest" message="tns:hello"></input>
 <output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/helloResponse" message="tns:helloResponse"></output>
 </operation>
+<operation name="arreterLeScheduler">
+<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/arreterLeSchedulerRequest" message="tns:arreterLeScheduler"></input>
+<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/arreterLeSchedulerResponse" message="tns:arreterLeSchedulerResponse"></output>
+</operation>
 </portType>
 <binding name="WSClientMonitoringPortBinding" type="tns:WSClientMonitoring">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap:binding>
 <operation name="hello">
+<soap:operation soapAction=""></soap:operation>
+<input>
+<soap:body use="literal"></soap:body>
+</input>
+<output>
+<soap:body use="literal"></soap:body>
+</output>
+</operation>
+<operation name="arreterLeScheduler">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>
