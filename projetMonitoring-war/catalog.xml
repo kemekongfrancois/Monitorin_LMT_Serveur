@@ -2,4 +2,5 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="http://172.16.4.2:8088/WSClientMonitoring?wsdl" uri="src/conf/xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_8088/WSClientMonitoring.wsdl"/>
     <system systemId="http://172.16.4.2:8088/?xsd=1" uri="src/conf/xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_8088/.xsd_1.xsd"/>
+    <system systemId="http://172.16.4.2:8088/?xsd=2" uri="src/conf/xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_8088/.xsd_2.xsd"/>
 </catalog>

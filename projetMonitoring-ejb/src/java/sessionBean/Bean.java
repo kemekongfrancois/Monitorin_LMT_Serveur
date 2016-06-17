@@ -27,6 +27,11 @@ public class Bean {
     public static final String OSWINDOWS = "Windows";
     public static final String OSLinux = "Linux";
     public static final String OK = "ok";
+    public static final String DEFAUL_PERIODE_CHECK_MACHINE = "1 * * * * ?";//represente la valeur par defaut de la période de check des machine 
+    public static final String PAUSE = "PAUSE";
+    public static final String START = "START";
+    public static final String STOP = "STOP";
+    public static final int SEUIL_ALERT_DD = 90;
     public static final String TACHE_DD = "surveiller_dd";
 
     @PersistenceContext(unitName = "projetMonitoring-ejbPU")
@@ -104,7 +109,7 @@ public class Bean {
         }
     }
 
-    private Tache getTache(int IdMachine, String cleTache) {
+    public Tache getTache(int IdMachine, String cleTache) {
         TachePK cle = new TachePK(IdMachine, cleTache);
         Tache tache = em.find(Tache.class, cle);
         if (tache==null){
@@ -114,6 +119,29 @@ public class Bean {
             return tache;
         }
          
+    }
+    
+    private Tache enregModification(Tache tache){
+        try {
+            Tache tacheModifier = em.merge(tache);
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO,  "les modification apporté à la tache a bien été effectué "+tacheModifier);
+            return tacheModifier;
+        } catch (Exception e) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE,  "impossible d'enregistrer les modifications apporté à la tache",e);
+            return null;
+        }
+    }
+    
+    public Tache traitementAlerte(Tache tache){
+        switch(tache.getTypeTache()){
+            case TACHE_DD: 
+                tache.setStatue(PAUSE);
+                return enregModification(tache);
+                //break;
+            default:
+                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, tache.getTypeTache() + ": ce type n'es pas reconnue ");
+                return null;
+        }
     }
 
     /**
@@ -126,6 +154,7 @@ public class Bean {
     public List<Tache> getListTacheMachine(String ipAdresse) {
         Machine machine = getMachine(ipAdresse);
         if (machine != null) {
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO,"la liste des machines es envoyé: nombre de machine="+machine.getTacheList().size());
             return machine.getTacheList();
         } else {
             return null;
@@ -134,25 +163,27 @@ public class Bean {
 
     public Tache creerTacheSurveilleDD(String adresIpMachine, String periodeVerrification, String lettre_partition, int seuil, String statue) {
         Machine machine = getMachine(adresIpMachine);
-        if(getTache(machine.getIdMachine(), lettre_partition)!=null){//cette tache existait déja
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE,lettre_partition+ ": cette tache existe déja sur la machine: "+adresIpMachine);
-            return null;
-        }
-        return creerTache(adresIpMachine, TACHE_DD, null, periodeVerrification, lettre_partition, seuil, statue);
+        
+        return creerTache(adresIpMachine, TACHE_DD, null, periodeVerrification, lettre_partition, seuil, statue,null);
     }
 
-    private Tache creerTache(String adresIpMachine, String typeTache, String description_fichier, String periodeVerrification, String cleTache, int seuil, String statue) {
+    private Tache creerTache(String adresIpMachine, String typeTache, String description_fichier, String periodeVerrification, String cleTache, int seuil, String statue, String liste_adresse) {
         Tache tacheDD = new Tache();
         Machine machine = getMachine(adresIpMachine);
         if (machine == null) {
             return null;
         } else {//la machine existe on creer la tache
+            if(getTache(machine.getIdMachine(), cleTache)!=null){//cette tache existait déja
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE,cleTache+ ": cette tache existe déja sur la machine: "+adresIpMachine);
+            return null;
+            }
             tacheDD.setTypeTache(typeTache);
             tacheDD.setTachePK(new TachePK(machine.getIdMachine(), cleTache));
             tacheDD.setSeuilAlerte(seuil);
             tacheDD.setPeriodeVerrification(periodeVerrification);
             tacheDD.setStatue(statue);
             tacheDD.setDescriptionFichier(description_fichier);
+            tacheDD.setListeAdresse(liste_adresse);
             persist(tacheDD);//on enregistre la tache dans la BD
             return getTache(machine.getIdMachine(), cleTache);
         }

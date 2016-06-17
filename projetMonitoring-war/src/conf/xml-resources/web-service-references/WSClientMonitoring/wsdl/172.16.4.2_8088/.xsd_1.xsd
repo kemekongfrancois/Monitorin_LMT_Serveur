@@ -1,32 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.9-b130926.1035 svn-revision#5f6196f2b90e9460065a4c2f4e30e065b245e51e. --><xs:schema xmlns:tns="http://ws.clientmonitoring/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.clientmonitoring/">
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.9-b130926.1035 svn-revision#5f6196f2b90e9460065a4c2f4e30e065b245e51e. --><xs:schema xmlns:tns="http://ws/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws/">
 
-<xs:element name="arreterLeScheduler" type="tns:arreterLeScheduler"></xs:element>
-
-<xs:element name="arreterLeSchedulerResponse" type="tns:arreterLeSchedulerResponse"></xs:element>
-
-<xs:element name="hello" type="tns:hello"></xs:element>
-
-<xs:element name="helloResponse" type="tns:helloResponse"></xs:element>
-
-<xs:complexType name="arreterLeScheduler">
-<xs:sequence></xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="arreterLeSchedulerResponse">
+<xs:complexType name="tache">
 <xs:sequence>
-<xs:element name="return" type="xs:boolean"></xs:element>
+<xs:element name="descriptionFichier" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="listeAdresse" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="machine" type="tns:machine" minOccurs="0"></xs:element>
+<xs:element name="periodeVerrification" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="seuilAlerte" type="xs:int" minOccurs="0"></xs:element>
+<xs:element name="statue" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="tachePK" type="tns:tachePK" minOccurs="0"></xs:element>
+<xs:element name="typeTache" type="xs:string" minOccurs="0"></xs:element>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="hello">
+<xs:complexType name="machine">
 <xs:sequence>
-<xs:element name="name" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="adresseIP" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="idMachine" type="xs:int" minOccurs="0"></xs:element>
+<xs:element name="nomMachine" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="periodeDeCheck" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="portEcoute" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="typeOS" type="xs:string" minOccurs="0"></xs:element>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="helloResponse">
+<xs:complexType name="tachePK">
 <xs:sequence>
-<xs:element name="return" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="cleTache" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="idMachine" type="xs:int"></xs:element>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>

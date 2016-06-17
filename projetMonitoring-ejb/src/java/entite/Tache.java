@@ -6,7 +6,6 @@
 package entite;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tache.findAll", query = "SELECT t FROM Tache t"),
     @NamedQuery(name = "Tache.findByIdMachine", query = "SELECT t FROM Tache t WHERE t.tachePK.idMachine = :idMachine"),
     @NamedQuery(name = "Tache.findByCleTache", query = "SELECT t FROM Tache t WHERE t.tachePK.cleTache = :cleTache"),
+    @NamedQuery(name = "Tache.findByListeAdresse", query = "SELECT t FROM Tache t WHERE t.listeAdresse = :listeAdresse"),
     @NamedQuery(name = "Tache.findBySeuilAlerte", query = "SELECT t FROM Tache t WHERE t.seuilAlerte = :seuilAlerte"),
     @NamedQuery(name = "Tache.findByDescriptionFichier", query = "SELECT t FROM Tache t WHERE t.descriptionFichier = :descriptionFichier"),
     @NamedQuery(name = "Tache.findByStatue", query = "SELECT t FROM Tache t WHERE t.statue = :statue"),
@@ -40,6 +39,9 @@ public class Tache implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected TachePK tachePK;
+    @Size(max = 254)
+    @Column(name = "liste_adresse")
+    private String listeAdresse;
     @Column(name = "seuil_alerte")
     private Integer seuilAlerte;
     @Size(max = 254)
@@ -57,10 +59,6 @@ public class Tache implements Serializable {
     @JoinColumn(name = "id_machine", referencedColumnName = "id_machine", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Machine machine;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tache")
-    private Telnet telnet;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tache")
-    private Pings pings;
 
     public Tache() {
     }
@@ -79,6 +77,14 @@ public class Tache implements Serializable {
 
     public void setTachePK(TachePK tachePK) {
         this.tachePK = tachePK;
+    }
+
+    public String getListeAdresse() {
+        return listeAdresse;
+    }
+
+    public void setListeAdresse(String listeAdresse) {
+        this.listeAdresse = listeAdresse;
     }
 
     public Integer getSeuilAlerte() {
@@ -127,22 +133,6 @@ public class Tache implements Serializable {
 
     public void setMachine(Machine machine) {
         this.machine = machine;
-    }
-
-    public Telnet getTelnet() {
-        return telnet;
-    }
-
-    public void setTelnet(Telnet telnet) {
-        this.telnet = telnet;
-    }
-
-    public Pings getPings() {
-        return pings;
-    }
-
-    public void setPings(Pings pings) {
-        this.pings = pings;
     }
 
     @Override

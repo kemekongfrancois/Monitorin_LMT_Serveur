@@ -5,6 +5,7 @@
  */
 package ws;
 
+import clientWS.TachePK;
 import clientWS.WSClientMonitoring;
 import clientWS.WSClientMonitoringService;
 import entite.Machine;
@@ -21,16 +22,21 @@ import javax.jws.WebParam;
 import sessionBean.Bean;
 import until.Until;
 
+/*doit être ajouter au classe générer par le web service client 
+affin que ces classe utilise les objets venant de "entite" et non ceux provenant du wed service
+
+import entite.Tache;
+import entite.TachePK;
+import entite.Machine;
+*/
+
 /**
  *
  * @author KEF10
  */
 @WebService(serviceName = "WsMonitoring")
 public class WsMonitoring {
-    private final String DEFAUL_PERIODE_CHECK_MACHINE = "* * * * * ?";//represente la valeur par defaut de la période de check des machine 
-    private final String PAUSE = "PAUSE";
-    private final String START = "START";
-    private final String STOP = "STOP";
+    
 
     @EJB
     private Bean bean;
@@ -43,15 +49,20 @@ public class WsMonitoring {
     public String hello(@WebParam(name = "name") String txt) {
         String adressTest = "172.16.4.2";
         String periodeCLient = " 0-30 * * * * ?";
-        int SeuilAlertDD = 80;
+        
         
         String resultat = "";
        
-        resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8080", DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
-        resultat += "\ncreation de la tache DD"+bean.creerTacheSurveilleDD(adressTest, periodeCLient, "c:", SeuilAlertDD, START);     
+        resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8080", Bean.DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
+        resultat += "\ncreation de la tache DD"+bean.creerTacheSurveilleDD(adressTest, periodeCLient, "c:", Bean.SEUIL_ALERT_DD, Bean.START);
+        
         
        WSClientMonitoring ws = appelWSClient(adressTest, "8088");
-       resultat += "\n l'autre "+ ws.hello(PAUSE);
+       //resultat += "\n l'autre "+ ws.hello(PAUSE);
+       Tache tacheBean = bean.getTache(1,"c:");
+       //clientWS.Tache tache = convertiTacheBeanEnTacheClient(tacheBean);
+       
+       resultat += "\n demarage de la tache DD"+ws.demarerMetAJourOUStopperTache(tacheBean);
         
         return "Hello je suis le WSServeur " + txt + " !" + resultat ;
     }
@@ -72,6 +83,40 @@ public class WsMonitoring {
         return service.getWSClientMonitoringPort();
     }
     /*
+    private clientWS.Tache convertiTacheBeanEnTacheClient(Tache tache){
+        clientWS.Tache tacheClient = new clientWS.Tache();
+        tacheClient.setDescriptionFichier(tache.getDescriptionFichier());
+        tacheClient.setListeAdresse(tache.getListeAdresse());
+        
+       // tacheClient.setMachine(convertirMachineBeanEnMachineClient(tache.getMachine()));
+        
+        tacheClient.setPeriodeVerrification(tache.getPeriodeVerrification());
+        tacheClient.setSeuilAlerte(tache.getSeuilAlerte());
+        tacheClient.setStatue(tache.getStatue());
+        TachePK cle = new TachePK();
+        
+        cle.setCleTache(tache.getTachePK().getCleTache());
+        cle.setIdMachine(tache.getTachePK().getIdMachine());
+        tacheClient.setTachePK(cle);
+        tacheClient.setTypeTache(tache.getTypeTache());
+        
+        return tacheClient;
+    }
+    
+    private clientWS.Machine convertirMachineBeanEnMachineClient(Machine machine){
+        clientWS.Machine machineClient = new clientWS.Machine();
+        
+        machineClient.setAdresseIP(machine.getAdresseIP());
+        machineClient.setIdMachine(machine.getIdMachine());
+        machineClient.setNomMachine(machine.getNomMachine());
+        machineClient.setPeriodeDeCheck(machine.getPeriodeDeCheck());
+        machineClient.setPortEcoute(machine.getPortEcoute());
+        machineClient.setTypeOS(machine.getTypeOS());
+        
+        return machineClient;
+    }
+    */
+    /*
     @WebMethod
     //public String creerMachine(String AdresIP, String nonOS, String nomMachine) {
     public Machine creerMachine(@WebParam(name = "AdresIP") String AdresIP,@WebParam(name = "Port")String port, @WebParam(name = "nonOS") String nonOS, @WebParam(name = "nomMachine") String nomMachine){
@@ -84,7 +129,7 @@ public class WsMonitoring {
             @WebParam(name = "Port")String port, 
             @WebParam(name = "nonOS") String nonOS, 
             @WebParam(name = "nomMachine") String nomMachine){
-        return bean.verifiOuCreerMachine(AdresIP,port, DEFAUL_PERIODE_CHECK_MACHINE, nonOS, nomMachine);
+        return bean.verifiOuCreerMachine(AdresIP,port, Bean.DEFAUL_PERIODE_CHECK_MACHINE, nonOS, nomMachine);
     }
     
     @WebMethod
@@ -95,6 +140,13 @@ public class WsMonitoring {
     @WebMethod
     public List<Tache> getListTacheMachine(@WebParam(name = "AdresIP")String ipAdresse){
         return bean.getListTacheMachine(ipAdresse);
+    }
+    
+    @WebMethod
+    public boolean traitementAlerte(@WebParam(name = "tache")Tache tache){
+        Tache tacheTraite = bean.traitementAlerte(tache);
+        if(tacheTraite==null) return false;
+        else return true;
     }
     /*
     public Tache creerTacheSurveilleDD(
