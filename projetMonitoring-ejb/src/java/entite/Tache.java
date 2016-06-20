@@ -6,9 +6,12 @@
 package entite;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -26,8 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tache.findAll", query = "SELECT t FROM Tache t"),
-    @NamedQuery(name = "Tache.findByIdMachine", query = "SELECT t FROM Tache t WHERE t.tachePK.idMachine = :idMachine"),
-    @NamedQuery(name = "Tache.findByCleTache", query = "SELECT t FROM Tache t WHERE t.tachePK.cleTache = :cleTache"),
+    @NamedQuery(name = "Tache.findByIdTache", query = "SELECT t FROM Tache t WHERE t.idTache = :idTache"),
+    @NamedQuery(name = "Tache.findByNom", query = "SELECT t FROM Tache t WHERE t.nom = :nom"),
     @NamedQuery(name = "Tache.findByListeAdresse", query = "SELECT t FROM Tache t WHERE t.listeAdresse = :listeAdresse"),
     @NamedQuery(name = "Tache.findBySeuilAlerte", query = "SELECT t FROM Tache t WHERE t.seuilAlerte = :seuilAlerte"),
     @NamedQuery(name = "Tache.findByDescriptionFichier", query = "SELECT t FROM Tache t WHERE t.descriptionFichier = :descriptionFichier"),
@@ -37,8 +40,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Tache implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected TachePK tachePK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_tache")
+    private Integer idTache;
+    @Size(max = 254)
+    @Column(name = "nom")
+    private String nom;
     @Size(max = 254)
     @Column(name = "liste_adresse")
     private String listeAdresse;
@@ -56,27 +65,31 @@ public class Tache implements Serializable {
     @Size(max = 254)
     @Column(name = "type_tache")
     private String typeTache;
-    @JoinColumn(name = "id_machine", referencedColumnName = "id_machine", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Machine machine;
+    @JoinColumn(name = "id_machine", referencedColumnName = "id_machine")
+    @ManyToOne
+    private Machine idMachine;
 
     public Tache() {
     }
 
-    public Tache(TachePK tachePK) {
-        this.tachePK = tachePK;
+    public Tache(Integer idTache) {
+        this.idTache = idTache;
     }
 
-    public Tache(int idMachine, String cleTache) {
-        this.tachePK = new TachePK(idMachine, cleTache);
+    public Integer getIdTache() {
+        return idTache;
     }
 
-    public TachePK getTachePK() {
-        return tachePK;
+    public void setIdTache(Integer idTache) {
+        this.idTache = idTache;
     }
 
-    public void setTachePK(TachePK tachePK) {
-        this.tachePK = tachePK;
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getListeAdresse() {
@@ -127,18 +140,18 @@ public class Tache implements Serializable {
         this.typeTache = typeTache;
     }
 
-    public Machine getMachine() {
-        return machine;
+    public Machine getIdMachine() {
+        return idMachine;
     }
 
-    public void setMachine(Machine machine) {
-        this.machine = machine;
+    public void setIdMachine(Machine idMachine) {
+        this.idMachine = idMachine;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (tachePK != null ? tachePK.hashCode() : 0);
+        hash += (idTache != null ? idTache.hashCode() : 0);
         return hash;
     }
 
@@ -149,7 +162,7 @@ public class Tache implements Serializable {
             return false;
         }
         Tache other = (Tache) object;
-        if ((this.tachePK == null && other.tachePK != null) || (this.tachePK != null && !this.tachePK.equals(other.tachePK))) {
+        if ((this.idTache == null && other.idTache != null) || (this.idTache != null && !this.idTache.equals(other.idTache))) {
             return false;
         }
         return true;
@@ -157,7 +170,7 @@ public class Tache implements Serializable {
 
     @Override
     public String toString() {
-        return "entite.Tache[ tachePK=" + tachePK + " ]";
+        return "entite.Tache[ idTache=" + idTache + " ]";
     }
     
 }

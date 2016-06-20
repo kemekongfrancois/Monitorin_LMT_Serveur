@@ -5,9 +5,7 @@
  */
 package ws;
 
-import clientWS.TachePK;
-import clientWS.WSClientMonitoring;
-import clientWS.WSClientMonitoringService;
+
 import entite.Machine;
 import entite.Tache;
 import java.net.MalformedURLException;
@@ -48,40 +46,29 @@ public class WsMonitoring {
     @WebMethod(operationName = "hello")
     public String hello(@WebParam(name = "name") String txt) {
         String adressTest = "172.16.4.2";
-        String periodeCLient = " 0-30 * * * * ?";
+        String periodeCLient = " 1,30 * * * * ?";
         
         
         String resultat = "";
-       
-        resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8080", Bean.DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
+        
+        resultat += "\ninitialisation du serveur"+bean.creerOuModifierServeur("jesuisinvisible1@gmail.com", "Kef007007", "loginSMS", "pasSMS");
+        
+        resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8088", Bean.DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
         resultat += "\ncreation de la tache DD"+bean.creerTacheSurveilleDD(adressTest, periodeCLient, "c:", Bean.SEUIL_ALERT_DD, Bean.START);
+
+        resultat += "\ndemarer la tache "+bean.redemarerTache(1);
         
         
-       WSClientMonitoring ws = appelWSClient(adressTest, "8088");
-       //resultat += "\n l'autre "+ ws.hello(PAUSE);
-       Tache tacheBean = bean.getTache(1,"c:");
+       //WSClientMonitoring ws = appelWSClient(adressTest, "8088");
+       //resultat += "\n l'autre "+ ws.hello(ALERTE);
+       //Tache tacheBean = bean.getTache(1,"c:");
        //clientWS.Tache tache = convertiTacheBeanEnTacheClient(tacheBean);
        
-       resultat += "\n demarage de la tache DD"+ws.demarerMetAJourOUStopperTache(tacheBean);
+       //resultat += "\n demarage de la tache DD"+ws.demarerMetAJourOUStopperTache(tacheBean);
         
         return "Hello je suis le WSServeur " + txt + " !" + resultat ;
     }
-    /**
-     * cette fonction permet d'ouvrire une connection web service ver un client 
-     */
-    private WSClientMonitoring appelWSClient(String adresse, String port){
-        URL url = null;
-        try {
-            //String adresse = "172.16.4.2";
-            //String port = "8088";
-            url = new URL("http://" + adresse + ":" + port + "/WSClientMonitoring?wsdl");
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(WsMonitoring.class.getName()).log(Level.SEVERE, null, ex);
-            //Until.savelog("Adresse du serveur ou port invalide \n"+ex, Until.fichieLog);
-        }
-        WSClientMonitoringService service = new WSClientMonitoringService(url);
-        return service.getWSClientMonitoringPort();
-    }
+   
     /*
     private clientWS.Tache convertiTacheBeanEnTacheClient(Tache tache){
         clientWS.Tache tacheClient = new clientWS.Tache();
@@ -143,10 +130,18 @@ public class WsMonitoring {
     }
     
     @WebMethod
-    public boolean traitementAlerte(@WebParam(name = "tache")Tache tache){
-        Tache tacheTraite = bean.traitementAlerte(tache);
-        if(tacheTraite==null) return false;
-        else return true;
+    public boolean traitementAlerteTache(
+            @WebParam(name = "idTache")int idTache,
+            @WebParam(name = "codeErreur")int codeErreur){
+        
+        return bean.traitementAlerteTache(idTache,codeErreur);
+    }
+    
+    @WebMethod
+    public boolean traitementAlerteMachine(
+            @WebParam(name = "idMachine")int idMachine,
+            @WebParam(name = "listTachePB")List<Tache> listTachePB){
+        return bean.traitementAlerteMachine(idMachine, listTachePB);
     }
     /*
     public Tache creerTacheSurveilleDD(

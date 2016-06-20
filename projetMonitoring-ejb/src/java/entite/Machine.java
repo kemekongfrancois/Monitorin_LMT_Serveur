@@ -8,7 +8,6 @@ package entite;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Machine.findByPortEcoute", query = "SELECT m FROM Machine m WHERE m.portEcoute = :portEcoute"),
     @NamedQuery(name = "Machine.findByNomMachine", query = "SELECT m FROM Machine m WHERE m.nomMachine = :nomMachine"),
     @NamedQuery(name = "Machine.findByTypeOS", query = "SELECT m FROM Machine m WHERE m.typeOS = :typeOS"),
-    @NamedQuery(name = "Machine.findByPeriodeDeCheck", query = "SELECT m FROM Machine m WHERE m.periodeDeCheck = :periodeDeCheck")})
+    @NamedQuery(name = "Machine.findByPeriodeDeCheck", query = "SELECT m FROM Machine m WHERE m.periodeDeCheck = :periodeDeCheck"),
+    @NamedQuery(name = "Machine.findByStatue", query = "SELECT m FROM Machine m WHERE m.statue = :statue")})
 public class Machine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,7 +63,10 @@ public class Machine implements Serializable {
     @Size(max = 254)
     @Column(name = "periode_de_check")
     private String periodeDeCheck;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "machine")
+    @Size(max = 254)
+    @Column(name = "statue")
+    private String statue;
+    @OneToMany(mappedBy = "idMachine")
     private List<Tache> tacheList;
 
     public Machine() {
@@ -124,6 +127,14 @@ public class Machine implements Serializable {
 
     public void setPeriodeDeCheck(String periodeDeCheck) {
         this.periodeDeCheck = periodeDeCheck;
+    }
+
+    public String getStatue() {
+        return statue;
+    }
+
+    public void setStatue(String statue) {
+        this.statue = statue;
     }
 
     @XmlTransient

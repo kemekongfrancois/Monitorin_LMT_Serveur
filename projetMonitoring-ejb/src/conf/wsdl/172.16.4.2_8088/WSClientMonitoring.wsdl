@@ -7,6 +7,12 @@
 <xsd:import namespace="http://ws.clientmonitoring/" schemaLocation="http://172.16.4.2:8088/?xsd=2"></xsd:import>
 </xsd:schema>
 </types>
+<message name="demarerLeScheduler">
+<part name="parameters" element="tns:demarerLeScheduler"></part>
+</message>
+<message name="demarerLeSchedulerResponse">
+<part name="parameters" element="tns:demarerLeSchedulerResponse"></part>
+</message>
 <message name="hello">
 <part name="parameters" element="tns:hello"></part>
 </message>
@@ -26,6 +32,10 @@
 <part name="parameters" element="tns:arreterLeSchedulerResponse"></part>
 </message>
 <portType name="WSClientMonitoring">
+<operation name="demarerLeScheduler">
+<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/demarerLeSchedulerRequest" message="tns:demarerLeScheduler"></input>
+<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/demarerLeSchedulerResponse" message="tns:demarerLeSchedulerResponse"></output>
+</operation>
 <operation name="hello">
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/helloRequest" message="tns:hello"></input>
 <output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/helloResponse" message="tns:helloResponse"></output>
@@ -41,6 +51,15 @@
 </portType>
 <binding name="WSClientMonitoringPortBinding" type="tns:WSClientMonitoring">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap:binding>
+<operation name="demarerLeScheduler">
+<soap:operation soapAction=""></soap:operation>
+<input>
+<soap:body use="literal"></soap:body>
+</input>
+<output>
+<soap:body use="literal"></soap:body>
+</output>
+</operation>
 <operation name="hello">
 <soap:operation soapAction=""></soap:operation>
 <input>

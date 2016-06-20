@@ -32,32 +32,4 @@
                 JAX-WS WSIMPORT SECTION
                 ===================
             -->
-    <target name="wsimport-init" depends="init">
-        <fail if="${wsimport.bad.version}" message="WsImport ant task defined in the classpath ${j2ee.platform.wsimport.classpath} has a serious bug. See http://wiki.netbeans.org/MetroIssue for details."/>
-        <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
-        <property name="j2ee.platform.wsimport.classpath" value="${libs.jaxws21.classpath}"/>
-        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
-            <classpath path="${java.home}/../lib/tools.jar:${j2ee.platform.wsimport.classpath}:${javac.classpath}"/>
-        </taskdef>
-        <condition property="conf-dir" value="${conf.dir}/" else="">
-            <isset property="conf.dir"/>
-        </condition>
-    </target>
-    <target name="wsimport-client-WSClientMonitoring" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" destdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_8088/WSClientMonitoring.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://172.16.4.2:8088/WSClientMonitoring?wsdl" xnocompile="true" xendorsed="true" package="clientWS">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_8088/WSClientMonitoring.wsdl"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
-        </wsimport>
-        <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="wsimport-client-clean-WSClientMonitoring" depends="-init-project">
-        <delete dir="${build.generated.sources.dir}/jax-ws/clientWS"/>
-        <delete dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
-    </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-WSClientMonitoring"/>
 </project>

@@ -6,6 +6,10 @@
 
 <xs:element name="arreterLeSchedulerResponse" type="tns:arreterLeSchedulerResponse"></xs:element>
 
+<xs:element name="demarerLeScheduler" type="tns:demarerLeScheduler"></xs:element>
+
+<xs:element name="demarerLeSchedulerResponse" type="tns:demarerLeSchedulerResponse"></xs:element>
+
 <xs:element name="demarerMetAJourOUStopperTache" type="tns:demarerMetAJourOUStopperTache"></xs:element>
 
 <xs:element name="demarerMetAJourOUStopperTacheResponse" type="tns:demarerMetAJourOUStopperTacheResponse"></xs:element>
@@ -36,9 +40,19 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="demarerLeScheduler">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="demarerLeSchedulerResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="demarerMetAJourOUStopperTache">
 <xs:sequence>
-<xs:element name="arg0" type="ns1:tache" minOccurs="0"></xs:element>
+<xs:element name="tache" type="ns1:tache" minOccurs="0"></xs:element>
 </xs:sequence>
 </xs:complexType>
 
