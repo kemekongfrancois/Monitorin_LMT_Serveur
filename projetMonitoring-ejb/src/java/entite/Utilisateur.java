@@ -6,9 +6,7 @@
 package entite;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,12 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,7 +33,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Utilisateur.findByNom", query = "SELECT u FROM Utilisateur u WHERE u.nom = :nom"),
     @NamedQuery(name = "Utilisateur.findByPrenom", query = "SELECT u FROM Utilisateur u WHERE u.prenom = :prenom"),
     @NamedQuery(name = "Utilisateur.findByLogin", query = "SELECT u FROM Utilisateur u WHERE u.login = :login"),
-    @NamedQuery(name = "Utilisateur.findByPass", query = "SELECT u FROM Utilisateur u WHERE u.pass = :pass")})
+    @NamedQuery(name = "Utilisateur.findByPass", query = "SELECT u FROM Utilisateur u WHERE u.pass = :pass"),
+    @NamedQuery(name = "Utilisateur.findByNumeroTelephone", query = "SELECT u FROM Utilisateur u WHERE u.numeroTelephone = :numeroTelephone"),
+    @NamedQuery(name = "Utilisateur.findByBoiteMail", query = "SELECT u FROM Utilisateur u WHERE u.boiteMail = :boiteMail")})
 public class Utilisateur implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,10 +61,16 @@ public class Utilisateur implements Serializable {
     @Size(max = 254)
     @Column(name = "pass")
     private String pass;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUtilisateur")
-    private List<Telephone> telephoneList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUtilisateur")
-    private List<Email> emailList;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 254)
+    @Column(name = "numero_telephone")
+    private String numeroTelephone;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 254)
+    @Column(name = "boite_mail")
+    private String boiteMail;
 
     public Utilisateur() {
     }
@@ -75,9 +79,11 @@ public class Utilisateur implements Serializable {
         this.idUtilisateur = idUtilisateur;
     }
 
-    public Utilisateur(Integer idUtilisateur, String login) {
+    public Utilisateur(Integer idUtilisateur, String login, String numeroTelephone, String boiteMail) {
         this.idUtilisateur = idUtilisateur;
         this.login = login;
+        this.numeroTelephone = numeroTelephone;
+        this.boiteMail = boiteMail;
     }
 
     public Integer getIdUtilisateur() {
@@ -128,22 +134,20 @@ public class Utilisateur implements Serializable {
         this.pass = pass;
     }
 
-    @XmlTransient
-    public List<Telephone> getTelephoneList() {
-        return telephoneList;
+    public String getNumeroTelephone() {
+        return numeroTelephone;
     }
 
-    public void setTelephoneList(List<Telephone> telephoneList) {
-        this.telephoneList = telephoneList;
+    public void setNumeroTelephone(String numeroTelephone) {
+        this.numeroTelephone = numeroTelephone;
     }
 
-    @XmlTransient
-    public List<Email> getEmailList() {
-        return emailList;
+    public String getBoiteMail() {
+        return boiteMail;
     }
 
-    public void setEmailList(List<Email> emailList) {
-        this.emailList = emailList;
+    public void setBoiteMail(String boiteMail) {
+        this.boiteMail = boiteMail;
     }
 
     @Override

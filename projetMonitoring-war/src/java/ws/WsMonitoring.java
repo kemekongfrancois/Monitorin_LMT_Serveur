@@ -45,18 +45,6 @@ public class WsMonitoring {
      */
     @WebMethod(operationName = "hello")
     public String hello(@WebParam(name = "name") String txt) {
-        String adressTest = "172.16.4.2";
-        String periodeCLient = " 1,30 * * * * ?";
-        
-        
-        String resultat = "";
-        
-        resultat += "\ninitialisation du serveur"+bean.creerOuModifierServeur("jesuisinvisible1@gmail.com", "Kef007007", "loginSMS", "pasSMS");
-        
-        resultat += "\ncreation de la machine"+bean.creerMachine(adressTest, "8088", Bean.DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
-        resultat += "\ncreation de la tache DD"+bean.creerTacheSurveilleDD(adressTest, periodeCLient, "c:", Bean.SEUIL_ALERT_DD, Bean.START);
-
-        resultat += "\ndemarer la tache "+bean.redemarerTache(1);
         
         
        //WSClientMonitoring ws = appelWSClient(adressTest, "8088");
@@ -66,7 +54,17 @@ public class WsMonitoring {
        
        //resultat += "\n demarage de la tache DD"+ws.demarerMetAJourOUStopperTache(tacheBean);
         
-        return "Hello je suis le WSServeur " + txt + " !" + resultat ;
+        return "Hello je suis le WSServeur " + txt + " !";
+    }
+    
+    @WebMethod
+    public String initialisation(){
+        return bean.initialisation();
+    }
+    
+    @WebMethod
+    public boolean redemarerTache(int idTache) {
+        return bean.redemarerTache(idTache);
     }
    
     /*

@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Serveur.findByEmailEnvoiMail", query = "SELECT s FROM Serveur s WHERE s.emailEnvoiMail = :emailEnvoiMail"),
     @NamedQuery(name = "Serveur.findByPassEnvoiMail", query = "SELECT s FROM Serveur s WHERE s.passEnvoiMail = :passEnvoiMail"),
     @NamedQuery(name = "Serveur.findByLogingSMS", query = "SELECT s FROM Serveur s WHERE s.logingSMS = :logingSMS"),
-    @NamedQuery(name = "Serveur.findByMotdepasseSMS", query = "SELECT s FROM Serveur s WHERE s.motdepasseSMS = :motdepasseSMS")})
+    @NamedQuery(name = "Serveur.findByMotdepasseSMS", query = "SELECT s FROM Serveur s WHERE s.motdepasseSMS = :motdepasseSMS"),
+    @NamedQuery(name = "Serveur.findByNumeroCourt", query = "SELECT s FROM Serveur s WHERE s.numeroCourt = :numeroCourt")})
 public class Serveur implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +53,9 @@ public class Serveur implements Serializable {
     @Size(max = 254)
     @Column(name = "mot_de_passe_SMS")
     private String motdepasseSMS;
+    @Size(max = 254)
+    @Column(name = "numero_court")
+    private String numeroCourt;
 
     public Serveur() {
     }
@@ -98,6 +102,14 @@ public class Serveur implements Serializable {
 
     public void setMotdepasseSMS(String motdepasseSMS) {
         this.motdepasseSMS = motdepasseSMS;
+    }
+
+    public String getNumeroCourt() {
+        return numeroCourt;
+    }
+
+    public void setNumeroCourt(String numeroCourt) {
+        this.numeroCourt = numeroCourt;
     }
 
     @Override

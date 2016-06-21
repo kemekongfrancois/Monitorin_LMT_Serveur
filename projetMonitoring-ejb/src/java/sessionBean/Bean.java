@@ -5,33 +5,26 @@
  */
 package sessionBean;
 
-import com.sun.mail.smtp.SMTPTransport;
 import entite.Machine;
 import entite.Serveur;
 import entite.Tache;
-import java.io.File;
-import java.net.MalformedURLException;
+import entite.Utilisateur;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 import javax.ejb.Stateless;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import until.Until;
 import wsClient.WSClientMonitoring;
 
 /**
@@ -51,19 +44,20 @@ public class Bean {
     public static final int SEUIL_ALERT_DD = 90;
     public static final String TACHE_DD = "surveiller_dd";
     public static final String TACHE_SURVEILLER_FICHIER_EXIST = "surveille_fichier_existe";
-    public static final String SURVEILLE_FICHIER_TAILLE = "surveille_fichier_taille";
+    public static final String TACHE_SURVEILLE_FICHIER_TAILLE = "surveille_fichier_taille";
+    //public static final String expresRegulierNumeroTel = "(\\+?237)?\\d{9}";
 
-    @PersistenceContext(unitName = "projetMonitoring-ejbPU")
+    @PersistenceContext
     private EntityManager em;
 
-    public boolean persist(Object object) {
+    public String persist(Object object) {
         try {
             em.persist(object);
-            return true;
+            return OK;
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, object + ": impossible d'écrire cet objet dans la BD", e);
             //Until.savelog("impossible d'écrire dans la BD \n" + e, Until.fichieLog);
-            return false;
+            return "enregistrement dans la BD impossible";
         }
     }
 
@@ -77,11 +71,11 @@ public class Bean {
      * @param nomMachine
      * @return
      */
-    public Machine creerMachine(String AdresIP, String port, String periodeCheck, String nonOS, String nomMachine) {
+    public String creerMachine(String AdresIP, String port, String periodeCheck, String nonOS, String nomMachine) {
         Machine machine = getMachine(AdresIP);
         if (machine != null) {//l'adresse ip es déja utilisé
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, AdresIP + ": cette adresse es déja utilisé");
-            return null;
+            return "adresse ip utilise";
         }
         machine = new Machine();
         machine.setAdresseIP(AdresIP);
@@ -89,10 +83,7 @@ public class Bean {
         machine.setNomMachine(nomMachine);
         machine.setPeriodeDeCheck(periodeCheck);
         machine.setTypeOS(nonOS);
-        if(persist(machine)){//on creer la machine dans la BD
-            return machine;
-        }
-        return null;
+        return persist(machine);
     }
 
     /**
@@ -111,6 +102,29 @@ public class Bean {
         }
     }
 
+    private List<Tache> getAllTache() {
+        Query requete = em.createNamedQuery("Tache.findAll");
+        return (List<Tache>) requete.getResultList();
+    }
+
+    /**
+     * cette fonction verifi si la machine (donc l'adresse es pris en paramettre) possède
+     * une tache avec le nom pris en paramettre
+     *
+     * @param idMachine
+     * @param nomTache
+     * @return true si la machine possède ce nom de tache
+     */
+    private boolean verifiNomTacheSurMachine(String adresIpMachine, String nomTache) {
+        List<Tache> listTache = getAllTache();
+        for (Tache tache : listTache) {
+            if (tache.getNom().equalsIgnoreCase(nomTache) && tache.getIdMachine().getAdresseIP().equals(adresIpMachine)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * cette fonction retourne la machine donc les caractéristique sont pris en
      * paramètre si la machine n'existe pas on là créer
@@ -125,7 +139,12 @@ public class Bean {
     public Machine verifiOuCreerMachine(String adresIP, String port, String periodeCheck, String nonOS, String nomMachine) {
         Machine machine = getMachine(adresIP);
         if (machine == null) {//la machine n'existe pas on la créer
-            return creerMachine(adresIP, port, periodeCheck, nonOS, nomMachine);//on créer l'objet dans la BD
+            if (creerMachine(adresIP, port, periodeCheck, nonOS, nomMachine).equals(OK))//on créer l'objet dans la BD
+            {
+                return getMachine(adresIP);
+            } else {
+                return null;
+            }
         } else {//la machine existe on l'a retourne
             return machine;
         }
@@ -150,9 +169,35 @@ public class Bean {
      */
     private List<String> getLlisteEmail() {
         List<String> listEmail = new ArrayList<>();
-        listEmail.add("kemekongfranois@yahoo.fr");
-        listEmail.add("kemekongfrancois@gmail.com");
+        //listEmail.add("kemekongfranois@yahoo.fr");
+        //listEmail.add("kemekongfrancois@gmail.com");
+        List<Utilisateur> listUtilisateur = getAllUtilisateur();
+        for (Utilisateur utilisateur : listUtilisateur) {
+            listEmail.add(utilisateur.getBoiteMail());
+        }
         return listEmail;
+    }
+
+    private List<Utilisateur> getAllUtilisateur() {
+        Query requet = em.createNamedQuery("Utilisateur.findAll");
+        return (List<Utilisateur>) requet.getResultList();
+    }
+
+    /**
+     * cette fonction retourne la liste des numéros aux quelles seront envoyé
+     * des alertes
+     *
+     * @return
+     */
+    private List<String> getListNumero() {
+        List<String> listeNumero = new ArrayList<>();
+        //listeNumero.add("237699667694");
+        //listeNumero.add("237675954517");
+        List<Utilisateur> listUtilisateur = getAllUtilisateur();
+        for (Utilisateur utilisateur : listUtilisateur) {
+            listeNumero.add(utilisateur.getNumeroTelephone());
+        }
+        return listeNumero;
     }
 
     public boolean traitementAlerteTache(int idTache, int codeErreur) {
@@ -177,13 +222,15 @@ public class Bean {
                 Logger.getLogger(Bean.class.getName()).log(Level.WARNING, tache.getTypeTache() + ": ce type n'es pas reconnue ");
                 return false;
         }
-        //envoie de l'alerte aux administrateur
-        if (!envoieDeMail(listEmail, corpsEmail, sujetEmail)) {
+        //envoie de l'alerte aux administrateur (si les mail ou les SMS on pus être envoyer alors le problème à été traité)
+        boolean envoiMail = envoieDeMail(listEmail, corpsEmail, sujetEmail);
+        boolean envoiSMS = envoieSMS(corpsEmail, getListNumero());
+        if (envoiMail || envoiSMS) {
+            tache.setStatue(ALERTE);
+            return true;
+        } else {//cas où aucun msg d'alert n'a pus être envoyé
             return false;
         }
-
-        tache.setStatue(ALERTE);
-        return true;
     }
 
     public boolean traitementAlerteMachine(int IdMachine, List<Tache> listTachePB) {
@@ -218,21 +265,20 @@ public class Bean {
         }
     }
 
-    public Tache creerTacheSurveilleDD(String adresIpMachine, String periodeVerrification, String lettre_partition, int seuil, String statue) {
-        Machine machine = getMachine(adresIpMachine);
-        if (machine == null) {
-            return null;
+    public String creerTacheSurveilleDD(String adresIpMachine, String periodeVerrification, String lettre_partition, int seuil, String statue) {
+        if (verifiNomTacheSurMachine(adresIpMachine, lettre_partition)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, lettre_partition + ": cette partition es déja surveillé sur la machine: " + adresIpMachine);
+            return "cette tache existe deja sur cette machine";
         }
-        for (Tache tacheVerification : machine.getTacheList()) {
-            if (tacheVerification.getNom().equalsIgnoreCase(lettre_partition)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, lettre_partition + ": cette partition es déja surveillé sur la machine: " + adresIpMachine);
-                return null;
-            }
-        }
-        return creerTache(machine, TACHE_DD, null, periodeVerrification, lettre_partition, seuil, statue, null);
+        return creerTache(adresIpMachine, TACHE_DD, null, periodeVerrification, lettre_partition, seuil, statue, null);
     }
 
-    private Tache creerTache(Machine machine, String typeTache, String description_fichier, String periodeVerrification, String nom, int seuil, String statue, String liste_adresse) {
+    private String creerTache(String adresIpMachine, String typeTache, String description_fichier, String periodeVerrification, String nom, int seuil, String statue, String liste_adresse) {
+        Machine machine = getMachine(adresIpMachine);
+        if (machine == null) {
+            return "adresse IP inconue";
+        }
+        
         Tache tache = new Tache();
 
         tache.setTypeTache(typeTache);
@@ -243,18 +289,13 @@ public class Bean {
         tache.setDescriptionFichier(description_fichier);
         tache.setListeAdresse(liste_adresse);
         tache.setNom(nom);
-        if (persist(tache)) {//on enregistre la tache dans la BD
-            return tache;
-        }
-        return null;
+        return persist(tache);
 
     }
 
     /**
-     * cette fontion permet d'envoi un mail à plusieur destinataires
+     * cette fontion permet d'envoyer un mail à plusieur destinataires
      *
-     * @param adresseEmetteur
-     * @param passEmetteur
      * @param listAdresseDestinataires
      * @param message
      * @param sujet
@@ -275,7 +316,7 @@ public class Bean {
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
             Session mailSession = Session.getDefaultInstance(props, null);
-            mailSession.setDebug(true);
+            mailSession.setDebug(false);//on desactive le debugage
 
             //*******envoi du mail******************
             Message mailMessage = new MimeMessage(mailSession);
@@ -340,7 +381,6 @@ public class Bean {
             return false;
         }
         return true;
-
     }
 
     /**
@@ -354,20 +394,21 @@ public class Bean {
      * @param motDePasseSms
      * @return
      */
-    public Serveur creerOuModifierServeur(String emailEnvoiMail, String passEnvoiMail, String logingSms, String motDePasseSms) {
+    public String creerOuModifierServeur(String emailEnvoiMail, String passEnvoiMail, String logingSms, String motDePasseSms, String numeroCour) {
         Serveur serveur = em.find(Serveur.class, 1);
         if (serveur == null) {
             serveur = new Serveur(1);
+        }
+        if (numeroCour.length() > 11) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "<" + numeroCour + "> n'est pas valide comme SenderID");
+            return "senderID invalide";
         }
         serveur.setEmailEnvoiMail(emailEnvoiMail);
         serveur.setPassEnvoiMail(passEnvoiMail);
         serveur.setLogingSMS(logingSms);
         serveur.setMotdepasseSMS(motDePasseSms);
-        if (persist(serveur)) {
-            return serveur;
-        }else{
-            return null;
-        }
+        serveur.setNumeroCourt(numeroCour);
+        return persist(serveur);
     }
 
     public Serveur getServeur() {
@@ -377,10 +418,89 @@ public class Bean {
         }
         return serveur;
     }
-    /*
-    private boolean envoieSMS(String sms, ){
-        ServiceSMS ws = (new ServiceSMS_Service()).getServiceSMSPort();
-                                int resultat = ws.envoyerSMS(userLogoin, userpassword, destinataires, message, numeroCourt);
-    }
+
+    /**
+     * cette fontion permet d'envoyer le SMS à une liste de destinataire
+     *
+     * @param message
+     * @param destinataires
+     * @return
      */
+    private boolean envoieSMS(String message, List<String> destinataires) {
+        Serveur serveur = getServeur();
+        String userLogoin = serveur.getLogingSMS();
+        String userpassword = serveur.getMotdepasseSMS();
+        String numeroCourt = serveur.getNumeroCourt();
+
+        String msgAlerte = "";
+        try {
+            ws_SMS_LMT.ServiceSMS ws = (new ws_SMS_LMT.ServiceSMS_Service()).getServiceSMSPort();
+            int resultat = ws.envoyerSMS(userLogoin, userpassword, destinataires, message, numeroCourt);
+            switch (resultat) {
+                case 1: //le SMS est bien partie
+                    Logger.getLogger(Bean.class.getName()).log(Level.INFO, "les SMS ont bien été envoyé");
+                    return true;
+                case 0:
+                    msgAlerte = " Une exception s'est produite dans le systeme lors de l'envoie des SMS";
+                    break;
+                case 100:
+                    msgAlerte = " pas assez de credit SMS ";
+                    break;
+                case 404:
+                    msgAlerte = " login ou mot de passe LMT non valide";
+                    break;
+
+                default:
+                    msgAlerte = "erreur inconue lors de l'envoie du SMS";
+                    break;
+            }
+
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, msgAlerte);
+            envoieDeMail(getLlisteEmail(), msgAlerte, "echec lors de l'envoie des SMS");
+        } catch (Exception e) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        return false;
+    }
+
+    public String creerUtilisateur(String login, String pass, String nom, String prenom, String type_compte, String numero_telephone, String boite_mail) {
+        List<Utilisateur> listUtilisateur = getAllUtilisateur();
+        for (Utilisateur utilisateur : listUtilisateur) {//on verifie que les information entré n'existe pas encore dans la BD
+            if (login.equalsIgnoreCase(utilisateur.getLogin())
+                    || numero_telephone.equalsIgnoreCase(utilisateur.getNumeroTelephone())
+                    || boite_mail.equalsIgnoreCase(utilisateur.getBoiteMail())) {
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le login (boite mail ou numero de téléphone) es déja utilisé");
+                return "le login (boite mail ou numero de telephone) es deja utilise";
+            }
+        }
+
+        Utilisateur utilisateur = new Utilisateur();
+
+        utilisateur.setBoiteMail(boite_mail);
+        utilisateur.setLogin(login);
+        utilisateur.setNom(nom);
+        utilisateur.setNumeroTelephone(numero_telephone);
+        utilisateur.setPass(pass);
+        utilisateur.setPrenom(prenom);
+        utilisateur.setTypeCompte(type_compte);
+        return persist(utilisateur);
+    }
+
+    public String initialisation() {
+        String adressTest = "172.16.4.2";
+        String periodeCLient = " 1,30 * * * * ?";
+
+        String resultat = "";
+
+        resultat += "\ninitialisation du serveur :-> " + creerOuModifierServeur("jesuisinvisible1@gmail.com", "Kef007007", "testali", "OnAEyotL", "Alert LMT");
+        resultat += "\ncreation de la machine :-> " + creerMachine(adressTest, "8088", DEFAUL_PERIODE_CHECK_MACHINE, "Windows", "KEF");
+        resultat += "\ncreation de la tache DD :-> " + creerTacheSurveilleDD(adressTest, periodeCLient, "c:", SEUIL_ALERT_DD, START);
+        resultat += "\ncreation du 1er utilisateur :-> " + creerUtilisateur("kef", "0000", "kemekong", "francois", "supAdmin", "237699667694", "kemekongfrancois@gmail.com");
+        resultat += "\ncreation du 2ième utilisateur :-> " + creerUtilisateur("kef2", "0000", "kemekong2", "francois2", "supAdmin", "237675954517", "kemekongfranois@yahoo.fr");
+
+        //resultat += "\ndemarer la tache "+redemarerTache(1);
+        return resultat;
+
+    }
 }
