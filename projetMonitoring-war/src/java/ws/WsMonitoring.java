@@ -39,6 +39,14 @@ public class WsMonitoring {
     @EJB
     private Bean bean;
 
+    public boolean activerDesactiveAlertSMS(@WebParam(name = "statut")boolean statut) {
+        return bean.activerDesactiveAlertSMS(statut);
+    }
+
+    public boolean activerDesactiveAlertMail(@WebParam(name = "statut")boolean statut) {
+        return bean.activerDesactiveAlertMail(statut);
+    }
+
     
     /**
      * This is a sample web service operation
@@ -63,7 +71,7 @@ public class WsMonitoring {
     }
     
     @WebMethod
-    public boolean redemarerTache(int idTache) {
+    public boolean redemarerTache(@WebParam(name = "idTache")int idTache) {
         return bean.redemarerTache(idTache);
     }
    

@@ -32,7 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Serveur.findByPassEnvoiMail", query = "SELECT s FROM Serveur s WHERE s.passEnvoiMail = :passEnvoiMail"),
     @NamedQuery(name = "Serveur.findByLogingSMS", query = "SELECT s FROM Serveur s WHERE s.logingSMS = :logingSMS"),
     @NamedQuery(name = "Serveur.findByMotdepasseSMS", query = "SELECT s FROM Serveur s WHERE s.motdepasseSMS = :motdepasseSMS"),
-    @NamedQuery(name = "Serveur.findByNumeroCourt", query = "SELECT s FROM Serveur s WHERE s.numeroCourt = :numeroCourt")})
+    @NamedQuery(name = "Serveur.findByNumeroCourt", query = "SELECT s FROM Serveur s WHERE s.numeroCourt = :numeroCourt"),
+    @NamedQuery(name = "Serveur.findByEnvoialerteSMS", query = "SELECT s FROM Serveur s WHERE s.envoialerteSMS = :envoialerteSMS"),
+    @NamedQuery(name = "Serveur.findByEnvoieAlerteMail", query = "SELECT s FROM Serveur s WHERE s.envoieAlerteMail = :envoieAlerteMail")})
 public class Serveur implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +58,10 @@ public class Serveur implements Serializable {
     @Size(max = 254)
     @Column(name = "numero_court")
     private String numeroCourt;
+    @Column(name = "envoi_alerte_SMS")
+    private Boolean envoialerteSMS;
+    @Column(name = "envoie_alerte_mail")
+    private Boolean envoieAlerteMail;
 
     public Serveur() {
     }
@@ -110,6 +116,22 @@ public class Serveur implements Serializable {
 
     public void setNumeroCourt(String numeroCourt) {
         this.numeroCourt = numeroCourt;
+    }
+
+    public Boolean getEnvoialerteSMS() {
+        return envoialerteSMS;
+    }
+
+    public void setEnvoialerteSMS(Boolean envoialerteSMS) {
+        this.envoialerteSMS = envoialerteSMS;
+    }
+
+    public Boolean getEnvoieAlerteMail() {
+        return envoieAlerteMail;
+    }
+
+    public void setEnvoieAlerteMail(Boolean envoieAlerteMail) {
+        this.envoieAlerteMail = envoieAlerteMail;
     }
 
     @Override
