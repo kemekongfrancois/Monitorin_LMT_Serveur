@@ -30,13 +30,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Tache.findAll", query = "SELECT t FROM Tache t"),
     @NamedQuery(name = "Tache.findByIdTache", query = "SELECT t FROM Tache t WHERE t.idTache = :idTache"),
-    @NamedQuery(name = "Tache.findByNom", query = "SELECT t FROM Tache t WHERE t.nom = :nom"),
-    @NamedQuery(name = "Tache.findByListeAdresse", query = "SELECT t FROM Tache t WHERE t.listeAdresse = :listeAdresse"),
+    @NamedQuery(name = "Tache.findByRedemarerAutoService", query = "SELECT t FROM Tache t WHERE t.redemarerAutoService = :redemarerAutoService"),
     @NamedQuery(name = "Tache.findBySeuilAlerte", query = "SELECT t FROM Tache t WHERE t.seuilAlerte = :seuilAlerte"),
-    @NamedQuery(name = "Tache.findByDescriptionFichier", query = "SELECT t FROM Tache t WHERE t.descriptionFichier = :descriptionFichier"),
+    @NamedQuery(name = "Tache.findByNom", query = "SELECT t FROM Tache t WHERE t.nom = :nom"),
     @NamedQuery(name = "Tache.findByStatue", query = "SELECT t FROM Tache t WHERE t.statue = :statue"),
     @NamedQuery(name = "Tache.findByPeriodeVerrification", query = "SELECT t FROM Tache t WHERE t.periodeVerrification = :periodeVerrification"),
-    @NamedQuery(name = "Tache.findByTypeTache", query = "SELECT t FROM Tache t WHERE t.typeTache = :typeTache")})
+    @NamedQuery(name = "Tache.findByTypeTache", query = "SELECT t FROM Tache t WHERE t.typeTache = :typeTache"),
+    @NamedQuery(name = "Tache.findByEnvoiyerMsgDAlerte", query = "SELECT t FROM Tache t WHERE t.envoiyerMsgDAlerte = :envoiyerMsgDAlerte"),
+    @NamedQuery(name = "Tache.findByDescriptionTache", query = "SELECT t FROM Tache t WHERE t.descriptionTache = :descriptionTache")})
 public class Tache implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,17 +46,13 @@ public class Tache implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_tache")
     private Integer idTache;
-    @Size(max = 254)
-    @Column(name = "nom")
-    private String nom;
-    @Size(max = 254)
-    @Column(name = "liste_adresse")
-    private String listeAdresse;
+    @Column(name = "redemarer_auto_service")
+    private Boolean redemarerAutoService;
     @Column(name = "seuil_alerte")
     private Integer seuilAlerte;
     @Size(max = 254)
-    @Column(name = "description_fichier")
-    private String descriptionFichier;
+    @Column(name = "nom")
+    private String nom;
     @Size(max = 254)
     @Column(name = "statue")
     private String statue;
@@ -65,6 +62,11 @@ public class Tache implements Serializable {
     @Size(max = 254)
     @Column(name = "type_tache")
     private String typeTache;
+    @Column(name = "envoiyer_msg_d_alerte")
+    private Boolean envoiyerMsgDAlerte;
+    @Size(max = 254)
+    @Column(name = "description_tache")
+    private String descriptionTache;
     @JoinColumn(name = "id_machine", referencedColumnName = "id_machine")
     @ManyToOne
     private Machine idMachine;
@@ -84,20 +86,12 @@ public class Tache implements Serializable {
         this.idTache = idTache;
     }
 
-    public String getNom() {
-        return nom;
+    public Boolean getRedemarerAutoService() {
+        return redemarerAutoService;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getListeAdresse() {
-        return listeAdresse;
-    }
-
-    public void setListeAdresse(String listeAdresse) {
-        this.listeAdresse = listeAdresse;
+    public void setRedemarerAutoService(Boolean redemarerAutoService) {
+        this.redemarerAutoService = redemarerAutoService;
     }
 
     public Integer getSeuilAlerte() {
@@ -108,12 +102,12 @@ public class Tache implements Serializable {
         this.seuilAlerte = seuilAlerte;
     }
 
-    public String getDescriptionFichier() {
-        return descriptionFichier;
+    public String getNom() {
+        return nom;
     }
 
-    public void setDescriptionFichier(String descriptionFichier) {
-        this.descriptionFichier = descriptionFichier;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getStatue() {
@@ -138,6 +132,22 @@ public class Tache implements Serializable {
 
     public void setTypeTache(String typeTache) {
         this.typeTache = typeTache;
+    }
+
+    public Boolean getEnvoiyerMsgDAlerte() {
+        return envoiyerMsgDAlerte;
+    }
+
+    public void setEnvoiyerMsgDAlerte(Boolean envoiyerMsgDAlerte) {
+        this.envoiyerMsgDAlerte = envoiyerMsgDAlerte;
+    }
+
+    public String getDescriptionTache() {
+        return descriptionTache;
+    }
+
+    public void setDescriptionTache(String descriptionTache) {
+        this.descriptionTache = descriptionTache;
     }
 
     public Machine getIdMachine() {
