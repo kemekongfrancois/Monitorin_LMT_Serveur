@@ -49,6 +49,7 @@ public class Bean {
     public static final String TACHE_FICHIER_EXISTE = "surveille fichier existe";
     public static final String TACHE_TAILLE_FICHIER = "surveille taille fichier";
     public static final String TACHE_TELNET = "telnet";
+    public static final String TACHE_DATE_MODIFICATION_DERNIER_FICHIER = "date modification du dernier fichier";
 
     public static final int SEUIL_ALERT_DD = 90;
     public static final int NB_TENTATIVE_PING = 10;
@@ -120,8 +121,8 @@ public class Bean {
     }
 
     private List<Tache> getAllTache() {
-        Query requete = em.createNamedQuery("Tache.findAll");
-        return (List<Tache>) requete.getResultList();
+        Query requete = em.createNamedQuery("Tache.findAll",Tache.class);
+        return requete.getResultList();
     }
 
     /**
@@ -196,8 +197,8 @@ public class Bean {
     }
 
     private List<Utilisateur> getAllUtilisateur() {
-        Query requet = em.createNamedQuery("Utilisateur.findAll");
-        return (List<Utilisateur>) requet.getResultList();
+        Query requet = em.createNamedQuery("Utilisateur.findAll",Utilisateur.class);
+        return requet.getResultList();
     }
 
     /**
@@ -276,6 +277,18 @@ public class Bean {
                 } else {//cas où on verrifie que le fichier à surveille es toujour plus petit que le seuil
                     sujetEmail = "Alerte: le fichier <<" + tache.getNom() + ">> es supérieure à la taille autorisé";
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es supérieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                }
+
+                break;
+            case TACHE_DATE_MODIFICATION_DERNIER_FICHIER:
+                if (codeErreur == -1) {
+                    sujetEmail = "Alerte: le repertoir <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le repertoir : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                }  else {
+                    sujetEmail = "Alerte: la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
+                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide" ;
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 }
 
@@ -432,12 +445,12 @@ public class Bean {
         return creerTache(adresIpMachine, TACHE_SERVICE, null, periodeVerrification, nomService, 0, statue, envoiyer_msg_d_alerte, redemarer_auto_service);
     }
 
-    public String creerTachePing(String adresIpMachine, String descriptionMachinePinger, String periodeVerrification, String adresseAPinger, int nbTentative, String statue, boolean envoiyer_msg_d_alerte) {
+    public String creerTachePing(String adresIpMachine, String periodeVerrification, String adresseAPinger, int nbTentative, String statue, boolean envoiyer_msg_d_alerte) {
         if (verifiNomTacheSurMachine(adresIpMachine, adresseAPinger)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le ping vers: " + adresseAPinger + " es déja créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
-        return creerTache(adresIpMachine, TACHE_PING, descriptionMachinePinger, periodeVerrification, adresseAPinger, nbTentative, statue, envoiyer_msg_d_alerte, false);
+        return creerTache(adresIpMachine, TACHE_PING, null,periodeVerrification, adresseAPinger, nbTentative, statue, envoiyer_msg_d_alerte, false);
     }
 
     public String creerTacheSurveilleFichierExist(String adresIpMachine, String periodeVerrification, String cheminFIchier, String statue, boolean envoiyer_msg_d_alerte) {
@@ -454,6 +467,14 @@ public class Bean {
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, TACHE_TAILLE_FICHIER, null, periodeVerrification, cheminFIchier, seuil, statue, envoiyer_msg_d_alerte, false);
+    }
+    
+    public String creerTacheDateModificationDernierFichier(String adresIpMachine, String periodeVerrification, String cheminRepertoire, int seuil, String statue, boolean envoiyer_msg_d_alerte) {
+        if (verifiNomTacheSurMachine(adresIpMachine, cheminRepertoire)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminRepertoire + ": ce repertoire es déja surveillé sur la machine: " + adresIpMachine);
+            return TACHE_EXISTE_DEJA;
+        }
+        return creerTache(adresIpMachine, TACHE_DATE_MODIFICATION_DERNIER_FICHIER, null, periodeVerrification, cheminRepertoire, seuil, statue, envoiyer_msg_d_alerte, false);
     }
 
     public String creerTacheTelnet(String adresIpMachine, String periodeVerrification, String adresseTelnet, int port, String statue, boolean envoiyer_msg_d_alerte) {
@@ -588,10 +609,15 @@ public class Bean {
      * @return
      */
     public String creerOuModifierServeur(String emailEnvoiMail, String passEnvoiMail, String logingSms, String motDePasseSms, String numeroCour, boolean envoiSMS, boolean envoiMail) {
-        Serveur serveur = em.find(Serveur.class, 1);
-        if (serveur == null) {
+        Query requete = em.createNamedQuery("Serveur.findAll", Serveur.class);
+        List<Serveur> listServeur = requete.getResultList();
+        Serveur serveur;
+        if(listServeur==null||listServeur.size()==0){
             serveur = new Serveur(1);
+        }else{
+            serveur = listServeur.get(0);
         }
+        
         if (numeroCour.length() > 11) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "<" + numeroCour + "> n'est pas valide comme SenderID");
             return NUMERO_COUR_INVALIDE;
@@ -607,11 +633,22 @@ public class Bean {
     }
 
     public Serveur getServeur() {
+        Query requete = em.createNamedQuery("Serveur.findAll", Serveur.class);
+        List<Serveur> listServeur = requete.getResultList();
+        if(listServeur==null||listServeur.size()==0){
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le serveur n'existe pas, veille initialisé la table serveur");
+            return null;
+        }else{
+            return listServeur.get(0);
+        }
+        
+        /*
         Serveur serveur = em.find(Serveur.class, 1);
         if (serveur == null) {
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le serveur n'existe pas, veille initialisé la table serveur");
+        Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le serveur n'existe pas, veille initialisé la table serveur");
         }
         return serveur;
+        */
     }
 
     /**
@@ -691,12 +728,14 @@ public class Bean {
         String periodecheckFichierExistant = " 21,51 * * * * ?";
         String periodecheckFichierTaille = " 25,55 * * * * ?";
         String periodecheckTelnet = " 29,59 * * * * ?";
+        String periodecheckDateModif = " 35,5 * * * * ?";
         int tailleMaxFichie = 5;
         int tailleMinFichie = -5;
+        int seuilDateModif = 10;
 
         String resultat = "";
 
-        resultat += "\ninitialisation du serveur :-> " + creerOuModifierServeur("jesuisinvisible1@gmail.com", "Kef007007", "testali", "OnAEyotL", "Alert LMT", false, false);
+        resultat += "\ninitialisation du serveur :-> " + creerOuModifierServeur("monitoringlmtgroupe@gmail.com","kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, true);
         resultat += "\ncreation de la machine :-> " + creerMachine(adressTest, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF");
         resultat += "\ncreation du 1er utilisateur :-> " + creerUtilisateur("kef", "0000", "kemekong", "francois", "supAdmin", "237699667694", "kemekongfrancois@gmail.com");
         resultat += "\ncreation du 2ième utilisateur :-> " + creerUtilisateur("kef2", "0000", "kemekong2", "francois2", "supAdmin", "237675954517", "kemekongfranois@yahoo.fr");
@@ -704,12 +743,13 @@ public class Bean {
         resultat += "\ncreation de la tache DD :-> " + creerTacheSurveilleDD(adressTest, periodecheckDD, "c:", SEUIL_ALERT_DD, START, true);
         resultat += "\ncreation de la tache processus :-> " + creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc.exe", START, false);
         resultat += "\ncreation de la tache Service :-> " + creerTacheSurveilleService(adressTest, periodecheckService, "Connectify", START, true, true);
-        resultat += "\ncreation de la tache Ping :-> " + creerTachePing(adressTest, "Ping vers Google", periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
-        resultat += "\ncreation de la tache Ping 2 :-> " + creerTachePing(adressTest, "Ping vers yahoo", periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
+        resultat += "\ncreation de la tache Ping :-> " + creerTachePing(adressTest,  periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
+        resultat += "\ncreation de la tache Ping 2 :-> " + creerTachePing(adressTest, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
         resultat += "\ncreation de la tache fichier existant :-> " + creerTacheSurveilleFichierExist(adressTest, periodecheckFichierExistant, "c:/testMonitoring/test.txt", START, true);
         resultat += "\ncreation de la tache fichier superieur :-> " + creerTacheSurveilleTailleFichier(adressTest, periodecheckFichierTaille, "c:/testMonitoring/Setup_Oscillo.exe", tailleMaxFichie, START, true);
         resultat += "\ncreation de la tache fichier inférieur :-> " + creerTacheSurveilleTailleFichier(adressTest, periodecheckFichierTaille, "c:/testMonitoring/TeamViewer_Setup_fr.exe", tailleMinFichie, START, true);
         resultat += "\ncreation de la tache faire telnet :-> " + creerTacheTelnet(adressTest, periodecheckTelnet, "41.204.94.29", 8282, START, true);
+        resultat += "\ncreation de la tache fverrifie date modification dernier fichier :-> " + creerTacheDateModificationDernierFichier(adressTest, periodecheckDateModif, "C:/testMonitoring/test date modification", seuilDateModif, START, true);
 
         String adressTest2 = "172.16.4.20";
         resultat += "\ncreation de la machine 2 :-> " + creerMachine(adressTest2, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel");
@@ -717,16 +757,16 @@ public class Bean {
         resultat += "\ncreation de la tache DD 2:-> " + creerTacheSurveilleDD(adressTest2, periodecheckDD, "c:", SEUIL_ALERT_DD, START, true);
         resultat += "\ncreation de la tache processus 2 :-> " + creerTacheSurveilleProcessus(adressTest2, periodecheckProcessus, "vlc.exe", START, false);
         resultat += "\ncreation de la tache Service 2 :-> " + creerTacheSurveilleService(adressTest2, periodecheckService, "HUAWEIWiMAX", START, true, true);
-        resultat += "\ncreation de la tache Ping 2 2 :-> " + creerTachePing(adressTest2, "Ping vers Google", periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
-        resultat += "\ncreation de la tache Ping 2 2 :-> " + creerTachePing(adressTest2, "Ping vers yahoo", periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
+        resultat += "\ncreation de la tache Ping 2 2 :-> " + creerTachePing(adressTest2, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
+        resultat += "\ncreation de la tache Ping 2 2 :-> " + creerTachePing(adressTest2, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
         resultat += "\ncreation de la tache fichier existant 2 :-> " + creerTacheSurveilleFichierExist(adressTest2, periodecheckFichierExistant, "c:/testMonitoring/test.txt", START, true);
 
         String adressTest3 = "172.16.4.21";
         //resultat += "\ncreation de la machine 2 :-> " + creerMachine(adressTest3, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel");
 
         resultat += "\ncreation de la tache DD 3:-> " + creerTacheSurveilleDD(adressTest3, periodecheckDD, "/mnt/hgfs", SEUIL_ALERT_DD, START, true);
-        resultat += "\ncreation de la tache Ping 2 3 :-> " + creerTachePing(adressTest3, "Ping vers Google", periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
-        resultat += "\ncreation de la tache Ping 2 3 :-> " + creerTachePing(adressTest3, "Ping vers yahoo", periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
+        resultat += "\ncreation de la tache Ping 2 3 :-> " + creerTachePing(adressTest3, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
+        resultat += "\ncreation de la tache Ping 2 3 :-> " + creerTachePing(adressTest3, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
         resultat += "\ncreation de la tache fichier existant 3 :-> " + creerTacheSurveilleFichierExist(adressTest3, periodecheckFichierExistant, "/home/ubuntu/Desktop/dist/parametre.txt", START, true);
         resultat += "\ncreation de la tache fichier superieur 3 :-> " + creerTacheSurveilleTailleFichier(adressTest3, periodecheckFichierTaille, "/home/ubuntu/Desktop/dist/log.txt", tailleMaxFichie, START, true);
         resultat += "\ncreation de la tache fichier inférieur 3 :-> " + creerTacheSurveilleTailleFichier(adressTest3, periodecheckFichierTaille, "/home/ubuntu/Desktop/dist/---keen'v - DIS MOI OUI (MARINA) Clip Officiel - YouTube.flv", tailleMinFichie, START, true);
