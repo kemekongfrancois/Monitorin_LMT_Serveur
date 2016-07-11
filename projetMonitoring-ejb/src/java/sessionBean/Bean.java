@@ -6,8 +6,8 @@
 package sessionBean;
 
 import entite.Machine;
-import entite.Serveur;
 import entite.Tache;
+import entite.Serveur;
 import entite.Utilisateur;
 import java.net.URL;
 import java.util.ArrayList;
@@ -121,7 +121,7 @@ public class Bean {
     }
 
     private List<Tache> getAllTache() {
-        Query requete = em.createNamedQuery("Tache.findAll",Tache.class);
+        Query requete = em.createNamedQuery("Tache.findAll", Tache.class);
         return requete.getResultList();
     }
 
@@ -197,7 +197,7 @@ public class Bean {
     }
 
     private List<Utilisateur> getAllUtilisateur() {
-        Query requet = em.createNamedQuery("Utilisateur.findAll",Utilisateur.class);
+        Query requet = em.createNamedQuery("Utilisateur.findAll", Utilisateur.class);
         return requet.getResultList();
     }
 
@@ -286,9 +286,9 @@ public class Bean {
                     sujetEmail = "Alerte: le repertoir <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le repertoir : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
-                }  else {
+                } else {
                     sujetEmail = "Alerte: la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide" ;
+                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 }
 
@@ -450,7 +450,7 @@ public class Bean {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le ping vers: " + adresseAPinger + " es déja créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
-        return creerTache(adresIpMachine, TACHE_PING, null,periodeVerrification, adresseAPinger, nbTentative, statue, envoiyer_msg_d_alerte, false);
+        return creerTache(adresIpMachine, TACHE_PING, null, periodeVerrification, adresseAPinger, nbTentative, statue, envoiyer_msg_d_alerte, false);
     }
 
     public String creerTacheSurveilleFichierExist(String adresIpMachine, String periodeVerrification, String cheminFIchier, String statue, boolean envoiyer_msg_d_alerte) {
@@ -468,7 +468,7 @@ public class Bean {
         }
         return creerTache(adresIpMachine, TACHE_TAILLE_FICHIER, null, periodeVerrification, cheminFIchier, seuil, statue, envoiyer_msg_d_alerte, false);
     }
-    
+
     public String creerTacheDateModificationDernierFichier(String adresIpMachine, String periodeVerrification, String cheminRepertoire, int seuil, String statue, boolean envoiyer_msg_d_alerte) {
         if (verifiNomTacheSurMachine(adresIpMachine, cheminRepertoire)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminRepertoire + ": ce repertoire es déja surveillé sur la machine: " + adresIpMachine);
@@ -590,11 +590,67 @@ public class Bean {
             return false;
         }
         tache.setStatue(START);
-        if (!ws.demarerMetAJourOUStopperTache(tache)) {
+        if (!ws.demarerMetAJourOUStopperTache(tacheServeurToTacheClient(tache))) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la machine :" + adresse + " n'a pas pus redémarer la tache");
             return false;
         }
         return true;
+    }
+
+    private wsClient.Machine machineServeurToMachineClient(Machine machine) {
+        if (machine == null) {
+            return null;
+        }
+        Integer idMachine = machine.getIdMachine();
+        String adresseIP = machine.getAdresseIP();
+        String portEcoute = machine.getPortEcoute();
+        String nomMachine = machine.getNomMachine();
+        String typeOS = machine.getTypeOS();
+        String periodeDeCheck = machine.getPeriodeDeCheck();
+        String statue = machine.getStatue();
+        //List<Tache> tacheList = machine.getTacheList();
+
+        wsClient.Machine machineCLient = new wsClient.Machine();
+        machineCLient.setIdMachine(idMachine);
+        machineCLient.setAdresseIP(adresseIP);
+        machineCLient.setPortEcoute(portEcoute);
+        machineCLient.setNomMachine(nomMachine);
+        machineCLient.setTypeOS(typeOS);
+        machineCLient.setPeriodeDeCheck(periodeDeCheck);
+        machineCLient.setStatue(statue);
+        //machineCLient.setTacheList(tacheList);
+        return machineCLient;
+    }
+
+    private wsClient.Tache tacheServeurToTacheClient(Tache tacheServeur) {
+        if (tacheServeur == null) {
+            return null;
+        }
+        Integer idTache = tacheServeur.getIdTache();
+        boolean redemarerAutoService = tacheServeur.getRedemarerAutoService();
+        int seuilAlerte = tacheServeur.getSeuilAlerte();
+        String nom = tacheServeur.getNom();
+        String statue = tacheServeur.getStatue();
+        String periodeVerrification = tacheServeur.getPeriodeVerrification();
+        String typeTache = tacheServeur.getTypeTache();
+        boolean envoiyerMsgD_alerte = tacheServeur.getEnvoiyerMsgDAlerte();
+        String descriptionTache = tacheServeur.getDescriptionTache();
+        Machine machine = tacheServeur.getIdMachine();
+
+        wsClient.Tache tacheClient = new wsClient.Tache();
+        tacheClient.setIdTache(idTache);
+        // tacheClient.setRedemarerAutoService(redemarerAutoService);
+        tacheClient.setSeuilAlerte(seuilAlerte);
+        tacheClient.setNom(nom);
+        tacheClient.setStatue(statue);
+        tacheClient.setPeriodeVerrification(periodeVerrification);
+        tacheClient.setTypeTache(typeTache);
+        //tacheClient.setEnvoiyerMsgDAlerte(envoiyerMsgD_alerte);
+        //tacheClient.setDescriptionTache(descriptionTache);
+        tacheClient.setIdMachine(machineServeurToMachineClient(machine));
+
+        return tacheClient;
+
     }
 
     /**
@@ -612,12 +668,12 @@ public class Bean {
         Query requete = em.createNamedQuery("Serveur.findAll", Serveur.class);
         List<Serveur> listServeur = requete.getResultList();
         Serveur serveur;
-        if(listServeur==null||listServeur.size()==0){
+        if (listServeur == null || listServeur.size() == 0) {
             serveur = new Serveur(1);
-        }else{
+        } else {
             serveur = listServeur.get(0);
         }
-        
+
         if (numeroCour.length() > 11) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "<" + numeroCour + "> n'est pas valide comme SenderID");
             return NUMERO_COUR_INVALIDE;
@@ -635,20 +691,20 @@ public class Bean {
     public Serveur getServeur() {
         Query requete = em.createNamedQuery("Serveur.findAll", Serveur.class);
         List<Serveur> listServeur = requete.getResultList();
-        if(listServeur==null||listServeur.size()==0){
+        if (listServeur == null || listServeur.size() == 0) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le serveur n'existe pas, veille initialisé la table serveur");
             return null;
-        }else{
+        } else {
             return listServeur.get(0);
         }
-        
+
         /*
         Serveur serveur = em.find(Serveur.class, 1);
         if (serveur == null) {
         Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le serveur n'existe pas, veille initialisé la table serveur");
         }
         return serveur;
-        */
+         */
     }
 
     /**
@@ -735,7 +791,7 @@ public class Bean {
 
         String resultat = "";
 
-        resultat += "\ninitialisation du serveur :-> " + creerOuModifierServeur("monitoringlmtgroupe@gmail.com","kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, true);
+        resultat += "\ninitialisation du serveur :-> " + creerOuModifierServeur("monitoringlmtgroupe@gmail.com", "kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, true);
         resultat += "\ncreation de la machine :-> " + creerMachine(adressTest, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF");
         resultat += "\ncreation du 1er utilisateur :-> " + creerUtilisateur("kef", "0000", "kemekong", "francois", "supAdmin", "237699667694", "kemekongfrancois@gmail.com");
         resultat += "\ncreation du 2ième utilisateur :-> " + creerUtilisateur("kef2", "0000", "kemekong2", "francois2", "supAdmin", "237675954517", "kemekongfranois@yahoo.fr");
@@ -743,7 +799,7 @@ public class Bean {
         resultat += "\ncreation de la tache DD :-> " + creerTacheSurveilleDD(adressTest, periodecheckDD, "c:", SEUIL_ALERT_DD, START, true);
         resultat += "\ncreation de la tache processus :-> " + creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc.exe", START, false);
         resultat += "\ncreation de la tache Service :-> " + creerTacheSurveilleService(adressTest, periodecheckService, "Connectify", START, true, true);
-        resultat += "\ncreation de la tache Ping :-> " + creerTachePing(adressTest,  periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
+        resultat += "\ncreation de la tache Ping :-> " + creerTachePing(adressTest, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
         resultat += "\ncreation de la tache Ping 2 :-> " + creerTachePing(adressTest, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
         resultat += "\ncreation de la tache fichier existant :-> " + creerTacheSurveilleFichierExist(adressTest, periodecheckFichierExistant, "c:/testMonitoring/test.txt", START, true);
         resultat += "\ncreation de la tache fichier superieur :-> " + creerTacheSurveilleTailleFichier(adressTest, periodecheckFichierTaille, "c:/testMonitoring/Setup_Oscillo.exe", tailleMaxFichie, START, true);
@@ -761,7 +817,7 @@ public class Bean {
         resultat += "\ncreation de la tache Ping 2 2 :-> " + creerTachePing(adressTest2, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, START, true);
         resultat += "\ncreation de la tache fichier existant 2 :-> " + creerTacheSurveilleFichierExist(adressTest2, periodecheckFichierExistant, "c:/testMonitoring/test.txt", START, true);
 
-        String adressTest3 = "172.16.4.21";
+        String adressTest3 = "172.16.4.22";
         //resultat += "\ncreation de la machine 2 :-> " + creerMachine(adressTest3, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel");
 
         resultat += "\ncreation de la tache DD 3:-> " + creerTacheSurveilleDD(adressTest3, periodecheckDD, "/mnt/hgfs", SEUIL_ALERT_DD, START, true);
@@ -772,6 +828,9 @@ public class Bean {
         resultat += "\ncreation de la tache fichier inférieur 3 :-> " + creerTacheSurveilleTailleFichier(adressTest3, periodecheckFichierTaille, "/home/ubuntu/Desktop/dist/---keen'v - DIS MOI OUI (MARINA) Clip Officiel - YouTube.flv", tailleMinFichie, START, true);
         // resultat += "\ncreation de la tache processus 3 :-> " + creerTacheSurveilleProcessus(adressTest3, periodecheckProcessus, "vlc.exe", START, false);
         //resultat += "\ncreation de la tache Service 3 :-> " + creerTacheSurveilleService(adressTest3, periodecheckService, "HUAWEIWiMAX", START, true, true);
+
+        String adressTestLMT83 = "192.168.100.83";
+        resultat += "\ncreation de la tache DD sur " + adressTestLMT83 + ":-> " + creerTacheSurveilleDD(adressTestLMT83, periodecheckDD, "c:", SEUIL_ALERT_DD, START, true);
 
         return resultat;
 
