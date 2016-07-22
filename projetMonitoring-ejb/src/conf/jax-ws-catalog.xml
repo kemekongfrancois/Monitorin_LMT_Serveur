@@ -6,4 +6,7 @@
     <system systemId="http://lmtgoldsms.dyndns.org:8282/Managesms-war/ServiceSMS?WSDL" uri="wsdl/lmtgoldsms.dyndns.org_8282/Managesms-war/ServiceSMS.wsdl"/>
     <system systemId="http://lmtgoldsms.dyndns.org:8282/Managesms-war/ServiceSMS?xsd=1" uri="wsdl/lmtgoldsms.dyndns.org_8282/Managesms-war/ServiceSMS.xsd_1.xsd"/>
     <system systemId="http://lmtgoldsms.dyndns.org:8282/Managesms-war/ServiceSMS?xsd=2" uri="wsdl/lmtgoldsms.dyndns.org_8282/Managesms-war/ServiceSMS.xsd_2.xsd"/>
+    <system systemId="http://172.16.4.2:9039/WSClientMonitoring?wsdl" uri="wsdl/172.16.4.2_9039/WSClientMonitoring.wsdl"/>
+    <system systemId="http://172.16.4.2:9039/?xsd=1" uri="wsdl/172.16.4.2_9039/.xsd_1.xsd"/>
+    <system systemId="http://172.16.4.2:9039/?xsd=2" uri="wsdl/172.16.4.2_9039/.xsd_2.xsd"/>
 </catalog>

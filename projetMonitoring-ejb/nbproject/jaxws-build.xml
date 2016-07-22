@@ -24,23 +24,6 @@
             <classpath path="${j2ee.platform.wsimport.classpath}"/>
         </taskdef>
     </target>
-    <target name="wsimport-client-WSClientMonitoring" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
-        <property name="wsdl-WSClientMonitoring" location="${meta.inf}/xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_8088/WSClientMonitoring.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" destdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" wsdl="${wsdl-WSClientMonitoring}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://172.16.4.2:8088/WSClientMonitoring?wsdl" xnocompile="true" xendorsed="true" package="wsClient">
-            <depends file="${wsdl-WSClientMonitoring}"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
-        </wsimport>
-        <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="wsimport-client-clean-WSClientMonitoring" depends="-init-project">
-        <delete dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
-        <delete dir="${build.generated.sources.dir}/jax-ws/wsClient"/>
-    </target>
     <target name="wsimport-client-ServiceSMS" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
         <property name="wsdl-ServiceSMS" location="${meta.inf}/xml-resources/web-service-references/ServiceSMS/wsdl/lmtgoldsms.dyndns.org_8282/Managesms-war/ServiceSMS.wsdl"/>
@@ -58,5 +41,22 @@
         <delete dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/ws_SMS_LMT"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-WSClientMonitoring, wsimport-client-ServiceSMS"/>
+    <target name="wsimport-client-WSClientMonitoring" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
+        <property name="wsdl-WSClientMonitoring" location="${meta.inf}/xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_9039/WSClientMonitoring.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" destdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" wsdl="${wsdl-WSClientMonitoring}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://172.16.4.2:9039/WSClientMonitoring?wsdl" xnocompile="true" xendorsed="true" package="wsClient">
+            <depends file="${wsdl-WSClientMonitoring}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-WSClientMonitoring" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/wsClient"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-ServiceSMS, wsimport-client-WSClientMonitoring"/>
 </project>

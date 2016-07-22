@@ -149,6 +149,16 @@ public class WsMonitoring {
             @WebParam(name = "listTachePB")List<Tache> listTachePB){
         return bean.traitementAlerteMachine(idMachine, listTachePB);
     }
+    
+    @WebMethod
+    public boolean pinger(@WebParam(name = "adres")String adres, @WebParam(name = "nbTentative")int nbTentative) {
+        return bean.pinger(adres, nbTentative);
+    }
+    
+    @WebMethod
+    public String changerStatueMachine(@WebParam(name = "idMachine")Integer idMachine, @WebParam(name = "statue")boolean statue){
+        return bean.changerStatueMachine(idMachine,statue);
+    }
     /*
     public Tache creerTacheSurveilleDD(
             @WebParam(name = "adresIpMachine") String adresIpMachine, 

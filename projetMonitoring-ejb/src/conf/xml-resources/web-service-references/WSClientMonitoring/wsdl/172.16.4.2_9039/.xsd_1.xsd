@@ -2,12 +2,13 @@
 
 <xs:complexType name="tache">
 <xs:sequence>
-<xs:element name="descriptionFichier" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="descriptionTache" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="envoiyerMsgDAlerte" type="xs:boolean" minOccurs="0"></xs:element>
 <xs:element name="idMachine" type="tns:machine" minOccurs="0"></xs:element>
 <xs:element name="idTache" type="xs:int" minOccurs="0"></xs:element>
-<xs:element name="listeAdresse" type="xs:string" minOccurs="0"></xs:element>
 <xs:element name="nom" type="xs:string" minOccurs="0"></xs:element>
 <xs:element name="periodeVerrification" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="redemarerAutoService" type="xs:boolean" minOccurs="0"></xs:element>
 <xs:element name="seuilAlerte" type="xs:int" minOccurs="0"></xs:element>
 <xs:element name="statue" type="xs:string" minOccurs="0"></xs:element>
 <xs:element name="typeTache" type="xs:string" minOccurs="0"></xs:element>

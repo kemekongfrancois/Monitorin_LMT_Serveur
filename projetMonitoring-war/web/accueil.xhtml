@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="top">
+                top
+            </ui:define>
+
+            <ui:define name="left">
+                left
+            </ui:define>
+
+            <ui:define name="right">
+                right
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">           
+                    <p:growl id="msgs" showDetail="true" />
+
+
+
+
+                    <h3>DataModel</h3>
+                    <p:accordionPanel multiple="true" 
+                                      dynamic="true" 
+                                      cache="true" 
+                                      value="#{beanAccueil.listMachines}" 
+                                      var="machine">
+
+                        <p:ajax event="tabChange" listener="#{beanAccueil.onTabChange}" update=":form:msgs" />
+                        <p:ajax event="tabClose" listener="#{beanAccueil.onTabClose}" update=":form:msgs" />
+
+                        <p:tab title="#{machine.adresseIP}:#{machine.portEcoute} (id: #{machine.idMachine})">
+                            <h:panelGrid columns="2" cellpadding="5">
+
+                                <h:outputText value="nom:" style="font-weight: bold" />
+                                <h:outputText value="#{machine.nomMachine}" />
+
+                                <h:outputText value="Type:" style="font-weight: bold" />
+                                <h:outputText value="#{machine.typeOS}" />
+
+                                <h:outputText value="Statue:" style="font-weight: bold" />
+                                <h:outputText value="#{machine.statue}" />
+
+                                <h:outputText value="Période de Check" style="font-weight: bold" />
+                                <h:outputText value="#{machine.periodeDeCheck}" />
+
+
+
+
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:accordionPanel>
+
+
+
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -42,10 +42,12 @@ public class Bean {
     public static final String ALERTE = "ALERTE";
     public static final String START = "START";
     public static final String STOP = "STOP";
+    public static final String INACCESSIBLE = "INACCESSIBLE";
     public static final String TACHE_DD = "surveiller_dd";
     public static final String TACHE_PROCESSUS = "surveiller_processus";
     public static final String TACHE_SERVICE = "surveiller_service";
     public static final String TACHE_PING = "ping";
+    public static final String PB_AGENT ="Impossible de contacter l’agent";
     public static final String TACHE_FICHIER_EXISTE = "surveille fichier existe";
     public static final String TACHE_TAILLE_FICHIER = "surveille taille fichier";
     public static final String TACHE_TELNET = "telnet";
@@ -53,6 +55,7 @@ public class Bean {
 
     public static final int SEUIL_ALERT_DD = 90;
     public static final int NB_TENTATIVE_PING = 10;
+    public static final int NB_TENTATIVE_PING_LOCAL = 2;
     public static final String TACHE_SURVEILLER_FICHIER_EXIST = "surveille_fichier_existe";
     public static final String TACHE_SURVEILLE_FICHIER_TAILLE = "surveille_fichier_taille";
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
@@ -101,6 +104,7 @@ public class Bean {
         machine.setNomMachine(nomMachine);
         machine.setPeriodeDeCheck(periodeCheck);
         machine.setTypeOS(nonOS);
+        machine.setStatue("");
         return persist(machine);
     }
 
@@ -118,6 +122,19 @@ public class Bean {
         } else {
             return (Machine) query.getSingleResult();
         }
+    }
+    /**
+     * cette fonction permet de changer le statue d'un machine
+     * @param id
+     * @param statue si elle vaut "true" alors le statue sera START sinon elle sera STOP 
+     * @return 
+     */
+    public String changerStatueMachine(Integer id, boolean statue){
+        Machine machine = em.find(Machine.class, id);
+        if(statue) machine.setStatue(START);
+        else machine.setStatue(STOP);
+        
+        return persist(machine);
     }
 
     private List<Tache> getAllTache() {
@@ -774,6 +791,82 @@ public class Bean {
         utilisateur.setTypeCompte(type_compte);
         return persist(utilisateur);
     }
+    
+    
+    /**
+     * cette fonction permet d'effectué un ping à l'adresse passé en paramettre
+     *
+     * @param adres
+     * @param nbTentative represente le nb de fois qu'on vas faire le ping
+     * @return
+     */
+    public boolean pinger(String adres, int nbTentative) {
+        try {
+            //---------on recupere le type d'OS du système------
+            String OS_MACHINE = System.getProperty("os.name");
+            if (OS_MACHINE.contains(OSWINDOWS)) {
+                OS_MACHINE = OSWINDOWS;
+            } else {
+                OS_MACHINE = OSLinux;
+            }
+            //System.out.println("OS= "+ OS_MACHINE);
+
+            int i = 0;
+            boolean pingOK = false;
+            while (i < nbTentative && !pingOK) {
+                // System.out.println(i + ": ping à l'adresse " + adres);
+                char param;
+                if (OS_MACHINE.equals(OSWINDOWS)) {//on es sur une machine windows
+                    param = 'n';
+                } else {//on es sur une machine linux
+                    param = 'c';
+                }
+                Process p = java.lang.Runtime.getRuntime().exec("ping -" + param + " 1 " + adres);
+                int valeurDeRetour = p.waitFor();
+                pingOK = (valeurDeRetour == 0);
+                i++;
+            }
+
+            //System.out.println("le nombre es: " + valeurDeRetour);
+            return pingOK;
+
+        } catch (Exception e) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "problème avec le ping vers l'adresse " + adres + "\n", e);
+            return false;
+        }
+    }
+
+    public List<Machine> getListMachine() {
+        Query requet = em.createNamedQuery("Machine.findAll", Machine.class);
+        List<Machine> listeMachine = requet.getResultList();
+        for (Machine machine : listeMachine) {
+            
+            if(machine.getStatue().equals(STOP)) continue;
+            
+            if (!pinger(machine.getAdresseIP(), NB_TENTATIVE_PING_LOCAL)) {
+                machine.setStatue(INACCESSIBLE);
+                continue;
+            }
+            
+            WSClientMonitoring ws = appelWSMachineClient(machine.getAdresseIP(), machine.getPortEcoute());
+            if (ws == null) {
+            machine.setStatue(PB_AGENT);
+            continue;
+            }
+            if (ws.jobExiste(machine.getIdMachine() + "", machine.getAdresseIP())) {
+            machine.setStatue(START);
+            } else {
+            machine.setStatue(STOP);
+            }
+            
+
+        }
+        return listeMachine;
+    }
+    
+    /*public String jobExiste(Integer id){
+    WSClientMonitoring ws = appelWSMachineClient(machine.getAdresseIP(), machine.getPortEcoute());
+    }*/
 
     public String initialisation() {
         String adressTest = "172.16.4.2";
@@ -788,11 +881,12 @@ public class Bean {
         int tailleMaxFichie = 5;
         int tailleMinFichie = -5;
         int seuilDateModif = 10;
+        String portEcoute = "9039";
 
         String resultat = "";
 
         resultat += "\ninitialisation du serveur :-> " + creerOuModifierServeur("monitoringlmtgroupe@gmail.com", "kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, true);
-        resultat += "\ncreation de la machine :-> " + creerMachine(adressTest, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF");
+        resultat += "\ncreation de la machine :-> " + creerMachine(adressTest, portEcoute, DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF");
         resultat += "\ncreation du 1er utilisateur :-> " + creerUtilisateur("kef", "0000", "kemekong", "francois", "supAdmin", "237699667694", "kemekongfrancois@gmail.com");
         resultat += "\ncreation du 2ième utilisateur :-> " + creerUtilisateur("kef2", "0000", "kemekong2", "francois2", "supAdmin", "237675954517", "kemekongfranois@yahoo.fr");
 
@@ -808,7 +902,7 @@ public class Bean {
         resultat += "\ncreation de la tache fverrifie date modification dernier fichier :-> " + creerTacheDateModificationDernierFichier(adressTest, periodecheckDateModif, "C:/testMonitoring/test date modification", seuilDateModif, START, true);
 
         String adressTest2 = "172.16.4.20";
-        resultat += "\ncreation de la machine 2 :-> " + creerMachine(adressTest2, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel");
+        resultat += "\ncreation de la machine 2 :-> " + creerMachine(adressTest2, portEcoute, DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel");
 
         resultat += "\ncreation de la tache DD 2:-> " + creerTacheSurveilleDD(adressTest2, periodecheckDD, "c:", SEUIL_ALERT_DD, START, true);
         resultat += "\ncreation de la tache processus 2 :-> " + creerTacheSurveilleProcessus(adressTest2, periodecheckProcessus, "vlc.exe", START, false);
@@ -818,7 +912,7 @@ public class Bean {
         resultat += "\ncreation de la tache fichier existant 2 :-> " + creerTacheSurveilleFichierExist(adressTest2, periodecheckFichierExistant, "c:/testMonitoring/test.txt", START, true);
 
         String adressTest3 = "172.16.4.22";
-        //resultat += "\ncreation de la machine 2 :-> " + creerMachine(adressTest3, "8088", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel");
+        //resultat += "\ncreation de la machine 2 :-> " + creerMachine(adressTest3, portEcoute, DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel");
 
         resultat += "\ncreation de la tache DD 3:-> " + creerTacheSurveilleDD(adressTest3, periodecheckDD, "/mnt/hgfs", SEUIL_ALERT_DD, START, true);
         resultat += "\ncreation de la tache Ping 2 3 :-> " + creerTachePing(adressTest3, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, START, true);
@@ -835,4 +929,5 @@ public class Bean {
         return resultat;
 
     }
+
 }
