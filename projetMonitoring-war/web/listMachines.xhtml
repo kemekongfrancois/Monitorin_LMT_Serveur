@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="content">
+                <f:view>
+
+
+                    <h:form id="formDesMachines">
+                        <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
+                        <p:dataTable resizableColumns="true" value="#{beansMachine.listMachines}" var="item" >
+
+                            <p:column style="text-align: center">
+                                <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(item.adresseIP)}" title="Editer Machine"/>
+                                <p:commandButton icon="ui-icon-play" title="Démarrer la supervision ou là rafraichi" action="#{beansMachine.demarerOuRedemarerMachine(item)}" ajax="true" update=":formDesMachines" />
+                                <p:commandButton icon="ui-icon-stop" title="arrêter la supervision" action="#{beansMachine.stoperMachine(item)}" ajax="true" update=":formDesMachines" />
+                                <p:commandButton update=":formDesMachines:machineParam" oncomplete="PF('parametreMachine').show()" icon="ui-icon-search" title="Aperçu des taches">
+                                    <f:setPropertyActionListener value="#{item}" target="#{beansMachine.machine}" />
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column sortBy="#{item.idMachine}">
+                                <f:facet name="header">
+                                    <h:outputText value="IdMachine"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idMachine}"/>
+                            </p:column>
+                            <p:column sortBy="#{item.adresseIP}">
+                                <f:facet name="header">
+                                    <h:outputText value="AdresseIP"/>
+                                </f:facet>
+                                <h:outputText value="#{item.adresseIP}"/>
+                            </p:column>
+                            <p:column sortBy="#{item.portEcoute}">
+                                <f:facet name="header">
+                                    <h:outputText value="PortEcoute"/>
+                                </f:facet>
+                                <h:outputText value="#{item.portEcoute}"/>
+                            </p:column>
+                            <p:column sortBy="#{item.nomMachine}" filterBy="#{item.nomMachine}" >
+                                <f:facet name="header">
+                                    <h:outputText value="NomMachine"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nomMachine}"/>
+                            </p:column>
+                            <p:column sortBy="#{item.typeOS}" >
+                                <f:facet name="header">
+                                    <h:outputText value="TypeOS"/>
+                                </f:facet>
+                                <h:outputText value="#{item.typeOS}"/>
+                            </p:column>
+                            <p:column sortBy="#{item.periodeDeCheck}">
+                                <f:facet name="header">
+                                    <h:outputText value="PeriodeDeCheck"/>
+                                </f:facet>
+                                <h:outputText value="#{item.periodeDeCheck}"/>
+                            </p:column>
+                            <p:column sortBy="#{item.statue}" filterBy="#{item.statue}">
+                                <f:facet name="header">
+                                    <h:outputText value="Statue"/>
+                                </f:facet>
+                                <h:outputText value="#{item.statue}"/>
+
+
+                            </p:column>
+
+
+
+                        </p:dataTable>
+                        <p:dialog header="Parametre machine" widgetVar="parametreMachine" dynamic="true" modal="false" showEffect="fade" hideEffect="fade" resizable="true" width="640" height="340">
+                            <p:outputPanel id="machineParam" style="text-align:center;">
+                                <p:panelGrid  columns="2"  rendered="#{not empty beansMachine.machine}" columnClasses="label,value">
+
+                                    <h:form>
+                                        <h1><h:outputText value="#{beansMachine.machine.adresseIP}: Liste des taches"/></h1>
+                                        <p:dataTable value="#{beansMachine.listTache}" resizableColumns="true" var="item">
+
+
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="SeuilAlerte"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.seuilAlerte}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Nom"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.nom}"/>
+                                            </p:column>
+
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="PeriodeVerrification"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.periodeVerrification}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="TypeTache"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.typeTache}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="EnvoiyerAlerteMail"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.envoiyerAlerteMail}"/>
+                                            </p:column>
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="EnvoyerAlerteSms"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.envoyerAlerteSms}"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </h:form>
+                                </p:panelGrid>
+                                <p:commandButton value="Plus de détail" action="#{beanListeTachesMachine.chargerPage(beansMachine.machine.adresseIP)}"/>
+                                <p:commandButton value="créer une tache sur cette machine" action="#{beanCreerTache.pageCreerTache(beansMachine.machine.adresseIP)}"/>
+                                
+                            </p:outputPanel>
+                        </p:dialog>
+
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

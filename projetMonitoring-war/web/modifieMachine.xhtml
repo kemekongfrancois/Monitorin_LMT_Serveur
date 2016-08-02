@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:metadata>  
+        <f:viewParam name="adresseMachine" value="#{beanModifierMachine.adresMachine}" />  
+        <f:viewAction action="#{beanModifierMachine.loadMachine}"/>  
+    </f:metadata> 
+    <body>
+
+        <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="content">
+                <f:view>
+
+
+                    <h:form id="form">
+                        <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
+
+                        <p:panel header="Modifier Machine" >
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="IdMachine:" for="idMachine" />
+                                <p:inputText id="idMachine" value="#{beanModifierMachine.machine.idMachine}" title="IdMachine" required="true" disabled="true"/>
+                                <p:message for="idMachine" />
+                                <p:outputLabel value="AdresseIP:" for="adresseIP" />
+                                <p:inputText id="adresseIP" value="#{beanModifierMachine.machine.adresseIP}" title="AdresseIP" required="true" requiredMessage="ce champ doit être non vide"/>
+                                <p:message for="adresseIP" />
+                                <p:outputLabel value="PortEcoute:" for="portEcoute" />
+                                <p:inputText id="portEcoute" value="#{beanModifierMachine.machine.portEcoute}" title="PortEcoute" required="true" requiredMessage="ce champ doit être non vide" />
+                                <p:message for="portEcoute" />
+                                <p:outputLabel value="NomMachine:" for="nomMachine" />
+                                <p:inputText id="nomMachine" value="#{beanModifierMachine.machine.nomMachine}" title="NomMachine" />
+                                <p:message for="nomMachine" />
+                                <p:outputLabel value="TypeOS:" for="typeOS" />
+                                <p:inputText id="typeOS" value="#{beanModifierMachine.machine.typeOS}" title="TypeOS" disabled="true" />
+                                <p:message for="typeOS" />
+                                <p:outputLabel value="PeriodeDeCheck:" for="periodeDeCheck" />
+                                <p:inputText id="periodeDeCheck" value="#{beanModifierMachine.machine.periodeDeCheck}" title="PeriodeDeCheck" required="true" requiredMessage="ce champ doit être non vide" />
+                                <p:message for="periodeDeCheck" />
+                                <p:outputLabel value="Statue:" for="statue" />
+                                <p:inputText id="statue" value="#{beanModifierMachine.machine.statue}" title="Statue" />
+                                <p:message for="statue" />
+
+
+                            </h:panelGrid>
+                            <h:panelGrid  columns="2" >
+                                <p:commandButton type="reset"  value="Reinitialiser" /> 
+                                <p:commandButton  value="Enregistrer" icon="ui-icon-check" action="#{beanModifierMachine.enregistreMachine}" ajax="true" update="form"  validateClient="true"/> 
+                            </h:panelGrid>
+
+
+                        </p:panel>
+
+                    </h:form>
+
+
+                </f:view>
+
+            </ui:define>
+
+            <ui:define name="left">
+                <h:form>
+                    <p:commandButton icon="ui-icon-arrowthick-1-w"   value="Précédant" action="#{beanMenu.pagelistMachines}" /> 
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

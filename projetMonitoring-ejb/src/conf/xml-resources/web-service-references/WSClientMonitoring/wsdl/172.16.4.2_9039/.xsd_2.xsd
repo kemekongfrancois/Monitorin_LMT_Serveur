@@ -2,17 +2,9 @@
 
 <xs:import namespace="http://ws/" schemaLocation="http://172.16.4.2:9039/?xsd=1"></xs:import>
 
-<xs:element name="arreterLeScheduler" type="tns:arreterLeScheduler"></xs:element>
-
-<xs:element name="arreterLeSchedulerResponse" type="tns:arreterLeSchedulerResponse"></xs:element>
-
 <xs:element name="dateDernierFichier" type="tns:dateDernierFichier"></xs:element>
 
 <xs:element name="dateDernierFichierResponse" type="tns:dateDernierFichierResponse"></xs:element>
-
-<xs:element name="demarerLeScheduler" type="tns:demarerLeScheduler"></xs:element>
-
-<xs:element name="demarerLeSchedulerResponse" type="tns:demarerLeSchedulerResponse"></xs:element>
 
 <xs:element name="demarerMetAJourOUStopperTache" type="tns:demarerMetAJourOUStopperTache"></xs:element>
 
@@ -45,6 +37,10 @@
 <xs:element name="processusWindowsEnFonctionnement" type="tns:processusWindowsEnFonctionnement"></xs:element>
 
 <xs:element name="processusWindowsEnFonctionnementResponse" type="tns:processusWindowsEnFonctionnementResponse"></xs:element>
+
+<xs:element name="redemarerTachePrincipaleEtSousTache" type="tns:redemarerTachePrincipaleEtSousTache"></xs:element>
+
+<xs:element name="redemarerTachePrincipaleEtSousTacheResponse" type="tns:redemarerTachePrincipaleEtSousTacheResponse"></xs:element>
 
 <xs:element name="tailleFichier" type="tns:tailleFichier"></xs:element>
 
@@ -156,16 +152,6 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="arreterLeScheduler">
-<xs:sequence></xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="arreterLeSchedulerResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:boolean"></xs:element>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="hello">
 <xs:sequence>
 <xs:element name="name" type="xs:string" minOccurs="0"></xs:element>
@@ -175,16 +161,6 @@
 <xs:complexType name="helloResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:string" minOccurs="0"></xs:element>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="demarerLeScheduler">
-<xs:sequence></xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="demarerLeSchedulerResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:boolean"></xs:element>
 </xs:sequence>
 </xs:complexType>
 
@@ -219,6 +195,16 @@
 </xs:complexType>
 
 <xs:complexType name="demarerMetAJourOUStopperTacheResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="redemarerTachePrincipaleEtSousTache">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="redemarerTachePrincipaleEtSousTacheResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"></xs:element>
 </xs:sequence>

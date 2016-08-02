@@ -38,15 +38,6 @@ public class WsMonitoring {
 
     @EJB
     private Bean bean;
-
-    public boolean activerDesactiveAlertSMS(@WebParam(name = "statut")boolean statut) {
-        return bean.activerDesactiveAlertSMS(statut);
-    }
-
-    public boolean activerDesactiveAlertMail(@WebParam(name = "statut")boolean statut) {
-        return bean.activerDesactiveAlertMail(statut);
-    }
-
     
     /**
      * This is a sample web service operation
@@ -65,15 +56,11 @@ public class WsMonitoring {
         return "Hello je suis le WSServeur " + txt + " !";
     }
     
-    @WebMethod
+    /*@WebMethod
     public String initialisation(){
-        return bean.initialisation();
+    return bean.initialisation();
     }
-    
-    @WebMethod
-    public boolean redemarerTache(@WebParam(name = "idTache")int idTache) {
-        return bean.redemarerTache(idTache);
-    }
+    */
    
     /*
     private clientWS.Tache convertiTacheBeanEnTacheClient(Tache tache){
@@ -81,7 +68,7 @@ public class WsMonitoring {
         tacheClient.setDescriptionFichier(tache.getDescriptionFichier());
         tacheClient.setListeAdresse(tache.getListeAdresse());
         
-       // tacheClient.setMachine(convertirMachineBeanEnMachineClient(tache.getMachine()));
+       // tacheClient.setMachine(convertirMachineBeanEnMachineClient(tache.getMachineByIP()));
         
         tacheClient.setPeriodeVerrification(tache.getPeriodeVerrification());
         tacheClient.setSeuilAlerte(tache.getSeuilAlerte());
@@ -127,7 +114,7 @@ public class WsMonitoring {
     
     @WebMethod
     public Machine getMachine(@WebParam(name = "AdresIP")String AdresIP){
-        return bean.getMachine(AdresIP);
+        return bean.getMachineByIP(AdresIP);
     }
     
     @WebMethod
@@ -151,13 +138,12 @@ public class WsMonitoring {
     }
     
     @WebMethod
-    public boolean pinger(@WebParam(name = "adres")String adres, @WebParam(name = "nbTentative")int nbTentative) {
-        return bean.pinger(adres, nbTentative);
+    public Tache getTache(@WebParam(name = "idMachine")int IdMachine) {
+        return bean.getTache(IdMachine);
     }
     
-    @WebMethod
-    public String changerStatueMachine(@WebParam(name = "idMachine")Integer idMachine, @WebParam(name = "statue")boolean statue){
-        return bean.changerStatueMachine(idMachine,statue);
+    public boolean verifiNomTacheSurMachine(String adresIpMachine, String nomTache) {
+        return bean.verifiNomTacheSurMachine(adresIpMachine,nomTache);
     }
     /*
     public Tache creerTacheSurveilleDD(

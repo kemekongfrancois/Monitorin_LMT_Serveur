@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="content">
+
+                <p:fieldset legend="Serveur" toggleable="true" toggleSpeed="500">
+                    <h:form>
+                        <p:commandButton icon="ui-icon-pencil" action="#{beanModifierServeur.pageModifierServeur}" title="Editer Serveur"/>
+                               
+                        <p:panelGrid columns="2">
+                            <h:outputText value="EmailEnvoiMail:"/>
+                            <h:outputText value="#{beanAdministrerServeur.serveur.emailEnvoiMail}" title="EmailEnvoiMail"/>
+                            <h:outputText value="PassEnvoiMail:"/>
+                            <h:outputText value="#{beanAdministrerServeur.serveur.passEnvoiMail}" title="PassEnvoiMail"/>
+                            <h:outputText value="LogingSMS:"/>
+                            <h:outputText value="#{beanAdministrerServeur.serveur.logingSMS}" title="LogingSMS"/>
+                            <h:outputText value="MotdepasseSMS:"/>
+                            <h:outputText value="#{beanAdministrerServeur.serveur.motdepasseSMS}" title="MotdepasseSMS"/>
+                            <h:outputText value="NumeroCourt:"/>
+                            <h:outputText value="#{beanAdministrerServeur.serveur.numeroCourt}" title="NumeroCourt"/>
+                            <h:outputText value="EnvoialerteSMS:"/>
+                            <h:outputText value="#{beanAdministrerServeur.serveur.envoialerteSMS}" title="EnvoialerteSMS"/>
+                            <h:outputText value="EnvoieAlerteMail:"/>
+                            <h:outputText value="#{beanAdministrerServeur.serveur.envoieAlerteMail}" title="EnvoieAlerteMail"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:fieldset>
+                <p:separator  />
+                <p:separator  />
+                <p:fieldset legend="Administrateur" toggleable="true" toggleSpeed="500">
+                    <f:view>
+
+
+                        <h:form>
+                            <p:dataTable value="#{beanAdministrerServeur.allUtilisateur}" var="item">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="IdUtilisateur"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idUtilisateur}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="TypeCompte"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.typeCompte}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nom"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.nom}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Prenom"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.prenom}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Login"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.login}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Pass"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.pass}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="NumeroTelephone"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.numeroTelephone}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="BoiteMail"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.boiteMail}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </f:view>
+
+                </p:fieldset>
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

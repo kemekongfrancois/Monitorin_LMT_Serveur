@@ -11,64 +11,159 @@
         <ui:composition template="./resources/templateMonitoring.xhtml">
 
             <ui:define name="top">
-                top
-            </ui:define>
-
-            <ui:define name="left">
-                left
-            </ui:define>
-
-            <ui:define name="right">
-                right
+                Accueil
             </ui:define>
 
             <ui:define name="content">
                 <h:form id="form">           
                     <p:growl id="msgs" showDetail="true" />
-
-
-
-
-                    <h3>DataModel</h3>
-                    <p:accordionPanel multiple="true" 
-                                      dynamic="true" 
-                                      cache="true" 
-                                      value="#{beanAccueil.listMachines}" 
-                                      var="machine">
+                    <p:accordionPanel id="panel" multiple="true" dynamic="true" cache="true" value="#{beanAccueil.listMachines}" var="machine">
 
                         <p:ajax event="tabChange" listener="#{beanAccueil.onTabChange}" update=":form:msgs" />
                         <p:ajax event="tabClose" listener="#{beanAccueil.onTabClose}" update=":form:msgs" />
 
-                        <p:tab title="#{machine.adresseIP}:#{machine.portEcoute} (id: #{machine.idMachine})">
-                            <h:panelGrid columns="2" cellpadding="5">
+                        <p:tab  title="#{machine.adresseIP}:#{machine.portEcoute} (id= #{machine.idMachine})">
+                            <p:fieldset legend="Machine" toggleable="true" toggleSpeed="500">
+                                <h:panelGrid  columns="2" cellpadding="5">
 
-                                <h:outputText value="nom:" style="font-weight: bold" />
-                                <h:outputText value="#{machine.nomMachine}" />
+                                    <h:outputText value="nom:" style="font-weight: bold" />
+                                    <h:outputText value="#{machine.nomMachine}" />
 
-                                <h:outputText value="Type:" style="font-weight: bold" />
-                                <h:outputText value="#{machine.typeOS}" />
+                                    <h:outputText value="Type:" style="font-weight: bold" />
+                                    <h:outputText value="#{machine.typeOS}" />
 
-                                <h:outputText value="Statue:" style="font-weight: bold" />
-                                <h:outputText value="#{machine.statue}" />
+                                    <h:outputText value="Statue:" style="font-weight: bold" />
+                                    <h:outputText value="#{machine.statue}" />
 
-                                <h:outputText value="Période de Check" style="font-weight: bold" />
-                                <h:outputText value="#{machine.periodeDeCheck}" />
+                                    <h:outputText value="Période de Check" style="font-weight: bold" />
+                                    <h:outputText value="#{machine.periodeDeCheck}" />
+                                </h:panelGrid>
+                            </p:fieldset>
+
+
+                            <p:fieldset legend="Tache" toggleable="true" toggleSpeed="500">
+
+                                <p:dataTable resizableColumns="true" value="#{machine.tacheList}" var="tache">
+                                    <p:column sortBy="#{tache.idTache}">
+                                        <f:facet name="header">
+                                            <h:outputText value="IdTache"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.idTache}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{tache.redemarerAutoService}">
+                                        <f:facet name="header">
+                                            <h:outputText value="RedemarerAutoService"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.redemarerAutoService}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{tache.seuilAlerte}">
+                                        <f:facet name="header">
+                                            <h:outputText value="SeuilAlerte"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.seuilAlerte}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{tache.nom}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Nom"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.nom}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{tache.statue}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Statue"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.statue}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{tache.periodeVerrification}">
+                                        <f:facet name="header">
+                                            <h:outputText value="PeriodeVerrification"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.periodeVerrification}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{tache.typeTache}">
+                                        <f:facet name="header">
+                                            <h:outputText value="TypeTache"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.typeTache}"/>
+                                    </p:column>
+                                    
+                                    <p:column sortBy="#{tache.descriptionTache}">
+                                        <f:facet name="header">
+                                            <h:outputText value="DescriptionTache"/>
+                                        </f:facet>
+                                        <h:outputText value="#{tache.descriptionTache}"/>
+                                    </p:column>
+
+                                    <p:column style="width:32px;text-align: center">
+                                        <p:commandButton update=":form:panel:tacheDetail" oncomplete="PF('modifierTache').show()" icon="ui-icon-search" title="modifier">
+                                            <f:setPropertyActionListener value="#{tache}" target="#{beanAccueil.tache}" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+
+
+                                <p:dialog header="modifier Tache" widgetVar="modifierTache" modal="false" showEffect="fade" hideEffect="fade" resizable="true">
+                                    <p:outputPanel id="tacheDetail" style="text-align:center;">
+                                        <p:panelGrid  columns="2"  rendered="#{not empty beanAccueil.tache}" columnClasses="label,value">
+                                            <f:view>
+                                                <h:form>
+                                                    <p:panel header="Modifier/Suprimer Tache" >
+                                                        <p:messages autoUpdate="true"/>
+                                                        <h:panelGrid columns="3" cellpadding="5" style="font-weight:bold">
+                                                            <h:outputLabel value="IdTache:" for="idTache" />
+                                                            <h:inputText id="idTache" value="#{beanAccueil.tache.idTache}" title="IdTache" disabled="true" />
+                                                            <p:message for="idTache" />
+                                                            <h:outputLabel value="RedemarerAutoService:" for="redemarerAutoService" />
+                                                            <h:inputText id="redemarerAutoService" value="#{beanAccueil.tache.redemarerAutoService}" title="RedemarerAutoService" />
+                                                            <p:message for="redemarerAutoService" />
+                                                            <h:outputLabel value="SeuilAlerte:" for="seuilAlerte" />
+                                                            <h:inputText id="seuilAlerte" value="#{beanAccueil.tache.seuilAlerte}" title="SeuilAlerte" required="true" requiredMessage="Veille remplir ce champ." />
+                                                            <p:message for="seuilAlerte" />
+                                                            <h:outputLabel value="Nom:" for="nom" />
+                                                            <h:inputText id="nom" value="#{beanAccueil.tache.nom}" title="Nom" required="true" requiredMessage="Veille remplir ce champ." />
+                                                            <p:message for="nom" />
+                                                            <h:outputLabel value="Statue:" for="statue" />
+                                                            <h:inputText id="statue" value="#{beanAccueil.tache.statue}" title="Statue" />
+                                                            <p:message for="statue" />
+                                                            <h:outputLabel value="PeriodeVerrification:" for="periodeVerrification" />
+                                                            <h:inputText id="periodeVerrification" value="#{beanAccueil.tache.periodeVerrification}" title="PeriodeVerrification" required="true" requiredMessage="Veille remplir ce champ."/>
+                                                            <p:message for="periodeVerrification" />
+                                                            <h:outputLabel value="TypeTache:" for="typeTache" />
+                                                            <h:inputText id="typeTache" value="#{beanAccueil.tache.typeTache}" title="TypeTache" />
+                                                            <p:message for="typeTache" />
+                                                            <h:outputLabel value="EnvoiyerMsgDAlerte:" for="envoiyerMsgDAlerte" />
+                                                            <h:inputText id="envoiyerMsgDAlerte" value="#{beanAccueil.tache.envoiyerMsgDAlerte}" title="EnvoiyerMsgDAlerte" />
+                                                            <p:message for="envoiyerMsgDAlerte" />
+                                                            <h:outputLabel value="DescriptionTache:" for="descriptionTache" />
+                                                            <h:inputText id="descriptionTache" value="#{beanAccueil.tache.descriptionTache}" title="DescriptionTache" />
+                                                            <p:message for="descriptionTache" />
+                                                            <!-- TODO: update below reference to list of available items-->
+                                                            <f:selectItems value="#{fixme}"/>
+                                                        </h:panelGrid>
+                                                        <p:panelGrid columns="2">
+                                                            <p:commandButton id="back" value="Back" />  
+                                                            <p:commandButton validateClient="true" style="margin-right:10px"  id="update" value="Update" action="#{beanAccueil.suprimerTache(beanAccueil.tache.idTache, beanAccueil.tache.nom)}" /> 
+                                                        </p:panelGrid>
+                                                    </p:panel>
+
+                                                </h:form>
+                                            </f:view>
 
 
 
+                                        </p:panelGrid>
+                                    </p:outputPanel>
+                                </p:dialog>
 
-                            </h:panelGrid>
+                            </p:fieldset>
+
                         </p:tab>
                     </p:accordionPanel>
-
-
-
                 </h:form>
             </ui:define>
 
-            <ui:define name="bottom">
-                bottom
-            </ui:define>
+
 
         </ui:composition>
 

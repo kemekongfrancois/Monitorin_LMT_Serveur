@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tache.findByStatue", query = "SELECT t FROM Tache t WHERE t.statue = :statue"),
     @NamedQuery(name = "Tache.findByPeriodeVerrification", query = "SELECT t FROM Tache t WHERE t.periodeVerrification = :periodeVerrification"),
     @NamedQuery(name = "Tache.findByTypeTache", query = "SELECT t FROM Tache t WHERE t.typeTache = :typeTache"),
-    @NamedQuery(name = "Tache.findByEnvoiyerMsgDAlerte", query = "SELECT t FROM Tache t WHERE t.envoiyerMsgDAlerte = :envoiyerMsgDAlerte"),
+    @NamedQuery(name = "Tache.findByEnvoiyerAlerteMail", query = "SELECT t FROM Tache t WHERE t.envoiyerAlerteMail = :envoiyerAlerteMail"),
+    @NamedQuery(name = "Tache.findByEnvoyerAlerteSms", query = "SELECT t FROM Tache t WHERE t.envoyerAlerteSms = :envoyerAlerteSms"),
     @NamedQuery(name = "Tache.findByDescriptionTache", query = "SELECT t FROM Tache t WHERE t.descriptionTache = :descriptionTache")})
 public class Tache implements Serializable {
 
@@ -62,8 +63,10 @@ public class Tache implements Serializable {
     @Size(max = 254)
     @Column(name = "type_tache")
     private String typeTache;
-    @Column(name = "envoiyer_msg_d_alerte")
-    private Boolean envoiyerMsgDAlerte;
+    @Column(name = "envoiyer_alerte_mail")
+    private Boolean envoiyerAlerteMail;
+    @Column(name = "envoyer_alerte_sms")
+    private Boolean envoyerAlerteSms;
     @Size(max = 254)
     @Column(name = "description_tache")
     private String descriptionTache;
@@ -134,12 +137,20 @@ public class Tache implements Serializable {
         this.typeTache = typeTache;
     }
 
-    public Boolean getEnvoiyerMsgDAlerte() {
-        return envoiyerMsgDAlerte;
+    public Boolean getEnvoiyerAlerteMail() {
+        return envoiyerAlerteMail;
     }
 
-    public void setEnvoiyerMsgDAlerte(Boolean envoiyerMsgDAlerte) {
-        this.envoiyerMsgDAlerte = envoiyerMsgDAlerte;
+    public void setEnvoiyerAlerteMail(Boolean envoiyerAlerteMail) {
+        this.envoiyerAlerteMail = envoiyerAlerteMail;
+    }
+
+    public Boolean getEnvoyerAlerteSms() {
+        return envoyerAlerteSms;
+    }
+
+    public void setEnvoyerAlerteSms(Boolean envoyerAlerteSms) {
+        this.envoyerAlerteSms = envoyerAlerteSms;
     }
 
     public String getDescriptionTache() {

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="content">
+                <f:view>
+
+
+                    <h:form id="form">
+                        <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
+                        <p:panel header="Modifier Serveur" >
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="EmailEnvoiMail:" for="emailEnvoiMail" />
+                                <p:inputText id="emailEnvoiMail" value="#{beanModifierServeur.serveur.emailEnvoiMail}" title="EmailEnvoiMail" required="true" />
+                                <p:message for="emailEnvoiMail"/>
+                                <p:outputLabel value="PassEnvoiMail:" for="passEnvoiMail" />
+                                <p:inputText id="passEnvoiMail" value="#{beanModifierServeur.serveur.passEnvoiMail}" title="PassEnvoiMail" required="true" />
+                                <p:message for="passEnvoiMail"/>
+                                <p:outputLabel value="LogingSMS:" for="logingSMS" />
+                                <p:inputText id="logingSMS" value="#{beanModifierServeur.serveur.logingSMS}" title="LogingSMS" required="true" />
+                                <p:message for="logingSMS"/>
+                                <p:outputLabel value="MotdepasseSMS:" for="motdepasseSMS"  />
+                                <p:inputText id="motdepasseSMS" value="#{beanModifierServeur.serveur.motdepasseSMS}" title="MotdepasseSMS" required="true" />
+                                
+                                <p:message for="motdepasseSMS"/>
+                                <p:outputLabel value="NumeroCourt:" for="numeroCourt" />
+                                <p:inputText id="numeroCourt" value="#{beanModifierServeur.serveur.numeroCourt}" title="NumeroCourt" required="true" >
+                                    <f:validateLength minimum="2" maximum="11" />
+                                </p:inputText>
+                                <p:message for="numeroCourt"/>
+                                <p:outputLabel value="EnvoialerteSMS:" for="envoialerteSMS" />
+                                <p:inputText id="envoialerteSMS" value="#{beanModifierServeur.serveur.envoialerteSMS}" title="EnvoialerteSMS" required="true"  />
+                                <p:message for="envoialerteSMS"/>
+                                <p:outputLabel value="EnvoieAlerteMail:" for="envoieAlerteMail" />
+                                <p:inputText id="envoieAlerteMail" value="#{beanModifierServeur.serveur.envoieAlerteMail}" title="EnvoieAlerteMail" required="true" />
+                                <p:message for="envoieAlerteMail"/>
+                            </h:panelGrid>
+                            <h:panelGrid  columns="2" >
+                                <p:commandButton type="reset"  value="Reinitialiser" /> 
+                                <p:commandButton  value="Enregistrer" icon="ui-icon-check" action="#{beanModifierServeur.enregistreServeur}" ajax="true" update="form"  validateClient="true"/> 
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+            <ui:define name="left" >
+                <h:form>
+                    <p:commandButton icon="ui-icon-arrowthick-1-w" value="Précédant" action="#{beanMenu.pageAdministrerServeur}" /> 
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

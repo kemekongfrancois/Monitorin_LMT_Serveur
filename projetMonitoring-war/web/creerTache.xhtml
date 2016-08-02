@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<f:metadata>  
+    <f:viewParam name="adresseMachine" value="#{beanCreerTache.adresseMachine}"/>   
+    </f:metadata> 
+    <body>
+
+        <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="content">
+                <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="content">
+                <f:view>
+
+
+                    <h:form id="form">
+                        <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+                        <p:panel header="Création d’une tache pour la machine: #{beanCreerTache.adresseMachine}" >
+                            <h:panelGrid columns="3">
+                                
+                                <p:outputLabel value="RedemarerAutoService:" for="redemarerAutoService" />
+                                <p:inputText id="redemarerAutoService" value="#{beanCreerTache.tache.redemarerAutoService}" title="RedemarerAutoService" required="true" requiredMessage="ce champ doit être non vide"/>
+                                <p:message for="redemarerAutoService" />
+                                <p:outputLabel value="SeuilAlerte ou port:" for="seuilAlerte" />
+                                <p:inputText id="seuilAlerte" value="#{beanCreerTache.tache.seuilAlerte}" title="SeuilAlerte" />
+                                <p:message for="seuilAlerte" />
+                                <p:outputLabel value="Nom:" for="nom" />
+                                <p:inputText id="nom" value="#{beanCreerTache.tache.nom}" title="Nom" required="true" requiredMessage="ce champ doit être non vide"/>
+                                <p:message for="nom" />
+                                
+                                <p:outputLabel value="PeriodeVerrification:" for="periodeVerrification" />
+                                <p:inputText id="periodeVerrification" value="#{beanCreerTache.tache.periodeVerrification}" title="PeriodeVerrification" required="true" requiredMessage="ce champ doit être non vide"/>
+                                <p:message for="periodeVerrification" />
+                                <p:outputLabel value="TypeTache:" for="typeTache" />
+                                <p:inputText id="typeTache" value="#{beanCreerTache.tache.typeTache}" title="TypeTache" required="true" requiredMessage="ce champ doit être non vide" />
+                                <p:message for="typeTache" />
+                                <p:outputLabel value="EnvoiyerAlerteMail:" for="envoiyerAlerteMail" />
+                                <p:inputText id="envoiyerAlerteMail" value="#{beanCreerTache.tache.envoiyerAlerteMail}" title="EnvoiyerAlerteMail" />
+                                <p:message for="envoiyerAlerteMail" />
+                                <p:outputLabel value="EnvoyerAlerteSms:" for="envoyerAlerteSms" />
+                                <p:inputText id="envoyerAlerteSms" value="#{beanCreerTache.tache.envoyerAlerteSms}" title="EnvoyerAlerteSms" />
+                                <p:message for="envoyerAlerteSms" />
+                                <p:outputLabel value="DescriptionTache:" for="descriptionTache" />
+                                <p:inputText id="descriptionTache" value="#{beanCreerTache.tache.descriptionTache}" title="DescriptionTache" />
+                                <p:message for="descriptionTache" />
+
+                            </h:panelGrid>
+                            <h:panelGrid  columns="3" >
+                                <p:commandButton type="reset"  value="Reinitialiser" /> 
+                                <p:commandButton  value="Enregistrer" icon="ui-icon-check" action="#{beanCreerTache.crerTache}" ajax="true" update="form"   validateClient="true"/> 
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+            <ui:define name="left">
+                <h:form>
+                    <p:commandButton icon="ui-icon-arrowthick-1-w"   value="Précédant" action="#{beanCreerTache.pagePrecedente()}" /> 
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
