@@ -36,15 +36,29 @@
                 </p:fieldset>
                 <p:separator  />
                 <p:separator  />
-                <p:fieldset legend="Administrateur" toggleable="true" toggleSpeed="500">
+                <p:fieldset legend="Utilisateur" toggleable="true" toggleSpeed="500">
                     <f:view>
 
 
-                        <h:form>
+                        <h:form id="form">
+                            <p:commandButton value="créer un utilisateur" action="#{beanUtilisateur.pageCreerUtilisateur()}"/>
+                        
                             <p:dataTable value="#{beanAdministrerServeur.allUtilisateur}" var="item">
-                                <p:column>
+                                <p:column style="text-align: center; width:70px">
+                                    <p:commandButton icon="ui-icon-pencil" action="#{beanUtilisateur.pageModifieUtilisateur(item.idUtilisateur)}" title="Editer utilisateur"/>
+                                <p:commandButton icon="ui-icon-closethick" title="supprimer l'utilisateur" actionListener="#{beanAdministrerServeur.suprimerUtilisateur(item)}" update=":form">
+                                    <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer l'utilisateur :#{item.idUtilisateur} ?" icon="ui-icon-alert" />
+                                </p:commandButton>
+
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+
+                            </p:column>
+                                <p:column style="text-align: center; width:20px">
                                     <f:facet name="header">
-                                        <h:outputText value="IdUtilisateur"/>
+                                        <h:outputText value="Id"/>
                                     </f:facet>
                                     <h:outputText value="#{item.idUtilisateur}"/>
                                 </p:column>

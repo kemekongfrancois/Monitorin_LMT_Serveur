@@ -2,13 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <f:metadata>  
-        <f:viewParam name="adresseMachine" value="#{beanListeTachesMachine.adresseMachine}"/>  
-        <f:viewAction action="#{beanListeTachesMachine.loadListeTacheEtMachine}"/>  
-    </f:metadata> 
+
     <body>
 
         <ui:composition template="./resources/templateMonitoring.xhtml">
@@ -16,45 +13,19 @@
             <ui:define name="content">
                 <f:view>
 
-<p:fieldset legend="Machine" toggleable="true" toggleSpeed="500">
 
-
-                            <h:form>
-                                <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(beanListeTachesMachine.machine.adresseIP)}" title="Editer Machine"/>
-                                
-                                <p:panelGrid columns="2">
-                                    <h:outputText value="IdMachine:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.idMachine}" title="IdMachine"/>
-                                    <h:outputText value="AdresseIP:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.adresseIP}" title="AdresseIP"/>
-                                    <h:outputText value="PortEcoute:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.portEcoute}" title="PortEcoute"/>
-                                    <h:outputText value="NomMachine:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.nomMachine}" title="NomMachine"/>
-                                    <h:outputText value="TypeOS:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.typeOS}" title="TypeOS"/>
-                                    <h:outputText value="PeriodeDeCheck:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.periodeDeCheck}" title="PeriodeDeCheck"/>
-                                    <h:outputText value="Statue:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.statue}" title="Statue"/>
-                                </p:panelGrid>
-                            </h:form>
-
-                            </p:fieldset>
-                        
                     <h:form id="form">
                         <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
 
-                        
-                        <p:dataTable value="#{beanListeTachesMachine.listTaches}" liveResize="true" draggableColumns="true" resizableColumns="true" var="item">
+                        <p:dataTable value="#{beanListeTaches.listTaches}" liveResize="true" draggableColumns="true" resizableColumns="true" var="item">
                             <f:facet name="header">
-                                Taches de la machines: #{beanListeTachesMachine.adresseMachine}
+                                Liste de toute les taches 
                             </f:facet>
                             <p:column style="text-align: center; width:130px">
                                 <p:commandButton icon="ui-icon-pencil" action="#{beanModifierTache.pageModifieTache(item.idTache)}" title="Editer tache"/>
                                 <p:commandButton icon="ui-icon-play" title="Démarrer la tache" action="#{beanListeTachesMachine.demarerOuRedemarerTache(item)}" ajax="true" update=":form" />
                                 <p:commandButton icon="ui-icon-stop" title="arrêter la tache" action="#{beanListeTachesMachine.stoperTache(item)}" ajax="true" update=":form" />
-                                <p:commandButton icon="ui-icon-closethick" title="supprimer la tache" actionListener="#{beanListeTachesMachine.suprimerTache(item)}" update=":form">
+                                <p:commandButton icon="ui-icon-closethick" title="supprimer la tache" actionListener="#{beanListeTaches.suprimerTache(item)}" update=":form">
                                     <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer la tâche :#{item.idTache} ?" icon="ui-icon-alert" />
                                 </p:commandButton>
 
@@ -70,6 +41,15 @@
                                 </f:facet>
                                 <h:outputText value="#{item.idTache}"/>
                             </p:column>
+                            
+                            <p:column style="text-align: center; width:100px" sortBy="#{item.idMachine.adresseIP}" filterBy="#{item.idMachine.adresseIP}" >
+                                <f:facet name="header">
+                                    <h:outputText value="IP machine"/>
+                                </f:facet>
+                                <p:link title="Détaille pour cette machine" outcome="#{beanListeTachesMachine.chargerPage(item.idMachine.adresseIP)}"  value="#{item.idMachine.adresseIP}"/>  
+                            </p:column>
+                            
+                            
                             
                             <p:column sortBy="#{item.statue}" style="text-align: center; width:50px">
                                 <f:facet name="header">
@@ -125,17 +105,15 @@
                                 </f:facet>
                                 <h:outputText value="#{item.descriptionTache}"/>
                             </p:column>
+                            
+                            
+                            
                         </p:dataTable>
                     </h:form>
                 </f:view>
 
             </ui:define>
-            <ui:define name="left">
-                <h:form>
-                    <p:commandButton title="créer une tache sur cette machine" value="créer une tache" action="#{beanCreerTache.pageCreerTache(beanListeTachesMachine.adresseMachine)}"/>
 
-                </h:form>
-            </ui:define>
         </ui:composition>
 
     </body>

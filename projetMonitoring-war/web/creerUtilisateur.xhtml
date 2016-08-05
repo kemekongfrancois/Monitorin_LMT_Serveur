@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./resources/templateMonitoring.xhtml">
+
+            <ui:define name="content">
+                <f:view>
+
+
+                    <h:form id="form">
+                        <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+                        <p:panel header="Modifier Utilisateur" >
+                            <p:panelGrid columns="2">
+                            <p:outputLabel value="TypeCompte:" for="typeCompte" />
+                            <p:inputText id="typeCompte" value="#{beanUtilisateur.utilisateur.typeCompte}" title="TypeCompte" />
+                            <p:outputLabel value="Nom:" for="nom" />
+                            <p:inputText id="nom" value="#{beanUtilisateur.utilisateur.nom}" title="Nom" />
+                            <p:outputLabel value="Prenom:" for="prenom" />
+                            <p:inputText id="prenom" value="#{beanUtilisateur.utilisateur.prenom}" title="Prenom" />
+                            <p:outputLabel value="Login:" for="login" />
+                            <p:inputText id="login" value="#{beanUtilisateur.utilisateur.login}" title="Login" required="true" />
+                            <p:outputLabel value="Pass:" for="pass" />
+                            <p:inputText id="pass" value="#{beanUtilisateur.utilisateur.pass}" title="Pass" />
+                            <p:outputLabel value="NumeroTelephone:" for="numeroTelephone" />
+                            <p:inputText id="numeroTelephone" value="#{beanUtilisateur.utilisateur.numeroTelephone}" title="NumeroTelephone" required="true" />
+                            <p:outputLabel value="BoiteMail:" for="boiteMail" />
+                            <p:inputText id="boiteMail" value="#{beanUtilisateur.utilisateur.boiteMail}" title="BoiteMail" required="true" />
+                        </p:panelGrid>
+                            <h:panelGrid  columns="2" >
+                                <p:commandButton type="reset"  value="Reinitialiser" /> 
+                                <p:commandButton  value="Enregistrer" icon="ui-icon-check" action="#{beanUtilisateur.creerUtilisateur()}" ajax="true" update="form"   validateClient="true"/> 
+                            </h:panelGrid>
+                        </p:panel>
+                        
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

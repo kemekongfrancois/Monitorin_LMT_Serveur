@@ -21,18 +21,22 @@ public class BeanMenu {
     public BeanMenu() {
     }
     
-    public String pageAccueil(){
+    public static String pageAccueil(){
         System.out.println("apple de la page d'accueil");
         return "accueil?faces-redirect=true&amp";
     }
     
-    public String pagelistMachines(){
+    public static String pagelistMachines(){
         System.out.println("apple de la page list Machine");
         return "listMachines?faces-redirect=true&amp";
     }
     
-    public String pageAdministrerServeur(){
+    public static String pageAdministrerServeur(){
         return "administrerServeur?faces-redirect=true&amp";
+    }
+    
+    public static String pageListeTaches(){
+        return "listeTaches?faces-redirect=true&amp";
     }
 
     

@@ -33,7 +33,7 @@ public class BeanModifierTache implements Serializable{
     }
 
     public String pageModifieTache(Integer idTache) {
-        System.out.println("apple de la page pour modifier une Tache:" + idTache);
+        //System.out.println("apple de la page pour modifier une Tache:" + idTache);
         return "modifierTache?faces-redirect=true&amp&idTache=" + idTache;
 
     }
@@ -66,9 +66,8 @@ public class BeanModifierTache implements Serializable{
     }
 
     public void loadTache() {
-        System.out.println("appel de la méthode load "+this);
+        //System.out.println("appel de la méthode load "+this);
         this.tache = bean.getTache(idTache);
-        //this.machine = manageBean.getCompteById(idCompte);
     }
     
     public Tache getTache() {

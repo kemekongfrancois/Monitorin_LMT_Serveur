@@ -16,24 +16,32 @@
 
                     <h:form id="formDesMachines">
                         <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
-                        <p:dataTable resizableColumns="true" value="#{beansMachine.listMachines}" var="item" >
+                        <p:dataTable  value="#{beansMachine.listMachines}" var="item" resizableColumns="true" liveResize="true" draggableColumns="true">
 
-                            <p:column style="text-align: center">
+                            <p:column style="text-align: center; width:160px">
                                 <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(item.adresseIP)}" title="Editer Machine"/>
                                 <p:commandButton icon="ui-icon-play" title="Démarrer la supervision ou là rafraichi" action="#{beansMachine.demarerOuRedemarerMachine(item)}" ajax="true" update=":formDesMachines" />
                                 <p:commandButton icon="ui-icon-stop" title="arrêter la supervision" action="#{beansMachine.stoperMachine(item)}" ajax="true" update=":formDesMachines" />
                                 <p:commandButton update=":formDesMachines:machineParam" oncomplete="PF('parametreMachine').show()" icon="ui-icon-search" title="Aperçu des taches">
                                     <f:setPropertyActionListener value="#{item}" target="#{beansMachine.machine}" />
                                 </p:commandButton>
+                                <p:commandButton icon="ui-icon-closethick" title="supprimer la machine" actionListener="#{beansMachine.suprimerMachine(item)}" update="formDesMachines">
+                                    <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer la machine :#{item.adresseIP} ? Toute les taches associées seront aussi supprimées " icon="ui-icon-alert" />
+                                </p:commandButton>
+
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
                             </p:column>
 
-                            <p:column sortBy="#{item.idMachine}">
+                            <p:column style="text-align: center; width:20px">
                                 <f:facet name="header">
-                                    <h:outputText value="IdMachine"/>
+                                    <h:outputText value="Id"/>
                                 </f:facet>
                                 <h:outputText value="#{item.idMachine}"/>
                             </p:column>
-                            <p:column sortBy="#{item.adresseIP}">
+                            <p:column sortBy="#{item.adresseIP}" style="text-align: center; width:90px">
                                 <f:facet name="header">
                                     <h:outputText value="AdresseIP"/>
                                 </f:facet>
@@ -77,12 +85,19 @@
                         </p:dataTable>
                         <p:dialog header="Parametre machine" widgetVar="parametreMachine" dynamic="true" modal="false" showEffect="fade" hideEffect="fade" resizable="true" width="640" height="340">
                             <p:outputPanel id="machineParam" style="text-align:center;">
+                                <p:panelGrid columns="2">
+                                    <p:commandButton value="Plus de détail" action="#{beanListeTachesMachine.chargerPage(beansMachine.machine.adresseIP)}"/>
+                                    <p:commandButton title="créer une tache sur cette machine" value="créer une tache" action="#{beanCreerTache.pageCreerTache(beansMachine.machine.adresseIP)}"/>
+
+                                </p:panelGrid>
+
                                 <p:panelGrid  columns="2"  rendered="#{not empty beansMachine.machine}" columnClasses="label,value">
 
                                     <h:form>
-                                        <h1><h:outputText value="#{beansMachine.machine.adresseIP}: Liste des taches"/></h1>
                                         <p:dataTable value="#{beansMachine.listTache}" resizableColumns="true" var="item">
-
+                                            <f:facet name="header">
+                                                Taches de la machines: #{beansMachine.machine.adresseIP}
+                                            </f:facet>
 
                                             <p:column>
                                                 <f:facet name="header">
@@ -125,9 +140,7 @@
                                         </p:dataTable>
                                     </h:form>
                                 </p:panelGrid>
-                                <p:commandButton value="Plus de détail" action="#{beanListeTachesMachine.chargerPage(beansMachine.machine.adresseIP)}"/>
-                                <p:commandButton value="créer une tache sur cette machine" action="#{beanCreerTache.pageCreerTache(beansMachine.machine.adresseIP)}"/>
-                                
+
                             </p:outputPanel>
                         </p:dialog>
 

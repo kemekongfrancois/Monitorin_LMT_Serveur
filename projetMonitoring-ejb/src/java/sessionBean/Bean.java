@@ -45,24 +45,22 @@ public class Bean {
     public static final String ALERTE = "ALERTE";
     public static final String START = "START";
     public static final String STOP = "STOP";
-    public static final String INACCESSIBLE = "Inaccessible";
-    public static final String TACHE_DD = "surveiller_dd";
-    public static final String TACHE_PROCESSUS = "surveiller_processus";
-    public static final String TACHE_SERVICE = "surveiller_service";
-    public static final String TACHE_PING = "ping";
-    public static final String PB_AGENT = "Impossible de contacter l’agent";
-    public static final String TACHE_FICHIER_EXISTE = "surveille fichier existe";
-    public static final String TACHE_TAILLE_FICHIER = "surveille taille fichier";
-    public static final String TACHE_TELNET = "telnet";
-    public static final String TACHE_DATE_MODIFICATION_DERNIER_FICHIER = "date modification du dernier fichier";
-
+    public static final String TACHE_DD = "Disque";
+    public static final String TACHE_PROCESSUS = "Processus";
+    public static final String TACHE_SERVICE = "Service";
+    public static final String TACHE_PING = "Ping";
+    public static final String TACHE_TELNET = "Telnet";
+    public static final String TACHE_DATE_MODIFICATION_DERNIER_FICHIER = "Last Date";
+    public static final String TACHE_FICHIER_EXISTE = "Fichier existe";
+    public static final String TACHE_TAILLE_FICHIER = "Taille fichier";
     
+    public static final String PB_AGENT = "Impossible de contacter l’agent";
+    public static final String INACCESSIBLE = "Inaccessible";
+
     //public static final String ADRESSE_MACHINE_SERVEUR = "127.0.0.1";//cette adresse represent l'adresse du serveur
     public static final String DEFAUL_PERIODE_CHECK_MACHINE = "1 1 * * * ?";//represente la valeur par defaut de la période de check des machine 
     public static final int NB_TENTATIVE_PING = 3;
     public static final int NB_TENTATIVE_PING_LOCAL = 1;
-    public static final String TACHE_SURVEILLER_FICHIER_EXIST = "surveille_fichier_existe";
-    public static final String TACHE_SURVEILLE_FICHIER_TAILLE = "surveille_fichier_taille";
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
     public static final String TACHE_INEXISTANTE = "cette tache n'existe pas";
     public static final String ADRESSE_INCONU = "adresse IP inconue";
@@ -71,7 +69,6 @@ public class Bean {
     public static final String NUMERO_COUR_INVALIDE = "senderID invalide";
     public static final String INFO_DEJA_EXISTANT_EN_BD = "le login ou la boite mail ou le numero de téléphone es déja utilisé";
 
-    
     public String OS_MACHINE;
     //public static final String expresRegulierNumeroTel = "(\\+?237)?\\d{9}";
     @PersistenceContext
@@ -221,7 +218,21 @@ public class Bean {
         }
     }
 
-    private List<Tache> getAllTache() {
+    public boolean suprimeerMachine(String adresseIP) {
+        Machine machine = getMachineByIP(adresseIP);
+        if (machine == null) {
+            return false;
+        }
+        try {
+            em.remove(machine);
+            return true;
+        } catch (Exception e) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible de suprimer la machine " + machine.getAdresseIP(), e);
+            return false;
+        }
+    }
+
+    public List<Tache> getAllTache() {
         Query requete = em.createNamedQuery("Tache.findAll", Tache.class);
         return requete.getResultList();
     }
@@ -236,7 +247,9 @@ public class Bean {
      */
     public boolean verifiNomTacheSurMachine(String adresIpMachine, String nomTache) {
         List<Tache> listTache = getListTacheMachine(adresIpMachine);
-        if(listTache==null) return false;
+        if (listTache == null) {
+            return false;
+        }
         for (Tache tache : listTache) {
             if (tache.getNom().equalsIgnoreCase(nomTache)) {
                 return true;
@@ -245,8 +258,8 @@ public class Bean {
         return false;
     }
 
-    public Tache getTache(int IdMachine) {
-        Tache tache = em.find(Tache.class, IdMachine);
+    public Tache getTache(int IdTache) {
+        Tache tache = em.find(Tache.class, IdTache);
         if (tache == null) {
             Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "Tache inexistante");
             return null;
@@ -260,7 +273,7 @@ public class Bean {
      * permet d'enregistrer les modification aporté à une tache
      *
      * @param tache
-     * @return TACHE_EXISTE_DEJA,OK et l'exception
+     * @return TACHE_EXISTE_DEJA,OK, l'exception
      */
     public String updateTache(Tache tache) {
         try {
@@ -277,20 +290,19 @@ public class Bean {
             return e + "";
         }
     }
-    
-    public boolean supprimerTache(int idTache){
-        Tache tache = em.find(Tache.class, idTache);
-        if(tache==null){
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La tache es null");
+
+    public boolean supprimerTache(int idTache) {
+        Tache tache = getTache(idTache);
+        if (tache == null) {
             return false;
         }
-        
+
         try {
             //em.merge(tache);
             em.remove(tache);
             return true;
         } catch (Exception e) {
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible de suprimer la tache"+tache.getIdTache(), e);
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible de suprimer la tache " + tache.getIdTache(), e);
             return false;
         }
     }
@@ -317,6 +329,56 @@ public class Bean {
         return requet.getResultList();
     }
 
+    public Utilisateur getUtilisateur(Integer idUtilisateur) {
+        Utilisateur utilisateur = em.find(Utilisateur.class, idUtilisateur);
+        if (utilisateur == null) {
+            Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "Utilisateur inexistante");
+            return null;
+
+        }
+        return utilisateur;
+    }
+
+    public String updateUtilisateur(Utilisateur utilisateur) {
+        try {
+            em.merge(utilisateur);
+            return OK;
+        } catch (Exception e) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
+            return  PB;
+        }
+    }
+    
+    public boolean supprimerUtilisateur(int idUtilisateur) {
+        Utilisateur utilisateur = getUtilisateur(idUtilisateur);
+        if (utilisateur == null) {
+            return false;
+        }
+        try {
+            //em.merge(tache);
+            em.remove(utilisateur);
+            return true;
+        } catch (Exception e) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible de suprimer l'utilisateur " + utilisateur.getIdUtilisateur(), e);
+            return false;
+        }
+    }
+    
+    public Utilisateur getUtilisateurByloginAndPass(String login,String pass){
+                Query query = em.createQuery("SELECT u FROM Utilisateur u WHERE u.login = :login AND u.pass = :pass", Utilisateur.class);
+            query.setParameter("login", login);
+            query.setParameter("pass", pass);
+            
+            List<Utilisateur> listUtilisateur = query.getResultList();
+            if(listUtilisateur.size()<1){
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le login :"+login+" et le pass: "+pass+" ne coresponde à aucun utilisateur");
+                return null;
+            }else{
+                return listUtilisateur.get(0);
+            }
+    }
+
+
     /**
      * cette fonction retourne la liste des numéros aux quelles seront envoyé
      * des alertes
@@ -337,7 +399,7 @@ public class Bean {
     public boolean traitementAlerteTache(int idTache, int codeErreur) {
         Tache tache = getTache(idTache);
         if (tache == null) {
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la tache <<"+idTache+">> n'existe pas dans la BD");
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la tache <<" + idTache + ">> n'existe pas dans la BD");
             return false;
         }
         String corpsEmailEtSMS, sujetEmail;
@@ -420,8 +482,6 @@ public class Bean {
                 Logger.getLogger(Bean.class.getName()).log(Level.WARNING, tache.getTypeTache() + ": ce type n'es pas reconnue ");
                 return false;
         }
-        
-        
 
         //*************envoie des messages d'alerte*********************
         boolean traiter = false;
@@ -467,7 +527,6 @@ public class Bean {
         return false;
     }
 
-    
     /**
      * cette fonction envoie le msg d'alerte au administrateur ces message sont
      * des sms et des mail si un seul des envoie c'est effectué on retourne vrai
@@ -704,12 +763,16 @@ public class Bean {
     }
 
     /**
-     * cette fonction permet de creer une tache appartir d'une tache pris en paramettre. NB: la tache pris en paramttre ne viend pas de la BD cette foction sera utilisé pour créer les tache donc les donné on été fourni à l'interface graphique
+     * cette fonction permet de creer une tache appartir d'une tache pris en
+     * paramettre. NB: la tache pris en paramttre ne viend pas de la BD cette
+     * foction sera utilisé pour créer les tache donc les donné on été fourni à
+     * l'interface graphique
+     *
      * @param tache
      * @param AdresseMAchine
-     * @return 
+     * @return
      */
-    public String creerTacheByTache(Tache tache, String adresseMachine){
+    public String creerTacheByTache(Tache tache, String adresseMachine) {
         String adresIpMachine = adresseMachine;
         String typeTache = tache.getTypeTache();
         String description_tache = tache.getDescriptionTache();
@@ -720,12 +783,12 @@ public class Bean {
         boolean envoiyer_alerte_mail = tache.getEnvoiyerAlerteMail();
         boolean envoyer_alerte_sms = tache.getEnvoyerAlerteSms();
         boolean redemarer_auto_service = tache.getRedemarerAutoService();
-        
+
         String resultat;
-        
+
         switch (typeTache) {
             case TACHE_DD:
-                resultat =  creerTacheSurveilleDD(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache);
+                resultat = creerTacheSurveilleDD(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache);
                 break;
             case TACHE_PROCESSUS:
                 resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache);
@@ -735,10 +798,10 @@ public class Bean {
                 break;
             case TACHE_PING:
                 resultat = creerTachePing(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache);
-                 break;
+                break;
             case TACHE_FICHIER_EXISTE:
                 resultat = creerTacheSurveilleFichierExist(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache);
-               break;
+                break;
             case TACHE_TAILLE_FICHIER:
                 resultat = creerTacheSurveilleTailleFichier(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache);
                 break;
@@ -746,11 +809,12 @@ public class Bean {
                 resultat = creerTacheTelnet(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache);
                 break;
             default:
-                resultat = "Le type <<"+typeTache+">> n’existe pas ";
-                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, resultat);           
+                resultat = "Le type <<" + typeTache + ">> n’existe pas ";
+                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, resultat);
         }
         return resultat;
     }
+
     /**
      * cette fonction permet d'ouvrire une connection web service vers une
      * machine qu'on supervise
@@ -1116,7 +1180,7 @@ public class Bean {
             }
             input.close();
 
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la commande <<" + commande + ">> c'es bien exécuté");
+            //Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la commande <<" + commande + ">> c'es bien exécuté");
             return processes;
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible d'exécuter la command <<" + commande + ">>\n", e);
@@ -1136,7 +1200,7 @@ public class Bean {
         List<Machine> listeMachine = requet.getResultList();
         em.clear();//permet de déconnecter l'entity manager de la BD ainsi les modification apporté au entity ne seront plus enregistré en BD
         for (Machine machine : listeMachine) {
-            if (!(machine.getStatue().equals(STOP)||machine.getStatue().equals(ALERTE))) {//on met à jour le statue si le statue n'es pas STOP ou Alerte
+            if (!(machine.getStatue().equals(STOP) || machine.getStatue().equals(ALERTE))) {//on met à jour le statue si le statue n'es pas STOP ou Alerte
                 machine.setStatue(testConnectionMachine(machine));
             }
         }
@@ -1166,10 +1230,10 @@ public class Bean {
         }
 
         if (ws.jobExiste(machine.getIdMachine() + "", machine.getAdresseIP())) {
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine :" + machine.getAdresseIP() + "a pour status: " + START);
+            //Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine :" + machine.getAdresseIP() + "a pour status: " + START);
             return START;
         } else {
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine :" + machine.getAdresseIP() + "a pour status: " + STOP);
+            // Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine :" + machine.getAdresseIP() + "a pour status: " + STOP);
             return STOP;
         }
     }
@@ -1190,10 +1254,10 @@ public class Bean {
             }
             WSClientMonitoring ws = appelWSMachineClient(machine.getAdresseIP(), machine.getPortEcoute());
             if (ws.redemarerTachePrincipaleEtSousTache()) {
-                Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine physique à redémarer la tache principale et les sous taches. IP:<<"+machine.getAdresseIP()+">>");
+                //Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine physique à redémarer la tache principale et les sous taches. IP:<<"+machine.getAdresseIP()+">>");
                 return OK;
             } else {
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la machine physique n'a pas pus redémarer la tache principale et les sous taches. IP:<<"+machine.getAdresseIP()+">>");
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la machine physique n'a pas pus redémarer la tache principale et les sous taches. IP:<<" + machine.getAdresseIP() + ">>");
                 return KO;
             }
         } catch (Exception e) {
@@ -1201,9 +1265,5 @@ public class Bean {
             return e + "";
         }
     }
-    
-    
-
-    
 
 }

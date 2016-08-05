@@ -87,6 +87,26 @@ public class BeansMachine implements Serializable {
         this.machine = machine;
         return stopeOuRedemarerMachine(Bean.START);
     }
+    
+    public String suprimerMachine(Machine machine) {
+        if (!machine.getStatue().equals(Bean.STOP)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la machine :" + machine.getAdresseIP(), "Le statut doit être à <<" + Bean.STOP + ">> ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
+        if (bean.suprimeerMachine(machine.getAdresseIP())) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès ", "La machine a été supprimé ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            listMachines.remove(machine);
+            return null;
+            //return chargerPage(tache.getIdMachine().getAdresseIP());
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Problème inconnue ", "impossible de supprimer la tache");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
+    }
+
 
     public BeansMachine() {
     }

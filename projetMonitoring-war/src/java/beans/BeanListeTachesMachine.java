@@ -5,6 +5,7 @@
  */
 package beans;
 
+import entite.Machine;
 import entite.Tache;
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +30,7 @@ public class BeanListeTachesMachine implements Serializable {
     private List<Tache> listTaches;
     private Tache tache;
     private String adresseMachine;
+    private Machine machine;
 
     public BeanListeTachesMachine() {
     }
@@ -40,9 +42,10 @@ public class BeanListeTachesMachine implements Serializable {
 
     }
 
-    public void loadListeTache() {
-        System.out.println("appel de la méthode load " + this);
+    public void loadListeTacheEtMachine() {
+        //System.out.println("appel de la méthode load " + this);
         this.listTaches = bean.getListTacheMachine(adresseMachine);
+        this.machine = bean.getMachineByIP(adresseMachine);
         //this.machine = manageBean.getCompteById(idCompte);
     }
 
@@ -73,8 +76,8 @@ public class BeanListeTachesMachine implements Serializable {
     }
 
     public String suprimerTache(Tache tache) {
-        if (tache.getStatue().equals(Bean.START)) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la tache :" + tache.getIdTache(), "Le statut ne doit pas être à <<" + Bean.START + ">> ");
+        if (!tache.getStatue().equals(Bean.STOP)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la tache :" + tache.getIdTache(), "Le statut doit être à <<" + Bean.STOP + ">> ");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
@@ -113,6 +116,14 @@ public class BeanListeTachesMachine implements Serializable {
 
     public void setTache(Tache tache) {
         this.tache = tache;
+    }
+
+    public Machine getMachine() {
+        return machine;
+    }
+
+    public void setMachine(Machine machine) {
+        this.machine = machine;
     }
 
 }

@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import sessionBean.Bean;
@@ -31,12 +33,28 @@ public class BeanAdministrerServeur implements Serializable{
     
     public BeanAdministrerServeur() {
     }
+    
     @PostConstruct
     public void init(){
         this.serveur = bean.getServeurOuInitialiseBD();
         this.allUtilisateur = bean.getAllUtilisateur();
     }
 
+    public void suprimerUtilisateur(Utilisateur utilisateur){
+         
+        if (bean.supprimerUtilisateur(utilisateur.getIdUtilisateur())) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès ", "L'utilisateur a été supprimé ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            allUtilisateur.remove(utilisateur);
+            return ;
+            //return chargerPage(tache.getIdMachine().getAdresseIP());
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Problème inconnue ", "impossible de supprimer l'utilisateur");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return ;
+        }
+    }
+    
     public Serveur getServeur() {
         return serveur;
     }

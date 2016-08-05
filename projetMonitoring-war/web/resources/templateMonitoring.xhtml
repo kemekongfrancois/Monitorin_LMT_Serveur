@@ -24,18 +24,19 @@
 
             <p:layoutUnit resizable="true" position="west" header="Menu" collapsible="true">
                 <h:form>
-                        <p:menu>
-                            <p:menuitem value="Machine supervisé" action="#{beanMenu.pagelistMachines}" />
+                    <p:menu>
+                        <p:menuitem value="Machine supervisé" action="#{beanMenu.pagelistMachines}" />
+                        <p:menuitem value="Liste des taches" action="#{beanMenu.pageListeTaches}" />
                         <p:menuitem title="administration du Serveur " value="Serveur" action="#{beanMenu.pageAdministrerServeur}" />
                         <p:menuitem value="Accueil(a sup)" action="#{beanMenu.pageAccueil}" />
-                        
+
                     </p:menu>
-                    </h:form>
+                </h:form>
                 <p:separator  />
                 <ui:insert name="left">
-                    
-                    
-                    
+
+
+
                 </ui:insert>
 
             </p:layoutUnit>
