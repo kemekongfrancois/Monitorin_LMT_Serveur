@@ -104,12 +104,12 @@ public class WsMonitoring {
     }
     */
     @WebMethod
-    public Machine verifiOuCreerMachine(
+    public Machine creerOuVerifiMachine(
             @WebParam(name = "AdresIP") String AdresIP,
             @WebParam(name = "Port")String port, 
             @WebParam(name = "nonOS") String nonOS, 
             @WebParam(name = "nomMachine") String nomMachine){
-        return bean.verifiOuCreerMachine(AdresIP,port, Bean.DEFAUL_PERIODE_CHECK_MACHINE, nonOS, nomMachine);
+        return bean.creerOuVerifiMachine(AdresIP,port, Bean.DEFAUL_PERIODE_CHECK_MACHINE, nonOS, nomMachine);
     }
     
     @WebMethod
@@ -141,10 +141,15 @@ public class WsMonitoring {
     public Tache getTache(@WebParam(name = "idMachine")int IdMachine) {
         return bean.getTache(IdMachine);
     }
-    
+    @WebMethod
     public boolean verifiNomTacheSurMachine(String adresIpMachine, String nomTache) {
         return bean.verifiNomTacheSurMachine(adresIpMachine,nomTache);
     }
+    @WebMethod
+    public boolean problemeTacheResolu(@WebParam(name = "idTache")int idTache) {
+        return bean.problemeTacheResolu(idTache);
+    }
+    
     /*
     public Tache creerTacheSurveilleDD(
             @WebParam(name = "adresIpMachine") String adresIpMachine, 

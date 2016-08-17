@@ -79,6 +79,14 @@
 
 
                             </p:column>
+                            <p:column sortBy="#{item.niveauDAlerte}" >
+                                <f:facet name="header">
+                                    <h:outputText value="NiveauDAlerte"/>
+                                </f:facet>
+                                <h:outputText value="#{item.niveauDAlerte}"/>
+
+
+                            </p:column>
 
 
 
@@ -136,6 +144,12 @@
                                                 </f:facet>
                                                 <h:outputText value="#{item.envoyerAlerteSms}"/>
                                             </p:column>
+                                            <p:column >
+                                <f:facet name="header">
+                                    <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
+                                </f:facet>
+                                <h:outputText value="#{item.niveauDAlerte}"/>
+                            </p:column>
 
                                         </p:dataTable>
                                     </h:form>

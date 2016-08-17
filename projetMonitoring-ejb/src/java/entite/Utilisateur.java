@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Utilisateur.findByLogin", query = "SELECT u FROM Utilisateur u WHERE u.login = :login"),
     @NamedQuery(name = "Utilisateur.findByPass", query = "SELECT u FROM Utilisateur u WHERE u.pass = :pass"),
     @NamedQuery(name = "Utilisateur.findByNumeroTelephone", query = "SELECT u FROM Utilisateur u WHERE u.numeroTelephone = :numeroTelephone"),
-    @NamedQuery(name = "Utilisateur.findByBoiteMail", query = "SELECT u FROM Utilisateur u WHERE u.boiteMail = :boiteMail")})
+    @NamedQuery(name = "Utilisateur.findByBoiteMail", query = "SELECT u FROM Utilisateur u WHERE u.boiteMail = :boiteMail"),
+    @NamedQuery(name = "Utilisateur.findByNiveauDAlerte", query = "SELECT u FROM Utilisateur u WHERE u.niveauDAlerte = :niveauDAlerte")})
 public class Utilisateur implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,6 +72,8 @@ public class Utilisateur implements Serializable {
     @Size(min = 1, max = 254)
     @Column(name = "boite_mail")
     private String boiteMail;
+    @Column(name = "niveau_d_alerte")
+    private Integer niveauDAlerte;
 
     public Utilisateur() {
     }
@@ -148,6 +151,14 @@ public class Utilisateur implements Serializable {
 
     public void setBoiteMail(String boiteMail) {
         this.boiteMail = boiteMail;
+    }
+
+    public Integer getNiveauDAlerte() {
+        return niveauDAlerte;
+    }
+
+    public void setNiveauDAlerte(Integer niveauDAlerte) {
+        this.niveauDAlerte = niveauDAlerte;
     }
 
     @Override

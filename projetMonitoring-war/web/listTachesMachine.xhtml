@@ -37,6 +37,8 @@
                                     <h:outputText value="#{beanListeTachesMachine.machine.periodeDeCheck}" title="PeriodeDeCheck"/>
                                     <h:outputText value="Statue:"/>
                                     <h:outputText value="#{beanListeTachesMachine.machine.statue}" title="Statue"/>
+                                    <h:outputText value="NiveauDAlerte:"/>
+                                    <h:outputText value="#{beanListeTachesMachine.machine.niveauDAlerte}" title="NiveauDAlerte"/>
                                 </p:panelGrid>
                             </h:form>
 
@@ -119,12 +121,19 @@
                                 </f:facet>
                                 <h:outputText value="#{item.redemarerAutoService}"/>
                             </p:column>
+                            <p:column sortBy="#{item.niveauDAlerte}" style="text-align: center; width:35px">
+                                <f:facet name="header">
+                                    <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
+                                </f:facet>
+                                <h:outputText value="#{item.niveauDAlerte}"/>
+                            </p:column>
                             <p:column sortBy="#{item.descriptionTache}" filterBy="#{item.descriptionTache}">
                                 <f:facet name="header">
                                     <h:outputText value="DescriptionTache"/>
                                 </f:facet>
                                 <h:outputText value="#{item.descriptionTache}"/>
                             </p:column>
+                            
                         </p:dataTable>
                     </h:form>
                 </f:view>

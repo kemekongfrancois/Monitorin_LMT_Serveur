@@ -43,22 +43,26 @@ public class BeanModifierMachine implements Serializable {
     }
 
     /**
-     * enregistre les modification aporté à la machine et repercute les modification  sur la machine physique si possible
-     * @return 
+     * enregistre les modification aporté à la machine et repercute les
+     * modification sur la machine physique si possible
+     *
+     * @return
      */
     public String enregistreMachine() {
 
         if (machine == null) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,"Gros Problème", "le beans es null: cause inconue");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Gros Problème", "le beans es null: cause inconue");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
         String resultat = bean.updateMachie(machine);
         if (resultat.equals(bean.OK)) {
-            bean.redemarerTachePrincipaleEtSousTache(machine);
+            if (!machine.getStatue().equals(Bean.STOP)) {//on applique les modification sur la machine physique si celle-ci n'a pas la valeur de STOP
+                bean.redemarerTachePrincipaleEtSousTache(machine);
+            }
             return "listMachines?faces-redirect=true&amp";
         } else {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Impossible d'enregistrer les modifications",resultat);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Impossible d'enregistrer les modifications", resultat);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
@@ -66,7 +70,7 @@ public class BeanModifierMachine implements Serializable {
     }
 
     public void loadMachine() {
-        System.out.println("appel de la méthode load "+this);
+        System.out.println("appel de la méthode load " + this);
         this.machine = bean.getMachineByIP(adresMachine);
         //this.machine = manageBean.getCompteById(idCompte);
     }

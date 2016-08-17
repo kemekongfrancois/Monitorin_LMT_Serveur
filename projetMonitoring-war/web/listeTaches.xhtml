@@ -46,7 +46,8 @@
                                 <f:facet name="header">
                                     <h:outputText value="IP machine"/>
                                 </f:facet>
-                                <p:link title="Détaille pour cette machine" outcome="#{beanListeTachesMachine.chargerPage(item.idMachine.adresseIP)}"  value="#{item.idMachine.adresseIP}"/>  
+                                <h:outputText value="#{item.idMachine.adresseIP} "/>
+                                <p:commandButton icon="ui-icon-search" action="#{beanListeTachesMachine.chargerPage(item.idMachine.adresseIP)}" title="Détaille pour cette machine" />
                             </p:column>
                             
                             
@@ -98,6 +99,12 @@
                                     <h:outputText title="Redémarrer automatiquement le service" value="Service"/>
                                 </f:facet>
                                 <h:outputText value="#{item.redemarerAutoService}"/>
+                            </p:column>
+                            <p:column sortBy="#{item.niveauDAlerte}" style="text-align: center; width:35px">
+                                <f:facet name="header">
+                                    <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
+                                </f:facet>
+                                <h:outputText value="#{item.niveauDAlerte}"/>
                             </p:column>
                             <p:column sortBy="#{item.descriptionTache}" filterBy="#{item.descriptionTache}">
                                 <f:facet name="header">

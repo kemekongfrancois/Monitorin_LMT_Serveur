@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Machine.findByNomMachine", query = "SELECT m FROM Machine m WHERE m.nomMachine = :nomMachine"),
     @NamedQuery(name = "Machine.findByTypeOS", query = "SELECT m FROM Machine m WHERE m.typeOS = :typeOS"),
     @NamedQuery(name = "Machine.findByPeriodeDeCheck", query = "SELECT m FROM Machine m WHERE m.periodeDeCheck = :periodeDeCheck"),
-    @NamedQuery(name = "Machine.findByStatue", query = "SELECT m FROM Machine m WHERE m.statue = :statue")})
+    @NamedQuery(name = "Machine.findByStatue", query = "SELECT m FROM Machine m WHERE m.statue = :statue"),
+    @NamedQuery(name = "Machine.findByNiveauDAlerte", query = "SELECT m FROM Machine m WHERE m.niveauDAlerte = :niveauDAlerte")})
 public class Machine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,6 +67,8 @@ public class Machine implements Serializable {
     @Size(max = 254)
     @Column(name = "statue")
     private String statue;
+    @Column(name = "niveau_d_alerte")
+    private Integer niveauDAlerte;
     @OneToMany(mappedBy = "idMachine")
     private List<Tache> tacheList;
 
@@ -135,6 +138,14 @@ public class Machine implements Serializable {
 
     public void setStatue(String statue) {
         this.statue = statue;
+    }
+
+    public Integer getNiveauDAlerte() {
+        return niveauDAlerte;
+    }
+
+    public void setNiveauDAlerte(Integer niveauDAlerte) {
+        this.niveauDAlerte = niveauDAlerte;
     }
 
     @XmlTransient

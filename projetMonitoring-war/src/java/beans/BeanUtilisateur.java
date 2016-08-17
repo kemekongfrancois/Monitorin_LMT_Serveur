@@ -89,10 +89,11 @@ public class BeanUtilisateur implements Serializable{
         String type_compte = utilisateur.getTypeCompte();
         String numero_telephone = utilisateur.getNumeroTelephone();
         String boite_mail = utilisateur.getBoiteMail();
+        int niveauDAlerte = utilisateur.getNiveauDAlerte();
         
         String resultat = null;
         try {
-            resultat = bean.creerUtilisateur(login, pass, nom, prenom, type_compte, numero_telephone, boite_mail);
+            resultat = bean.creerUtilisateur(login, pass, nom, prenom, type_compte, numero_telephone, boite_mail,niveauDAlerte);
         } catch (Exception e) {
             resultat = "Le login, la boite mail et le numéro de téléphone doivent être unique dans toute la base de donné\n"+e;
         }

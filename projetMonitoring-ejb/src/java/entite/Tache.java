@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tache.findByTypeTache", query = "SELECT t FROM Tache t WHERE t.typeTache = :typeTache"),
     @NamedQuery(name = "Tache.findByEnvoiyerAlerteMail", query = "SELECT t FROM Tache t WHERE t.envoiyerAlerteMail = :envoiyerAlerteMail"),
     @NamedQuery(name = "Tache.findByEnvoyerAlerteSms", query = "SELECT t FROM Tache t WHERE t.envoyerAlerteSms = :envoyerAlerteSms"),
-    @NamedQuery(name = "Tache.findByDescriptionTache", query = "SELECT t FROM Tache t WHERE t.descriptionTache = :descriptionTache")})
+    @NamedQuery(name = "Tache.findByDescriptionTache", query = "SELECT t FROM Tache t WHERE t.descriptionTache = :descriptionTache"),
+    @NamedQuery(name = "Tache.findByNiveauDAlerte", query = "SELECT t FROM Tache t WHERE t.niveauDAlerte = :niveauDAlerte")})
 public class Tache implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,6 +71,8 @@ public class Tache implements Serializable {
     @Size(max = 254)
     @Column(name = "description_tache")
     private String descriptionTache;
+    @Column(name = "niveau_d_alerte")
+    private Integer niveauDAlerte;
     @JoinColumn(name = "id_machine", referencedColumnName = "id_machine")
     @ManyToOne
     private Machine idMachine;
@@ -159,6 +162,14 @@ public class Tache implements Serializable {
 
     public void setDescriptionTache(String descriptionTache) {
         this.descriptionTache = descriptionTache;
+    }
+
+    public Integer getNiveauDAlerte() {
+        return niveauDAlerte;
+    }
+
+    public void setNiveauDAlerte(Integer niveauDAlerte) {
+        this.niveauDAlerte = niveauDAlerte;
     }
 
     public Machine getIdMachine() {
