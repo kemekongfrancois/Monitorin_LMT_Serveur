@@ -25,7 +25,7 @@
                                 <p:inputText id="idTache" value="#{beanModifierTache.tache.idTache}" title="IdTache" disabled="true"/>
                                 <p:message for="idTache" />
                                 <p:outputLabel value="RedemarerAutoService:" for="redemarerAutoService" />
-                                <p:inputText id="redemarerAutoService" value="#{beanModifierTache.tache.redemarerAutoService}" title="RedemarerAutoService" required="true" requiredMessage="ce champ doit être non vide"/>
+                                <p:selectBooleanCheckbox id="redemarerAutoService" value="#{beanModifierTache.tache.redemarerAutoService}" title="RedemarerAutoService" />
                                 <p:message for="redemarerAutoService" />
                                 <p:outputLabel value="SeuilAlerte:" for="seuilAlerte" />
                                 <p:inputText id="seuilAlerte" value="#{beanModifierTache.tache.seuilAlerte}" title="SeuilAlerte" />
@@ -43,10 +43,10 @@
                                 <p:inputText id="typeTache" value="#{beanModifierTache.tache.typeTache}" title="TypeTache" required="true" requiredMessage="ce champ doit être non vide" />
                                 <p:message for="typeTache" />
                                 <p:outputLabel value="EnvoiyerAlerteMail:" for="envoiyerAlerteMail" />
-                                <p:inputText id="envoiyerAlerteMail" value="#{beanModifierTache.tache.envoiyerAlerteMail}" title="EnvoiyerAlerteMail" />
+                                <p:selectBooleanCheckbox id="envoiyerAlerteMail" value="#{beanModifierTache.tache.envoiyerAlerteMail}" title="EnvoiyerAlerteMail" />
                                 <p:message for="envoiyerAlerteMail" />
                                 <p:outputLabel value="EnvoyerAlerteSms:" for="envoyerAlerteSms" />
-                                <p:inputText id="envoyerAlerteSms" value="#{beanModifierTache.tache.envoyerAlerteSms}" title="EnvoyerAlerteSms" />
+                                <p:selectBooleanCheckbox id="envoyerAlerteSms" value="#{beanModifierTache.tache.envoyerAlerteSms}" title="EnvoyerAlerteSms" />
                                 <p:message for="envoyerAlerteSms" />
                                 <p:outputLabel value="NiveauDAlerte:" for="niveauDAlerte" />
                                 <p:inputText id="niveauDAlerte" value="#{beanModifierTache.tache.niveauDAlerte}" title="DescriptionTache" required="true" />

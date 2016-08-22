@@ -43,7 +43,7 @@
                         <h:form id="form">
                             <p:commandButton value="créer un utilisateur" action="#{beanUtilisateur.pageCreerUtilisateur()}"/>
                         
-                            <p:dataTable value="#{beanAdministrerServeur.allUtilisateur}" var="item">
+                            <p:dataTable value="#{beanAdministrerServeur.allUtilisateur}" var="item" resizableColumns="true" liveResize="true" draggableColumns="true">
                                 <p:column style="text-align: center; width:70px">
                                     <p:commandButton icon="ui-icon-pencil" action="#{beanUtilisateur.pageModifieUtilisateur(item.idUtilisateur)}" title="Editer utilisateur"/>
                                 <p:commandButton icon="ui-icon-closethick" title="supprimer l'utilisateur" actionListener="#{beanAdministrerServeur.suprimerUtilisateur(item)}" update=":form">

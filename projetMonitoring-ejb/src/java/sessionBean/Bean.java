@@ -58,8 +58,8 @@ public class Bean {
     public static final String INACCESSIBLE = "Inaccessible";
 
     //public static final String ADRESSE_MACHINE_SERVEUR = "127.0.0.1";//cette adresse represent l'adresse du serveur
-    public static final String DEFAUL_PERIODE_CHECK_MACHINE = "1 1 * * * ?";//represente la valeur par defaut de la période de check des machine 
-    public static final int NB_TENTATIVE_PING_LOCAL = 1;
+    public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 7-22 * * * ?";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 22h)
+    public static final int NB_TENTATIVE_PING_LOCAL = 2;
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
     public static final String TACHE_INEXISTANTE = "cette tache n'existe pas";
     public static final String ADRESSE_INCONU = "adresse IP inconue";
@@ -258,21 +258,27 @@ public class Bean {
      * cette fonction verifi si la machine (donc l'adresse es pris en
      * paramettre) possède une tache avec le nom pris en paramettre
      *
-     * @param idMachine
+     * @param adresIpMachine
      * @param nomTache
      * @return true si la machine possède ce nom de tache
      */
     public boolean verifiNomTacheSurMachine(String adresIpMachine, String nomTache) {
-        List<Tache> listTache = getListTacheMachine(adresIpMachine);
+
+        Query query = em.createQuery("SELECT t FROM Tache t WHERE t.idMachine.adresseIP = :adresseIP AND t.nom = :nom", Tache.class);
+        query.setParameter("adresseIP", adresIpMachine);
+        query.setParameter("nom", nomTache);
+        return !query.getResultList().isEmpty();
+
+        /*List<Tache> listTache = getListTacheMachine(adresIpMachine);
         if (listTache == null) {
-            return false;
+        return false;
         }
         for (Tache tache : listTache) {
-            if (tache.getNom().equalsIgnoreCase(nomTache)) {
-                return true;
-            }
+        if (tache.getNom().equalsIgnoreCase(nomTache)) {
+        return true;
         }
-        return false;
+        }
+        return false;*/
     }
 
     public Tache getTache(int IdTache) {
@@ -874,47 +880,51 @@ public class Bean {
      * @return
      */
     public String creerTacheByTache(Tache tache, String adresseMachine) {
-        String adresIpMachine = adresseMachine;
-        String typeTache = tache.getTypeTache();
-        String description_tache = tache.getDescriptionTache();
-        String periodeVerrification = tache.getPeriodeVerrification();
-        String nom = tache.getNom();
-        int seuil = tache.getSeuilAlerte();
-        String statue = tache.getStatue();
-        boolean envoiyer_alerte_mail = tache.getEnvoiyerAlerteMail();
-        boolean envoyer_alerte_sms = tache.getEnvoyerAlerteSms();
-        boolean redemarer_auto_service = tache.getRedemarerAutoService();
-        int niveauDAlerte = tache.getNiveauDAlerte();
+        try {
+            String adresIpMachine = adresseMachine;
+            String typeTache = tache.getTypeTache();
+            String description_tache = tache.getDescriptionTache();
+            String periodeVerrification = tache.getPeriodeVerrification();
+            String nom = tache.getNom();
+            int seuil = tache.getSeuilAlerte();
+            String statue = tache.getStatue();
+            boolean envoiyer_alerte_mail = tache.getEnvoiyerAlerteMail();
+            boolean envoyer_alerte_sms = tache.getEnvoyerAlerteSms();
+            boolean redemarer_auto_service = tache.getRedemarerAutoService();
+            int niveauDAlerte = tache.getNiveauDAlerte();
 
-        String resultat;
+            String resultat;
 
-        switch (typeTache) {
-            case TACHE_DD:
-                resultat = creerTacheSurveilleDD(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
-                break;
-            case TACHE_PROCESSUS:
-                resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
-                break;
-            case TACHE_SERVICE:
-                resultat = creerTacheSurveilleService(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, redemarer_auto_service, description_tache, niveauDAlerte);
-                break;
-            case TACHE_PING:
-                resultat = creerTachePing(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
-                break;
-            case TACHE_FICHIER_EXISTE:
-                resultat = creerTacheSurveilleFichierExist(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
-                break;
-            case TACHE_TAILLE_FICHIER:
-                resultat = creerTacheSurveilleTailleFichier(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
-                break;
-            case TACHE_TELNET:
-                resultat = creerTacheTelnet(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
-                break;
-            default:
-                resultat = "Le type <<" + typeTache + ">> n’existe pas ";
-                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, resultat);
+            switch (typeTache) {
+                case TACHE_DD:
+                    resultat = creerTacheSurveilleDD(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    break;
+                case TACHE_PROCESSUS:
+                    resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    break;
+                case TACHE_SERVICE:
+                    resultat = creerTacheSurveilleService(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, redemarer_auto_service, description_tache, niveauDAlerte);
+                    break;
+                case TACHE_PING:
+                    resultat = creerTachePing(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    break;
+                case TACHE_FICHIER_EXISTE:
+                    resultat = creerTacheSurveilleFichierExist(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    break;
+                case TACHE_TAILLE_FICHIER:
+                    resultat = creerTacheSurveilleTailleFichier(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    break;
+                case TACHE_TELNET:
+                    resultat = creerTacheTelnet(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    break;
+                default:
+                    resultat = "Le type <<" + typeTache + ">> n’existe pas ";
+                    Logger.getLogger(Bean.class.getName()).log(Level.WARNING, resultat);
+            }
+            return resultat;
+        } catch (Exception e) {
+            return e + "";
         }
-        return resultat;
     }
 
     /**
@@ -1193,6 +1203,26 @@ public class Bean {
     }
 
     /**
+     * cette fonction verrifie si il existe déjà un utilisateur avec un des
+     * paramétres
+     *
+     * @param login
+     * @param numero_telephone
+     * @param boite_mail
+     * @return true s'il existe un utilisateur avec un des paramétres
+     */
+    private boolean verifieExisteUtilisateur(String login, String numero_telephone, String boite_mail) {
+        Query query = em.createQuery("SELECT u FROM Utilisateur u WHERE u.boiteMail = :boiteMail OR u.login = :login OR u.numeroTelephone = :numeroTelephone ", Utilisateur.class);
+        query.setParameter("numeroTelephone", numero_telephone);
+        query.setParameter("login", login);
+        query.setParameter("boiteMail", boite_mail);
+        if (!query.getResultList().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      *
      * @param login
      * @param pass
@@ -1201,19 +1231,25 @@ public class Bean {
      * @param type_compte
      * @param numero_telephone
      * @param boite_mail
+     * @param niveauDAlerte
      * @return OK, INFO_DEJA_EXISTANT_EN_BD, ECHEC_ECRITURE_BD
      */
     public String creerUtilisateur(String login, String pass, String nom, String prenom, String type_compte, String numero_telephone, String boite_mail, int niveauDAlerte) {
-        List<Utilisateur> listUtilisateur = getAllUtilisateur();
-        for (Utilisateur utilisateur : listUtilisateur) {//on verifie que les information entré n'existe pas encore dans la BD
-            if (login.equalsIgnoreCase(utilisateur.getLogin())
-                    || numero_telephone.equalsIgnoreCase(utilisateur.getNumeroTelephone())
-                    || boite_mail.equalsIgnoreCase(utilisateur.getBoiteMail())) {
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, INFO_DEJA_EXISTANT_EN_BD);
-                return INFO_DEJA_EXISTANT_EN_BD;
-            }
+
+        if (verifieExisteUtilisateur(login, numero_telephone, boite_mail)) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, INFO_DEJA_EXISTANT_EN_BD);
+            return INFO_DEJA_EXISTANT_EN_BD;
         }
 
+        /*List<Utilisateur> listUtilisateur = getAllUtilisateur();
+        for (Utilisateur utilisateur : listUtilisateur) {//on verifie que les information entré n'existe pas encore dans la BD
+        if (login.equalsIgnoreCase(utilisateur.getLogin())
+        || numero_telephone.equalsIgnoreCase(utilisateur.getNumeroTelephone())
+        || boite_mail.equalsIgnoreCase(utilisateur.getBoiteMail())) {
+        Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, INFO_DEJA_EXISTANT_EN_BD);
+        return INFO_DEJA_EXISTANT_EN_BD;
+        }
+        }*/
         Utilisateur utilisateur = new Utilisateur();
 
         utilisateur.setBoiteMail(boite_mail);

@@ -58,7 +58,7 @@ public class BeanInitialisation {
      * renvoie les alertes des machine et met à jour le statu dans le cas où la
      * machine es de nouveau accessible situation es de retour à la normal
      */
-    @Schedule(hour = "*/1")//cette tache vas s'exécuté toute les  1 heure pendant les heure de travail 
+    @Schedule(hour = "7-22")//cette tache vas s'exécuté toute les  heure entre 7h et 22h
     //@Schedule(second = "30", minute = "*", hour = "*")
     public void renvoiAlerteMachineEtUpdateMachine() {
         System.out.println("renvoie des alertes machine ou met à jour les alertes machines " + new Date());

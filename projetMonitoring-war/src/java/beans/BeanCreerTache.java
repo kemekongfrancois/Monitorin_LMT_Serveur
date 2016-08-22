@@ -37,6 +37,7 @@ public class BeanCreerTache implements Serializable{
         tache.setEnvoyerAlerteSms(true);;
         tache.setRedemarerAutoService(false);
         tache.setPeriodeVerrification(Bean.DEFAUL_PERIODE_CHECK_MACHINE);
+        tache.setSeuilAlerte(0);
         
     }
 
