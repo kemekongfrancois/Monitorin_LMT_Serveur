@@ -237,6 +237,23 @@ public class Bean {
         return requete.getResultList();
     }
 
+    private List<Machine> getAllMachine() {
+        Query requete = em.createNamedQuery("Machine.findAll", Machine.class);
+        return requete.getResultList();
+    }
+
+    /**
+     * retournne toute les machines donc le statue es passé en paramettre
+     *
+     * @param statue
+     * @return
+     */
+    public List<Machine> getAllMachineByStatue(String statue) {
+        Query query = em.createNamedQuery("Machine.findByStatue", Machine.class);
+        query.setParameter("statue", statue);
+        return query.getResultList();
+    }
+
     /**
      * cette fonction verifi si la machine (donc l'adresse es pris en
      * paramettre) possède une tache avec le nom pris en paramettre
@@ -308,8 +325,8 @@ public class Bean {
     }
 
     /**
-     * cette fonction retourne la liste des adresse mail des utilisateur donc leur
-     * niveau d'alerte es inférieur ou égal à la valeur pris en paramettre
+     * cette fonction retourne la liste des adresse mail des utilisateur donc
+     * leur niveau d'alerte es inférieur ou égal à la valeur pris en paramettre
      *
      * @param niveauDAlerte
      * @return
@@ -321,7 +338,7 @@ public class Bean {
         Query query = em.createQuery("SELECT u.boiteMail FROM Utilisateur u WHERE u.niveauDAlerte <= :niveauDAlerte", Utilisateur.class);
         query.setParameter("niveauDAlerte", niveauDAlerte);
         listEmail = query.getResultList();
-        
+
         /*List<Utilisateur> listUtilisateur = getAllUtilisateur();
         for (Utilisateur utilisateur : listUtilisateur) {
         listEmail.add(utilisateur.getBoiteMail());
@@ -645,16 +662,33 @@ public class Bean {
         return true;
     }
      */
-    public boolean traitementAlerteMachine(int IdMachine, List<Tache> listTachePB) {
+    /**
+     * cette fonction permet de traiter les alertes issus d'une machine et de
+     * relancé les alerte des taches
+     *
+     * @param IdMachine
+     * @param listTachePB
+     * @return
+     */
+    public boolean traitementAlerteMachine(int IdMachine, List<Integer> listTachePB) {
         Machine machine = em.find(Machine.class, IdMachine);
         if (machine == null) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "machine inexistante: id=" + IdMachine);
             return false;
         }
+        List<Tache> listTacheMachine = getListTacheMachineByStatueTache(machine, ALERTE);
+        String msg;
+
+        for (Tache tache : listTacheMachine) {//cette boucle permet de renvoyer les msg d'alerte des taches
+            msg = "Rappel d'alerte sur la machine <<" + machine.getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> et de type <<" + tache.getTypeTache() + ">>";
+            Logger.getLogger(Bean.class.getName()).log(Level.WARNING, msg);
+            envoiMessageAlerte("rappel alerte", msg, machine.getNiveauDAlerte());
+        }
+
         if (listTachePB.isEmpty()) {//cas ou il n'ya pas de pb sur la machine
             Logger.getLogger(Bean.class.getName()).log(Level.INFO, "communication OK avec la machine: adresse=" + machine.getAdresseIP());
         } else {
-            String msg = "des JOB on été redémarer sur la machine <<" + machine.getAdresseIP() + ">>";
+            msg = "des JOB on été redémarer sur la machine <<" + machine.getAdresseIP() + ">>";
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, msg);
             return envoiMessageAlerte("problème très anormal sur" + machine.getAdresseIP(), msg, machine.getNiveauDAlerte());
         }
@@ -688,6 +722,21 @@ public class Bean {
         } else {
             return null;
         }
+    }
+
+    /**
+     * cette fonction retourne la liste des tache avec le statue pris en
+     * paramettre pour la machine pris en paramettre
+     *
+     * @param machine
+     * @param statue represente le statue des taches qui seront retourné
+     * @return
+     */
+    private List<Tache> getListTacheMachineByStatueTache(Machine machine, String statue) {
+        Query query = em.createQuery("SELECT t FROM Tache t WHERE t.idMachine = :idMachine AND t.statue = :statue", Tache.class);
+        query.setParameter("idMachine", machine);
+        query.setParameter("statue", statue);
+        return query.getResultList();
     }
 
     /*
@@ -1245,16 +1294,16 @@ public class Bean {
     /**
      * retourne la liste de toute les machines presente en BD avec leur status à
      * jour (INACCESSIBLE, PB_AGENT, START ou STOP) dans le cas où la machine à
-     * le statue STOP, on verifie plus la connection avec le serveur
+     * le statue STOP, on ne verifie plus la connection avec le serveur
      *
      * @return
      */
     public List<Machine> getAllMachineAvecBonStatue() {
-        Query requet = em.createNamedQuery("Machine.findAll", Machine.class);
-        List<Machine> listeMachine = requet.getResultList();
+        List<Machine> listeMachine = getAllMachine();
         em.clear();//permet de déconnecter l'entity manager de la BD ainsi les modification apporté au entity ne seront plus enregistré en BD
         for (Machine machine : listeMachine) {
-            if (!(machine.getStatue().equals(STOP) || machine.getStatue().equals(ALERTE))) {//on met à jour le statue si le statue n'es pas STOP ou Alerte
+            if (!machine.getStatue().equals(STOP)) {//on met à jour le statue si le statue n'es pas STOP
+                //if (machine.getStatue().equals(START)) {//on met à jour le statue si le statue es à START
                 machine.setStatue(testConnectionMachine(machine));
             }
         }
@@ -1268,7 +1317,7 @@ public class Bean {
      * @param machine
      * @return INACCESSIBLE, PB_AGENT, START ou STOP
      */
-    private String testConnectionMachine(Machine machine) {
+    public String testConnectionMachine(Machine machine) {
         /*if (machine.getStatue().equals(STOP)) {
         return STOP;
         }*/

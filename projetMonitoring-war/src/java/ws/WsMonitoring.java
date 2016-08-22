@@ -133,7 +133,7 @@ public class WsMonitoring {
     @WebMethod
     public boolean traitementAlerteMachine(
             @WebParam(name = "idMachine")int idMachine,
-            @WebParam(name = "listTachePB")List<Tache> listTachePB){
+            @WebParam(name = "listTachePB")List<Integer> listTachePB){
         return bean.traitementAlerteMachine(idMachine, listTachePB);
     }
     

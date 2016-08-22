@@ -22,17 +22,17 @@
 <message name="verifiServiceResponse">
 <part name="parameters" element="tns:verifiServiceResponse"></part>
 </message>
-<message name="demarerService">
-<part name="parameters" element="tns:demarerService"></part>
-</message>
-<message name="demarerServiceResponse">
-<part name="parameters" element="tns:demarerServiceResponse"></part>
-</message>
 <message name="pourcentageOccupationDD">
 <part name="parameters" element="tns:pourcentageOccupationDD"></part>
 </message>
 <message name="pourcentageOccupationDDResponse">
 <part name="parameters" element="tns:pourcentageOccupationDDResponse"></part>
+</message>
+<message name="demarerService">
+<part name="parameters" element="tns:demarerService"></part>
+</message>
+<message name="demarerServiceResponse">
+<part name="parameters" element="tns:demarerServiceResponse"></part>
 </message>
 <message name="telnet">
 <part name="parameters" element="tns:telnet"></part>
@@ -46,29 +46,29 @@
 <message name="pingerResponse">
 <part name="parameters" element="tns:pingerResponse"></part>
 </message>
-<message name="dateDernierFichier">
-<part name="parameters" element="tns:dateDernierFichier"></part>
-</message>
-<message name="dateDernierFichierResponse">
-<part name="parameters" element="tns:dateDernierFichierResponse"></part>
-</message>
 <message name="executeCommand">
 <part name="parameters" element="tns:executeCommand"></part>
 </message>
 <message name="executeCommandResponse">
 <part name="parameters" element="tns:executeCommandResponse"></part>
 </message>
-<message name="tailleFichier">
-<part name="parameters" element="tns:tailleFichier"></part>
-</message>
-<message name="tailleFichierResponse">
-<part name="parameters" element="tns:tailleFichierResponse"></part>
-</message>
 <message name="jobExiste">
 <part name="parameters" element="tns:jobExiste"></part>
 </message>
 <message name="jobExisteResponse">
 <part name="parameters" element="tns:jobExisteResponse"></part>
+</message>
+<message name="dateDernierFichier">
+<part name="parameters" element="tns:dateDernierFichier"></part>
+</message>
+<message name="dateDernierFichierResponse">
+<part name="parameters" element="tns:dateDernierFichierResponse"></part>
+</message>
+<message name="tailleFichier">
+<part name="parameters" element="tns:tailleFichier"></part>
+</message>
+<message name="tailleFichierResponse">
+<part name="parameters" element="tns:tailleFichierResponse"></part>
 </message>
 <message name="hello">
 <part name="parameters" element="tns:hello"></part>
@@ -95,13 +95,13 @@
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/verifiServiceRequest" message="tns:verifiService"></input>
 <output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/verifiServiceResponse" message="tns:verifiServiceResponse"></output>
 </operation>
-<operation name="demarerService">
-<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/demarerServiceRequest" message="tns:demarerService"></input>
-<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/demarerServiceResponse" message="tns:demarerServiceResponse"></output>
-</operation>
 <operation name="pourcentageOccupationDD">
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/pourcentageOccupationDDRequest" message="tns:pourcentageOccupationDD"></input>
 <output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/pourcentageOccupationDDResponse" message="tns:pourcentageOccupationDDResponse"></output>
+</operation>
+<operation name="demarerService">
+<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/demarerServiceRequest" message="tns:demarerService"></input>
+<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/demarerServiceResponse" message="tns:demarerServiceResponse"></output>
 </operation>
 <operation name="telnet">
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/telnetRequest" message="tns:telnet"></input>
@@ -111,21 +111,21 @@
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/pingerRequest" message="tns:pinger"></input>
 <output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/pingerResponse" message="tns:pingerResponse"></output>
 </operation>
-<operation name="dateDernierFichier">
-<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/dateDernierFichierRequest" message="tns:dateDernierFichier"></input>
-<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/dateDernierFichierResponse" message="tns:dateDernierFichierResponse"></output>
-</operation>
 <operation name="executeCommand">
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/executeCommandRequest" message="tns:executeCommand"></input>
 <output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/executeCommandResponse" message="tns:executeCommandResponse"></output>
 </operation>
-<operation name="tailleFichier">
-<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/tailleFichierRequest" message="tns:tailleFichier"></input>
-<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/tailleFichierResponse" message="tns:tailleFichierResponse"></output>
-</operation>
 <operation name="jobExiste">
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/jobExisteRequest" message="tns:jobExiste"></input>
 <output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/jobExisteResponse" message="tns:jobExisteResponse"></output>
+</operation>
+<operation name="dateDernierFichier">
+<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/dateDernierFichierRequest" message="tns:dateDernierFichier"></input>
+<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/dateDernierFichierResponse" message="tns:dateDernierFichierResponse"></output>
+</operation>
+<operation name="tailleFichier">
+<input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/tailleFichierRequest" message="tns:tailleFichier"></input>
+<output wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/tailleFichierResponse" message="tns:tailleFichierResponse"></output>
 </operation>
 <operation name="hello">
 <input wsam:Action="http://ws.clientmonitoring/WSClientMonitoring/helloRequest" message="tns:hello"></input>
@@ -165,7 +165,7 @@
 <soap:body use="literal"></soap:body>
 </output>
 </operation>
-<operation name="demarerService">
+<operation name="pourcentageOccupationDD">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>
@@ -174,7 +174,7 @@
 <soap:body use="literal"></soap:body>
 </output>
 </operation>
-<operation name="pourcentageOccupationDD">
+<operation name="demarerService">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>
@@ -201,15 +201,6 @@
 <soap:body use="literal"></soap:body>
 </output>
 </operation>
-<operation name="dateDernierFichier">
-<soap:operation soapAction=""></soap:operation>
-<input>
-<soap:body use="literal"></soap:body>
-</input>
-<output>
-<soap:body use="literal"></soap:body>
-</output>
-</operation>
 <operation name="executeCommand">
 <soap:operation soapAction=""></soap:operation>
 <input>
@@ -219,7 +210,7 @@
 <soap:body use="literal"></soap:body>
 </output>
 </operation>
-<operation name="tailleFichier">
+<operation name="jobExiste">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>
@@ -228,7 +219,16 @@
 <soap:body use="literal"></soap:body>
 </output>
 </operation>
-<operation name="jobExiste">
+<operation name="dateDernierFichier">
+<soap:operation soapAction=""></soap:operation>
+<input>
+<soap:body use="literal"></soap:body>
+</input>
+<output>
+<soap:body use="literal"></soap:body>
+</output>
+</operation>
+<operation name="tailleFichier">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>
