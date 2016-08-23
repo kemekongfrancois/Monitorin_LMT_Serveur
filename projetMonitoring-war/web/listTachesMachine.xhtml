@@ -103,23 +103,23 @@
                                 </f:facet>
                                 <h:outputText value="#{item.seuilAlerte}"/>
                             </p:column>
-                            <p:column sortBy="#{item.envoiyerAlerteMail}" style="text-align: center; width:35px">
+                            <p:column sortBy="#{item.envoiyerAlerteMail}" style="text-align: center; width:45px">
                                 <f:facet name="header">
                                     <h:outputText title="Envoie alerte mail" value="Mail"/>
                                 </f:facet>
-                                <p:selectBooleanCheckbox value="#{item.envoiyerAlerteMail}" disabled="true" />
+                                <p:inputSwitch value="#{item.envoiyerAlerteMail}"  />
                             </p:column>
-                            <p:column sortBy="#{item.envoyerAlerteSms}" style="text-align: center; width:35px">
+                            <p:column sortBy="#{item.envoyerAlerteSms}" style="text-align: center; width:45px">
                                 <f:facet name="header">
                                     <h:outputText title="Envoie alerte SMS"  value="SMS"/>
                                 </f:facet>
-                                <p:selectBooleanCheckbox value="#{item.envoyerAlerteSms}" disabled="true" />
+                                <p:inputSwitch value="#{item.envoyerAlerteSms}"  />
                             </p:column>
-                            <p:column sortBy="#{item.redemarerAutoService}" style="text-align: center; width:35px">
+                            <p:column  sortBy="#{item.redemarerAutoService}" style="text-align: center; width:45px">
                                 <f:facet name="header">
                                     <h:outputText title="Redémarrer automatiquement le service" value="Service"/>
                                 </f:facet>
-                                <p:selectBooleanCheckbox value="#{item.redemarerAutoService}" disabled="true" />
+                                <p:inputSwitch value="#{item.redemarerAutoService}"  />
                             </p:column>
                             <p:column sortBy="#{item.niveauDAlerte}" style="text-align: center; width:35px">
                                 <f:facet name="header">
