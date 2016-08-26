@@ -35,13 +35,17 @@
                                 <p:inputText id="nomMachine" value="#{beanModifierMachine.machine.nomMachine}" title="NomMachine" />
                                 <p:message for="nomMachine" />
                                 <p:outputLabel value="TypeOS:" for="typeOS" />
-                                <p:inputText id="typeOS" value="#{beanModifierMachine.machine.typeOS}" title="TypeOS" disabled="true" />
+                                <p:selectOneMenu id="typeOS" value="#{beanModifierMachine.machine.typeOS}" >
+                                    <f:selectItems value="#{beanVariableGlobal.listOS}"  />
+                                </p:selectOneMenu>
                                 <p:message for="typeOS" />
                                 <p:outputLabel value="PeriodeDeCheck:" for="periodeDeCheck" />
                                 <p:inputText id="periodeDeCheck" value="#{beanModifierMachine.machine.periodeDeCheck}" title="PeriodeDeCheck" required="true" requiredMessage="ce champ doit être non vide" />
                                 <p:message for="periodeDeCheck" />
                                 <p:outputLabel value="Statue:" for="statue" />
-                                <p:inputText id="statue" value="#{beanModifierMachine.machine.statue}" title="Statue" />
+                                <p:selectOneMenu id="statue" value="#{beanModifierMachine.machine.statue}" required="true" >
+                                    <f:selectItems value="#{beanVariableGlobal.listTypeStatue}"  />
+                                </p:selectOneMenu>
                                 <p:message for="statue" />
                                 <p:outputLabel value="NiveauDAlerte:" for="niveauDAlerte" />
                                 <p:inputText id="niveauDAlerte" value="#{beanModifierMachine.machine.niveauDAlerte}" title="NiveauDAlerte" />

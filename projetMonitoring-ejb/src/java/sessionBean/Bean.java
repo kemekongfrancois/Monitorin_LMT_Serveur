@@ -57,7 +57,8 @@ public class Bean {
     public static final String PB_AGENT = "Impossible de contacter l’agent";
     public static final String INACCESSIBLE = "Inaccessible";
 
-    //public static final String ADRESSE_MACHINE_SERVEUR = "127.0.0.1";//cette adresse represent l'adresse du serveur
+    public static final String TYPE_COMPTE_SUPADMIN = "supAdmin";
+    public static final String TYPE_COMPTE_ADMIN = "admin";
     public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 7-22 * * * ?";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 22h)
     public static final int NB_TENTATIVE_PING_LOCAL = 2;
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";

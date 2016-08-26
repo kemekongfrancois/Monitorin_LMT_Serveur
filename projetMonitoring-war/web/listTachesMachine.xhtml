@@ -73,11 +73,13 @@
                                 <h:outputText value="#{item.idTache}"/>
                             </p:column>
                             
-                            <p:column sortBy="#{item.statue}" style="text-align: center; width:50px">
+                            <p:column sortBy="#{item.statue}" style="text-align: center; width:70px">
                                 <f:facet name="header">
                                     <h:outputText value="Statue"/>
                                 </f:facet>
-                                <h:outputText value="#{item.statue}"/>
+                                <p:panel style="background-color: #{beanVariableGlobal.couleurStatue(item.statue)}">
+                                    <h:outputText title="#{item.statue}"  value="#{item.statue}" style="font-weight:bold"/>
+                                </p:panel>
                             </p:column>
                             <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
                                 <f:facet name="header">

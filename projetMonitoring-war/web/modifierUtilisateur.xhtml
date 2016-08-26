@@ -24,7 +24,9 @@
                                 <p:outputLabel value="IdUtilisateur:" for="idUtilisateur" />
                                 <p:inputText id="idUtilisateur" value="#{beanUtilisateur.utilisateur.idUtilisateur}" disabled="true" title="IdUtilisateur" required="true" />
                                 <p:outputLabel value="TypeCompte:" for="typeCompte" />
-                                <p:inputText id="typeCompte" value="#{beanUtilisateur.utilisateur.typeCompte}" title="TypeCompte" />
+                                <p:selectOneMenu id="typeCompte" value="#{beanUtilisateur.utilisateur.typeCompte}" >
+                                    <f:selectItems value="#{beanVariableGlobal.listTypeCompte}"  />
+                                </p:selectOneMenu>
                                 <p:outputLabel value="Nom:" for="nom" />
                                 <p:inputText id="nom" value="#{beanUtilisateur.utilisateur.nom}" title="Nom" />
                                 <p:outputLabel value="Prenom:" for="prenom" />

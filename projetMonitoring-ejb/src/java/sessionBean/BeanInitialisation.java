@@ -6,6 +6,7 @@
 package sessionBean;
 
 import entite.Machine;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,6 +29,12 @@ public class BeanInitialisation {
 
     @EJB
     private Bean bean;
+    
+    public static List<String> listOS;
+    public static List<String> listTypeTache;
+    public static List<String> listTypeCompte;
+    public static List<String> listTypeStatue;
+    
 
     @Schedule(minute = "*/5", hour = "*")//cette tache vas s'exécuté toute les 5 minute
     //@Schedule(second = "0", minute = "*", hour = "*")
@@ -79,8 +86,44 @@ public class BeanInitialisation {
         }
     }
 
+    
+    public void initialisationListOS(){
+        listOS = new ArrayList<>();
+        listOS.add(Bean.OSWINDOWS);
+        listOS.add(Bean.OSLinux);
+    }
+    public void initialisationListTypeStatue(){
+        listTypeStatue = new ArrayList<>();
+        listTypeStatue.add(Bean.START);
+        listTypeStatue.add(Bean.STOP);
+    }
+    
+    public void initialisationListTypeCompte(){
+        listTypeCompte = new ArrayList<>();
+        listTypeCompte.add(Bean.TYPE_COMPTE_SUPADMIN);
+        listTypeCompte.add(Bean.TYPE_COMPTE_ADMIN);
+    }
+    
+    public void initialisationListTypeTache(){
+        listTypeTache = new ArrayList<>();
+        listTypeTache.add(Bean.TACHE_DD);
+        listTypeTache.add(Bean.TACHE_PROCESSUS);
+        listTypeTache.add(Bean.TACHE_SERVICE);
+        listTypeTache.add(Bean.TACHE_PING);
+        listTypeTache.add(Bean.TACHE_TELNET);
+        listTypeTache.add(Bean.TACHE_DATE_MODIFICATION_DERNIER_FICHIER);
+        listTypeTache.add(Bean.TACHE_FICHIER_EXISTE);
+        listTypeTache.add(Bean.TACHE_TAILLE_FICHIER);
+    }
+    
     @PostConstruct
     public void initialisation() {
+        System.out.println("initialisation des variables");
+        initialisationListOS();
+        initialisationListTypeTache();
+        initialisationListTypeCompte();
+        initialisationListTypeStatue();
+        
         System.out.println("initialisation de la BD");
 
         int SEUIL_ALERT_DD = 90;
@@ -105,8 +148,8 @@ public class BeanInitialisation {
         resultat += "\ninitialisation du serveur :-> " + bean.creerOuModifierServeur("monitoringlmtgroupe@gmail.com", "kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, false);
         //resultat += "\ncreation de la machine qui sera situe sur le serveur :-> " + creerMachine(ADRESSE_MACHINE_SERVEUR, portEcoute, DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "machine Serveur");
 
-        resultat += "\ncreation du 1er utilisateur :-> " + bean.creerUtilisateur("kef", "0000", "kemekong", "francois", "supAdmin", "237699667694", "kemekongfrancois@gmail.com", 1);
-        resultat += "\ncreation du 2ième utilisateur :-> " + bean.creerUtilisateur("kef2", "0000", "kemekong2", "francois2", "supAdmin", "237675954517", "kemekongfranois@yahoo.fr", 1);
+        resultat += "\ncreation du 1er utilisateur :-> " + bean.creerUtilisateur("kef", "0000", "kemekong", "francois", Bean.TYPE_COMPTE_SUPADMIN, "237699667694", "kemekongfrancois@gmail.com", 1);
+        resultat += "\ncreation du 2ième utilisateur :-> " + bean.creerUtilisateur("kef2", "0000", "kemekong2", "francois2", Bean.TYPE_COMPTE_SUPADMIN, "237675954517", "kemekongfranois@yahoo.fr", 1);
 
         resultat += "\ncreation de la machine :-> " + bean.creerMachine(adressTest, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF", 1);
 

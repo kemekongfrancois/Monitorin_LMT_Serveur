@@ -34,13 +34,17 @@
                                 <p:inputText id="nom" value="#{beanModifierTache.tache.nom}" title="Nom" required="true" requiredMessage="ce champ doit être non vide"/>
                                 <p:message for="nom" />
                                 <p:outputLabel value="Statue:" for="statue" />
-                                <p:inputText id="statue" value="#{beanModifierTache.tache.statue}" title="Statue" />
+                                <p:selectOneMenu id="statue" value="#{beanModifierTache.tache.statue}" required="true" >
+                                    <f:selectItems value="#{beanVariableGlobal.listTypeStatue}"  />
+                                </p:selectOneMenu>
                                 <p:message for="statue" />
                                 <p:outputLabel value="PeriodeVerrification:" for="periodeVerrification" />
                                 <p:inputText id="periodeVerrification" value="#{beanModifierTache.tache.periodeVerrification}" title="PeriodeVerrification" required="true" requiredMessage="ce champ doit être non vide"/>
                                 <p:message for="periodeVerrification" />
                                 <p:outputLabel value="TypeTache:" for="typeTache" />
-                                <p:inputText id="typeTache" value="#{beanModifierTache.tache.typeTache}" title="TypeTache" required="true" requiredMessage="ce champ doit être non vide" />
+                                <p:selectOneMenu id="typeTache" value="#{beanModifierTache.tache.typeTache}" title="TypeTache" required="true" >
+                                    <f:selectItems value="#{beanVariableGlobal.listTypeTache}"  />
+                                </p:selectOneMenu>
                                 <p:message for="typeTache" />
                                 <p:outputLabel value="EnvoiyerAlerteMail:" for="envoiyerAlerteMail" />
                                 <p:inputSwitch id="envoiyerAlerteMail" value="#{beanModifierTache.tache.envoiyerAlerteMail}"  />

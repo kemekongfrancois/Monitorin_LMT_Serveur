@@ -15,7 +15,7 @@
                 <p:fieldset legend="Serveur" toggleable="true" toggleSpeed="500">
                     <h:form>
                         <p:commandButton icon="ui-icon-pencil" action="#{beanModifierServeur.pageModifierServeur}" title="Editer Serveur"/>
-                               
+
                         <p:panelGrid columns="2">
                             <h:outputText value="EmailEnvoiMail:"/>
                             <h:outputText value="#{beanAdministrerServeur.serveur.emailEnvoiMail}" title="EmailEnvoiMail"/>
@@ -41,21 +41,23 @@
 
 
                         <h:form id="form">
+                            <p:separator  />
                             <p:commandButton value="créer un utilisateur" action="#{beanUtilisateur.pageCreerUtilisateur()}"/>
-                        
+
+                            <p:separator  />
                             <p:dataTable value="#{beanAdministrerServeur.allUtilisateur}" var="item" resizableColumns="true" liveResize="true" draggableColumns="true">
                                 <p:column style="text-align: center; width:70px">
                                     <p:commandButton icon="ui-icon-pencil" action="#{beanUtilisateur.pageModifieUtilisateur(item.idUtilisateur)}" title="Editer utilisateur"/>
-                                <p:commandButton icon="ui-icon-closethick" title="supprimer l'utilisateur" actionListener="#{beanAdministrerServeur.suprimerUtilisateur(item)}" update=":form">
-                                    <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer l'utilisateur :#{item.idUtilisateur} ?" icon="ui-icon-alert" />
-                                </p:commandButton>
+                                    <p:commandButton icon="ui-icon-closethick" title="supprimer l'utilisateur" actionListener="#{beanAdministrerServeur.suprimerUtilisateur(item)}" update=":form">
+                                        <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer l'utilisateur :#{item.idUtilisateur} ?" icon="ui-icon-alert" />
+                                    </p:commandButton>
 
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                    <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                </p:confirmDialog>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
 
-                            </p:column>
+                                </p:column>
                                 <p:column style="text-align: center; width:20px">
                                     <f:facet name="header">
                                         <h:outputText value="Id"/>

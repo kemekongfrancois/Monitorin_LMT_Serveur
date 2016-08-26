@@ -19,7 +19,9 @@
                         <p:panel header="Modifier Utilisateur" >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="TypeCompte:" for="typeCompte" />
-                                <p:inputText id="typeCompte" value="#{beanUtilisateur.utilisateur.typeCompte}" title="TypeCompte" />
+                                <p:selectOneMenu id="typeCompte" value="#{beanUtilisateur.utilisateur.typeCompte}" >
+                                    <f:selectItems value="#{beanVariableGlobal.listTypeCompte}"  />
+                                </p:selectOneMenu>
                                 <p:outputLabel value="Nom:" for="nom" />
                                 <p:inputText id="nom" value="#{beanUtilisateur.utilisateur.nom}" title="Nom" />
                                 <p:outputLabel value="Prenom:" for="prenom" />
