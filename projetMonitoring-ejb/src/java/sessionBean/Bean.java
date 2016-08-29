@@ -28,6 +28,7 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.apache.commons.net.telnet.TelnetClient;
 import wsClient.WSClientMonitoring;
 
 /**
@@ -60,7 +61,7 @@ public class Bean {
     public static final String TYPE_COMPTE_SUPADMIN = "supAdmin";
     public static final String TYPE_COMPTE_ADMIN = "admin";
     public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 7-22 * * * ?";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 22h)
-    public static final int NB_TENTATIVE_PING_LOCAL = 2;
+    public static final int NB_TENTATIVE_PING_LOCAL = 1;
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
     public static final String TACHE_INEXISTANTE = "cette tache n'existe pas";
     public static final String ADRESSE_INCONU = "adresse IP inconue";
@@ -929,24 +930,48 @@ public class Bean {
     }
 
     /**
+     * permet de faire le telnet. il sera util pour verrifié que la connection avec les agent es OK
+     *
+     * @return
+     */
+    private boolean telnet(String adresse, int port) {
+        try {
+            TelnetClient telnet = new TelnetClient();
+            telnet.connect(adresse, port);
+            if (telnet.isConnected()) {
+                telnet.disconnect();
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * cette fonction permet d'ouvrire une connection web service vers une
      * machine qu'on supervise
      */
     private WSClientMonitoring appelWSMachineClient(String adresse, String port) {
         try {
+            //on teste que la connection avec l'agent
+            if (!telnet(adresse, new Integer(port))) {
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible de contacter l'agent de la machine: " + adresse + "\n");
+                return null;
+            }
+            /*if (service.getExecutor() == null) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible de contacter l'agent de la machine: " + adresse + "\n");
+            return null;
+            }*/
+
             //String adresse = "172.16.4.2";
             //String port = "8088";
             URL url = new URL("http://" + adresse + ":" + port + "/WSClientMonitoring?wsdl");
             wsClient.WSClientMonitoringService service = new wsClient.WSClientMonitoringService(url);
 
-            //on teste que la connection passe effectivement
-            String test = service.getWSClientMonitoringPort().hello("");
-            //System.out.println(test);
-
             return service.getWSClientMonitoringPort();
         } catch (Exception ex) {
-            //Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "problème lors de l'appel du web service de la machine: " + adresse + "\n", ex);
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "problème lors de l'appel du web service de la machine: " + adresse + "\n");
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "problème lors de l'appel du web service de la machine: " + adresse + "\n", ex);
+            //Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "problème lors de l'appel du web service de la machine: " + adresse + "\n");
             return null;
         }
 
@@ -1346,14 +1371,14 @@ public class Bean {
         }
         return listeMachine;
     }
-    
-    public Machine getMachineAvecBonStatue(String adresse){
+
+    public Machine getMachineAvecBonStatue(String adresse) {
         Machine machine = getMachineByIP(adresse);
         em.clear();
         if (!machine.getStatue().equals(STOP)) {//on met à jour le statue si le statue n'es pas STOP
-                //if (machine.getStatue().equals(START)) {//on met à jour le statue si le statue es à START
-                machine.setStatue(testConnectionMachine(machine));
-            }
+            //if (machine.getStatue().equals(START)) {//on met à jour le statue si le statue es à START
+            machine.setStatue(testConnectionMachine(machine));
+        }
         return machine;
     }
 
@@ -1378,7 +1403,7 @@ public class Bean {
             Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "la machine :" + machine.getAdresseIP() + "a pour status: " + PB_AGENT);
             return PB_AGENT;
         }
-            System.out.println(ws.hello(""));
+        System.out.println(ws.hello(""));
 
         if (ws.jobExiste(machine.getIdMachine() + "", machine.getAdresseIP())) {
             //Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine :" + machine.getAdresseIP() + "a pour status: " + START);

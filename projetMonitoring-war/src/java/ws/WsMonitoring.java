@@ -53,7 +53,7 @@ public class WsMonitoring {
        
        //resultat += "\n demarage de la tache DD"+ws.demarerMetAJourOUStopperTache(tacheBean);
         
-        return "Hello je suis le WSServeur " + txt + " !";
+        return "Hello je suis le WS Serveur " + txt + " ! version= 1.00";
     }
     
     /*@WebMethod
