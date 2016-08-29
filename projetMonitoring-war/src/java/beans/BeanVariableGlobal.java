@@ -42,11 +42,21 @@ public class BeanVariableGlobal implements Serializable{
         String couleur;
         switch(statue){
             case Bean.ALERTE: couleur = "#ff6633"; break;
-            case Bean.START: couleur = "aquamarine"; break;
-            case Bean.STOP: couleur = "gray"; break;
+            case Bean.START: couleur = "green"; break;
+            case Bean.STOP: couleur = "black"; break;
             default : couleur = "chocolate";
         }
         return couleur;
+    }
+    
+    public String booleanEnString(boolean valeur){
+        if(valeur) return "on";
+        return "off";
+    }
+    
+    public String booleanCouleur(boolean valeur){
+        if(valeur) return "blue";
+        return "red";
     }
 
     public List<String> getListOS() {

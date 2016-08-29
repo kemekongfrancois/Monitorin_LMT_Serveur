@@ -16,38 +16,42 @@
             <ui:define name="content">
                 <f:view>
 
-<p:fieldset legend="Machine" toggleable="true" toggleSpeed="500">
+                    <p:fieldset legend="Machine" toggleable="true" toggleSpeed="500">
 
 
-                            <h:form>
-                                <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(beanListeTachesMachine.machine.adresseIP)}" title="Editer Machine"/>
-                                
-                                <p:panelGrid columns="2">
-                                    <h:outputText value="IdMachine:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.idMachine}" title="IdMachine"/>
-                                    <h:outputText value="AdresseIP:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.adresseIP}" title="AdresseIP"/>
-                                    <h:outputText value="PortEcoute:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.portEcoute}" title="PortEcoute"/>
-                                    <h:outputText value="NomMachine:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.nomMachine}" title="NomMachine"/>
-                                    <h:outputText value="TypeOS:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.typeOS}" title="TypeOS"/>
-                                    <h:outputText value="PeriodeDeCheck:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.periodeDeCheck}" title="PeriodeDeCheck"/>
-                                    <h:outputText value="Statue:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.statue}" title="Statue"/>
-                                    <h:outputText value="NiveauDAlerte:"/>
-                                    <h:outputText value="#{beanListeTachesMachine.machine.niveauDAlerte}" title="NiveauDAlerte"/>
-                                </p:panelGrid>
-                            </h:form>
+                        <h:form id="formDesMachines">
+                            <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
+                            <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(beanListeTachesMachine.machine.adresseIP)}" title="Editer Machine"/>
+                            <p:commandButton icon="ui-icon-play" title="Démarrer la supervision ou là rafraichi" action="#{beanListeTachesMachine.demarerOuRedemarerMachine()}" ajax="true" update=":formDesMachines" />
+                            <p:commandButton icon="ui-icon-stop" title="arrêter la supervision" action="#{beanListeTachesMachine.stoperMachine()}" ajax="true" update=":formDesMachines" />
+                            <p:commandButton icon="ui-icon-circle-plus" title="créer une tache sur cette machine" action="#{beanCreerTache.pageCreerTache(beanListeTachesMachine.adresseMachine)}"/>
 
-                            </p:fieldset>
-                        
+                            <p:panelGrid columns="2">
+                                <h:outputText value="IdMachine:"/>
+                                <h:outputText value="#{beanListeTachesMachine.machine.idMachine}" title="IdMachine"/>
+                                <h:outputText value="AdresseIP:"/>
+                                <h:outputText value="#{beanListeTachesMachine.machine.adresseIP}" title="AdresseIP"/>
+                                <h:outputText value="PortEcoute:"/>
+                                <h:outputText value="#{beanListeTachesMachine.machine.portEcoute}" title="PortEcoute"/>
+                                <h:outputText value="NomMachine:"/>
+                                <h:outputText value="#{beanListeTachesMachine.machine.nomMachine}" title="NomMachine"/>
+                                <h:outputText value="TypeOS:"/>
+                                <h:outputText value="#{beanListeTachesMachine.machine.typeOS}" title="TypeOS"/>
+                                <h:outputText value="PeriodeDeCheck:"/>
+                                <h:outputText value="#{beanListeTachesMachine.machine.periodeDeCheck}" title="PeriodeDeCheck"/>
+                                <h:outputText value="Statue:"/>
+                                <h:outputText title="#{beanListeTachesMachine.machine.statue}" value="#{beanListeTachesMachine.machine.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(beanListeTachesMachine.machine.statue)}"/>
+                                <h:outputText value="NiveauDAlerte:"/>
+                                <h:outputText value="#{beanListeTachesMachine.machine.niveauDAlerte}" title="NiveauDAlerte"/>
+                            </p:panelGrid>
+                        </h:form>
+
+                    </p:fieldset>
+
                     <h:form id="form">
                         <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
 
-                        
+
                         <p:dataTable value="#{beanListeTachesMachine.listTaches}" liveResize="true" draggableColumns="true" resizableColumns="true" var="item">
                             <f:facet name="header">
                                 Taches de la machines: #{beanListeTachesMachine.adresseMachine}
@@ -72,14 +76,12 @@
                                 </f:facet>
                                 <h:outputText value="#{item.idTache}"/>
                             </p:column>
-                            
+
                             <p:column sortBy="#{item.statue}" style="text-align: center; width:70px">
                                 <f:facet name="header">
                                     <h:outputText value="Statue"/>
                                 </f:facet>
-                                <p:panel style="background-color: #{beanVariableGlobal.couleurStatue(item.statue)}">
-                                    <h:outputText title="#{item.statue}"  value="#{item.statue}" style="font-weight:bold"/>
-                                </p:panel>
+                                <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
                             </p:column>
                             <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
                                 <f:facet name="header">
@@ -105,24 +107,26 @@
                                 </f:facet>
                                 <h:outputText value="#{item.seuilAlerte}"/>
                             </p:column>
-                            <p:column sortBy="#{item.envoiyerAlerteMail}" style="text-align: center; width:45px">
+                            <p:column sortBy="#{item.envoiyerAlerteMail}" style="text-align: center; width:40px">
                                 <f:facet name="header">
                                     <h:outputText title="Envoie alerte mail" value="Mail"/>
                                 </f:facet>
-                                <p:inputSwitch value="#{item.envoiyerAlerteMail}"  />
+                                <h:outputText value="#{beanVariableGlobal.booleanEnString(item.envoiyerAlerteMail)}" style="color: #{beanVariableGlobal.booleanCouleur(item.envoiyerAlerteMail)}" />
                             </p:column>
-                            <p:column sortBy="#{item.envoyerAlerteSms}" style="text-align: center; width:45px">
+                            <p:column sortBy="#{item.envoyerAlerteSms}" style="text-align: center; width:40px">
                                 <f:facet name="header">
                                     <h:outputText title="Envoie alerte SMS"  value="SMS"/>
                                 </f:facet>
-                                <p:inputSwitch value="#{item.envoyerAlerteSms}"  />
+                                <h:outputText value="#{beanVariableGlobal.booleanEnString(item.envoyerAlerteSms)}" style="color: #{beanVariableGlobal.booleanCouleur(item.envoyerAlerteSms)}" />
                             </p:column>
-                            <p:column  sortBy="#{item.redemarerAutoService}" style="text-align: center; width:45px">
+                            <p:column sortBy="#{item.redemarerAutoService}" style="text-align: center; width:40px">
                                 <f:facet name="header">
                                     <h:outputText title="Redémarrer automatiquement le service" value="Service"/>
                                 </f:facet>
-                                <p:inputSwitch value="#{item.redemarerAutoService}"  />
+                                <h:outputText value="#{beanVariableGlobal.booleanEnString(item.redemarerAutoService)}" style="color: #{beanVariableGlobal.booleanCouleur(item.redemarerAutoService)}" />
                             </p:column>
+
+
                             <p:column sortBy="#{item.niveauDAlerte}" style="text-align: center; width:35px">
                                 <f:facet name="header">
                                     <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
@@ -135,18 +139,13 @@
                                 </f:facet>
                                 <h:outputText value="#{item.descriptionTache}"/>
                             </p:column>
-                            
+
                         </p:dataTable>
                     </h:form>
                 </f:view>
 
             </ui:define>
-            <ui:define name="left">
-                <h:form>
-                    <p:commandButton title="créer une tache sur cette machine" value="créer une tache" action="#{beanCreerTache.pageCreerTache(beanListeTachesMachine.adresseMachine)}"/>
 
-                </h:form>
-            </ui:define>
         </ui:composition>
 
     </body>

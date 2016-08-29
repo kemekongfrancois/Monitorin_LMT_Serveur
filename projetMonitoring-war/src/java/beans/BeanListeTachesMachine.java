@@ -35,6 +35,53 @@ public class BeanListeTachesMachine implements Serializable {
     public BeanListeTachesMachine() {
     }
 
+    /**
+     * cette fonction permet d'enregistre les modeifications dans la BD et sur
+     * la machine physique si possible
+     *
+     * @param statue
+     * @return
+     */
+    private String stopeOuRedemarerMachine(String statue) {
+        machine.setStatue(statue);
+        bean.updateMachie(machine);//on enregistre la nouvelle valeur du statue dans la BD
+        String resultat = bean.redemarerTachePrincipaleEtSousTache(machine);
+        if (resultat.equals(Bean.OK)) {
+            //machine.setStatue(statue);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statue de la machine <" + machine.getAdresseIP() + "> es :" + machine.getStatue(), " Les modification ont été enregistrer");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
+
+        //System.out.println("msgAlert= " + resultat);
+        if (statue.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statue
+            machine.setStatue(resultat);
+        }
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machine.getAdresseIP(), "Cause: "+resultat);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        return null;
+    }
+
+    /**
+     * cette fonction permet de stoper la machine elle agit dans la BD et sur la
+     * machine physique si possible
+     *
+     * @return
+     */
+    public String stoperMachine() {
+        return stopeOuRedemarerMachine(Bean.STOP);
+    }
+
+    /**
+     * cette fonction permet de démarer la machine ou de la rafrechire elle agit
+     * dans la BD et sur la machine physique si possible
+     *
+     * @return
+     */
+    public String demarerOuRedemarerMachine() {
+        return stopeOuRedemarerMachine(Bean.START);
+    }
+    
     public String chargerPage(String adresseMachine) {
         System.out.println("apple de la page de la liste des taches de la machines:" + adresseMachine);
         //return "modifieMachines?faces-redirect=true&amp";
@@ -45,7 +92,7 @@ public class BeanListeTachesMachine implements Serializable {
     public void loadListeTacheEtMachine() {
         //System.out.println("appel de la méthode load " + this);
         this.listTaches = bean.getListTacheMachine(adresseMachine);
-        this.machine = bean.getMachineByIP(adresseMachine);
+        this.machine = bean.getMachineAvecBonStatue(adresseMachine);
         //this.machine = manageBean.getCompteById(idCompte);
     }
 

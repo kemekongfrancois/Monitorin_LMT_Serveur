@@ -75,11 +75,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Statue"/>
                                 </f:facet>
-                                
-                                <p:panel style="background-color: #{beanVariableGlobal.couleurStatue(item.statue)}">
-                                    <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold"/>
-                                </p:panel>
-
+                                <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
                             </p:column>
                             <p:column sortBy="#{item.niveauDAlerte}" >
                                 <f:facet name="header">
@@ -97,7 +93,7 @@
                             <p:outputPanel id="machineParam" style="text-align:center;">
                                 <p:panelGrid columns="2">
                                     <p:commandButton value="Plus de détail" action="#{beanListeTachesMachine.chargerPage(beansMachine.machine.adresseIP)}"/>
-                                    <p:commandButton title="créer une tache sur cette machine" value="créer une tache" action="#{beanCreerTache.pageCreerTache(beansMachine.machine.adresseIP)}"/>
+                                    <p:commandButton icon="ui-icon-circle-plus" title="créer une tache sur cette machine" action="#{beanCreerTache.pageCreerTache(beansMachine.machine.adresseIP)}"/>
 
                                 </p:panelGrid>
 
@@ -147,11 +143,11 @@
                                                 <h:outputText value="#{item.envoyerAlerteSms}"/>
                                             </p:column>
                                             <p:column >
-                                <f:facet name="header">
-                                    <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
-                                </f:facet>
-                                <h:outputText value="#{item.niveauDAlerte}"/>
-                            </p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
+                                                </f:facet>
+                                                <h:outputText value="#{item.niveauDAlerte}"/>
+                                            </p:column>
 
                                         </p:dataTable>
                                     </h:form>

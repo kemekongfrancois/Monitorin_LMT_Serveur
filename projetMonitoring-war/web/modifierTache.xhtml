@@ -68,17 +68,12 @@
 
                     </h:form>
                 </f:view>
-
-            </ui:define>
-            <ui:define name="left">
                 <h:form>
-                    <h:panelGrid  columns="1" >
-                        <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher la liste des taches de la machine hôte"   value="Machine hôte" action="#{beanModifierTache.pagePrecedente()}" /> 
+                    <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher la liste des taches de la machine hôte"   value="Machine hôte" action="#{beanModifierTache.pagePrecedente()}" /> 
                     <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher toute les taches"   value="Toute les taches" action="#{beanMenu.pageListeTaches}" /> 
-                
-                    </h:panelGrid>
-                    </h:form>
+                </h:form>
             </ui:define>
+
         </ui:composition>
 
     </body>

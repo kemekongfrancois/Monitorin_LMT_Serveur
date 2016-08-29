@@ -22,24 +22,24 @@
                 <ui:insert name="bottom">bas</ui:insert> 
             </p:layoutUnit>
 
-            <p:layoutUnit resizable="true" position="west" header="Menu" collapsible="true">
-                <h:form>
-                    <p:menu>
-                        <p:menuitem value="Machine supervisé" action="#{beanMenu.pagelistMachines}" />
-                        <p:menuitem value="Liste des taches" action="#{beanMenu.pageListeTaches}" />
-                        <p:menuitem title="administration du Serveur " value="Serveur" action="#{beanMenu.pageAdministrerServeur}" />
-                        <p:menuitem value="Accueil(a sup)" action="#{beanMenu.pageAccueil}" />
+            
 
-                    </p:menu>
-                </h:form>
-                <p:separator  />
                 <ui:insert name="left">
+                    <p:layoutUnit resizable="true" position="west" header="Menu" collapsible="true">
+                    <h:form>
+                        <p:menu>
+                            <p:menuitem value="Machine supervisé" action="#{beanMenu.pagelistMachines}" />
+                            <p:menuitem value="Liste des taches" action="#{beanMenu.pageListeTaches}" />
+                            <p:menuitem title="administration du Serveur " value="Serveur" action="#{beanMenu.pageAdministrerServeur}" />
 
 
-
+                        </p:menu>
+                    </h:form>
+                    <p:separator  />
+                    </p:layoutUnit>
                 </ui:insert>
 
-            </p:layoutUnit>
+            
 
             <p:layoutUnit resizable="true" position="center">
                 <ui:insert name="content">centre</ui:insert>

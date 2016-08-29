@@ -34,12 +34,13 @@ public class BeansMachine implements Serializable {
 
     @PostConstruct
     public void init() {
+        System.out.println("recupération de la liste des machines pour affichage");
         listMachines = bean.getAllMachineAvecBonStatue();
     }
 
     /**
      * cette fonction permet d'enregistre les modeifications dans la BD et sur
-     * la machine physique
+     * la machine physique si possible
      *
      * @param statue
      * @return
@@ -55,7 +56,7 @@ public class BeansMachine implements Serializable {
             return null;
         }
 
-        System.out.println("msgAlert= " + resultat);
+        //System.out.println("msgAlert= " + resultat);
         if (statue.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statue
             machine.setStatue(resultat);
         }
@@ -65,7 +66,7 @@ public class BeansMachine implements Serializable {
     }
 
     /**
-     * cette fonction permet de stoper la tacheelle agit dans la BD et sur la
+     * cette fonction permet de stoper la machine elle agit dans la BD et sur la
      * machine physique si possible
      *
      * @param machine
@@ -77,7 +78,7 @@ public class BeansMachine implements Serializable {
     }
 
     /**
-     * cette fonction permet de démarer la tache ou de la rafrechire elle agit
+     * cette fonction permet de démarer la machine ou de la rafrechire elle agit
      * dans la BD et sur la machine physique si possible
      *
      * @param machine

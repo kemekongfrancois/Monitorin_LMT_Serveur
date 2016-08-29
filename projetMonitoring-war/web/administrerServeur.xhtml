@@ -28,9 +28,10 @@
                             <h:outputText value="NumeroCourt:"/>
                             <h:outputText value="#{beanAdministrerServeur.serveur.numeroCourt}" title="NumeroCourt"/>
                             <h:outputText value="EnvoialerteSMS:"/>
-                            <h:outputText value="#{beanAdministrerServeur.serveur.envoialerteSMS}" title="EnvoialerteSMS"/>
+                            <h:outputText value="#{beanVariableGlobal.booleanEnString(beanAdministrerServeur.serveur.envoialerteSMS)}" style="color: #{beanVariableGlobal.booleanCouleur(beanAdministrerServeur.serveur.envoialerteSMS)}" />
                             <h:outputText value="EnvoieAlerteMail:"/>
-                            <h:outputText value="#{beanAdministrerServeur.serveur.envoieAlerteMail}" title="EnvoieAlerteMail"/>
+                            <h:outputText value="#{beanVariableGlobal.booleanEnString(beanAdministrerServeur.serveur.envoieAlerteMail)}" style="color: #{beanVariableGlobal.booleanCouleur(beanAdministrerServeur.serveur.envoieAlerteMail)}" />
+
                         </p:panelGrid>
                     </h:form>
                 </p:fieldset>
@@ -42,7 +43,7 @@
 
                         <h:form id="form">
                             <p:separator  />
-                            <p:commandButton value="créer un utilisateur" action="#{beanUtilisateur.pageCreerUtilisateur()}"/>
+                            <p:commandButton icon="ui-icon-circle-plus" title="créer un nouveau utilisateur" action="#{beanUtilisateur.pageCreerUtilisateur()}"/>
 
                             <p:separator  />
                             <p:dataTable value="#{beanAdministrerServeur.allUtilisateur}" var="item" resizableColumns="true" liveResize="true" draggableColumns="true">

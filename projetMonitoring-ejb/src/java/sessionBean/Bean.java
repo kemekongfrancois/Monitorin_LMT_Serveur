@@ -941,7 +941,7 @@ public class Bean {
 
             //on teste que la connection passe effectivement
             String test = service.getWSClientMonitoringPort().hello("");
-            System.out.println(test);
+            //System.out.println(test);
 
             return service.getWSClientMonitoringPort();
         } catch (Exception ex) {
@@ -1346,6 +1346,16 @@ public class Bean {
         }
         return listeMachine;
     }
+    
+    public Machine getMachineAvecBonStatue(String adresse){
+        Machine machine = getMachineByIP(adresse);
+        em.clear();
+        if (!machine.getStatue().equals(STOP)) {//on met à jour le statue si le statue n'es pas STOP
+                //if (machine.getStatue().equals(START)) {//on met à jour le statue si le statue es à START
+                machine.setStatue(testConnectionMachine(machine));
+            }
+        return machine;
+    }
 
     /**
      * verifie la connection entre le serveur et la machine et retourne la
@@ -1368,6 +1378,7 @@ public class Bean {
             Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "la machine :" + machine.getAdresseIP() + "a pour status: " + PB_AGENT);
             return PB_AGENT;
         }
+            System.out.println(ws.hello(""));
 
         if (ws.jobExiste(machine.getIdMachine() + "", machine.getAdresseIP())) {
             //Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la machine :" + machine.getAdresseIP() + "a pour status: " + START);

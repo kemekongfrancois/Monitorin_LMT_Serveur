@@ -46,19 +46,18 @@
                                 <f:facet name="header">
                                     <h:outputText value="IP machine"/>
                                 </f:facet>
-                                <h:outputText value="#{item.idMachine.adresseIP} "/>
                                 <p:commandButton icon="ui-icon-search" action="#{beanListeTachesMachine.chargerPage(item.idMachine.adresseIP)}" title="Détaille pour cette machine" />
+
+                                <h:outputText value="#{item.idMachine.adresseIP} "/>
                             </p:column>
 
 
 
-                            <p:column sortBy="#{item.statue}"  style="width:70px">
+                            <p:column sortBy="#{item.statue}"  style="width:50px">
                                 <f:facet name="header">
                                     <h:outputText value="Statue"/>
                                 </f:facet>
-                                <p:panel style="background-color: #{beanVariableGlobal.couleurStatue(item.statue)}">
-                                    <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold"/>
-                                </p:panel>
+                                <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
                             </p:column>
                             <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
                                 <f:facet name="header">
@@ -84,23 +83,23 @@
                                 </f:facet>
                                 <h:outputText value="#{item.seuilAlerte}"/>
                             </p:column>
-                            <p:column sortBy="#{item.envoiyerAlerteMail}" style="text-align: center; width:45px">
+                            <p:column sortBy="#{item.envoiyerAlerteMail}" style="text-align: center; width:40px">
                                 <f:facet name="header">
                                     <h:outputText title="Envoie alerte mail" value="Mail"/>
                                 </f:facet>
-                                <p:inputSwitch value="#{item.envoiyerAlerteMail}" />
+                                <h:outputText value="#{beanVariableGlobal.booleanEnString(item.envoiyerAlerteMail)}" style="color: #{beanVariableGlobal.booleanCouleur(item.envoiyerAlerteMail)}" />
                             </p:column>
-                            <p:column sortBy="#{item.envoyerAlerteSms}" style="text-align: center; width:45px">
+                            <p:column sortBy="#{item.envoyerAlerteSms}" style="text-align: center; width:40px">
                                 <f:facet name="header">
                                     <h:outputText title="Envoie alerte SMS"  value="SMS"/>
                                 </f:facet>
-                                <p:inputSwitch value="#{item.envoyerAlerteSms}" />
+                                <h:outputText value="#{beanVariableGlobal.booleanEnString(item.envoyerAlerteSms)}" style="color: #{beanVariableGlobal.booleanCouleur(item.envoyerAlerteSms)}" />
                             </p:column>
-                            <p:column sortBy="#{item.redemarerAutoService}" style="text-align: center; width:45px">
+                            <p:column sortBy="#{item.redemarerAutoService}" style="text-align: center; width:40px">
                                 <f:facet name="header">
                                     <h:outputText title="Redémarrer automatiquement le service" value="Service"/>
                                 </f:facet>
-                                <p:inputSwitch value="#{item.redemarerAutoService}"  />
+                                <h:outputText value="#{beanVariableGlobal.booleanEnString(item.redemarerAutoService)}" style="color: #{beanVariableGlobal.booleanCouleur(item.redemarerAutoService)}" />
                             </p:column>
                             <p:column sortBy="#{item.niveauDAlerte}" style="text-align: center; width:35px">
                                 <f:facet name="header">
