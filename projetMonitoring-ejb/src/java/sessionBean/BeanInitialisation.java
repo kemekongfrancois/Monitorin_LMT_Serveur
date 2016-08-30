@@ -130,7 +130,7 @@ public class BeanInitialisation {
         String periodecheckPing = " 1 * * * * ?";
         int NB_TENTATIVE_PING = 10;
 
-        String adressTest = "172.16.4.2";
+        String adressTest = "192.168.100.182";
         String periodecheckDD = " 1,30 * * * * ?";
         String periodecheckProcessus = " 10,40 * * * * ?";
         String periodecheckService = " 15,45 * * * * ?";

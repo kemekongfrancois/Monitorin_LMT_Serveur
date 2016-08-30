@@ -60,8 +60,10 @@ public class Bean {
 
     public static final String TYPE_COMPTE_SUPADMIN = "supAdmin";
     public static final String TYPE_COMPTE_ADMIN = "admin";
-    public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 7-22 * * * ?";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 22h)
-    public static final int NB_TENTATIVE_PING_LOCAL = 1;
+    public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 0 7-22 * * ?";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 22h)
+    public static final int NB_TENTATIVE_PING_LOCAL = 2;
+    public static final int TEMP_ATTENT_TELNET_SECOND = 5;//le temps es en secomde
+    
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
     public static final String TACHE_INEXISTANTE = "cette tache n'existe pas";
     public static final String ADRESSE_INCONU = "adresse IP inconue";
@@ -937,6 +939,7 @@ public class Bean {
     private boolean telnet(String adresse, int port) {
         try {
             TelnetClient telnet = new TelnetClient();
+            telnet.setConnectTimeout(TEMP_ATTENT_TELNET_SECOND*1000);//On converti le temps d'attente en second
             telnet.connect(adresse, port);
             if (telnet.isConnected()) {
                 telnet.disconnect();

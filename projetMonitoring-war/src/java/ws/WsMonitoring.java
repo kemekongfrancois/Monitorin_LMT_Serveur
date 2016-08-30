@@ -150,6 +150,11 @@ public class WsMonitoring {
         return bean.problemeTacheResolu(idTache);
     }
     
+    @WebMethod
+    public String testConnectionMachine(@WebParam(name = "AdresIP")String AdresIP) {
+        return bean.testConnectionMachine(bean.getMachineByIP(AdresIP));
+    }
+    
     /*
     public Tache creerTacheSurveilleDD(
             @WebParam(name = "adresIpMachine") String adresIpMachine, 
