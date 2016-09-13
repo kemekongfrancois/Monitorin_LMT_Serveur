@@ -46,7 +46,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="IP machine"/>
                                 </f:facet>
-                                <p:commandButton icon="ui-icon-search" action="#{beanListeTachesMachine.chargerPage(item.idMachine.adresseIP)}" title="Détaille pour cette machine" />
+                                <p:commandButton icon="ui-icon-search" action="#{beanListeTachesMachine.chargerPage(item.idMachine.adresseIP)}" title="Détaille pour : #{item.idMachine.adresseIP}" />
 
                                 <h:outputText value="#{item.idMachine.adresseIP} "/>
                             </p:column>

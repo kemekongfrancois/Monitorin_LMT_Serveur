@@ -798,12 +798,12 @@ public class Bean {
         return creerTache(adresIpMachine, TACHE_DD, description_tache, periodeVerrification, lettre_partition, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
     }
 
-    public String creerTacheSurveilleProcessus(String adresIpMachine, String periodeVerrification, String nomProcessus, String statue, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
+    public String creerTacheSurveilleProcessus(String adresIpMachine, String periodeVerrification, String nomProcessus, String statue, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte, int nbTentative) {
         if (verifiNomTacheSurMachine(adresIpMachine, nomProcessus)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, nomProcessus + ": ce processus es déja surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
-        return creerTache(adresIpMachine, TACHE_PROCESSUS, description_tache, periodeVerrification, nomProcessus, 0, statue, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
+        return creerTache(adresIpMachine, TACHE_PROCESSUS, description_tache, periodeVerrification, nomProcessus, nbTentative, statue, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
     }
 
     public String creerTacheSurveilleService(String adresIpMachine, String periodeVerrification, String nomService, String statue, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, boolean redemarer_auto_service, String description_tache, int niveauDAlerte) {
@@ -908,7 +908,7 @@ public class Bean {
                     resultat = creerTacheSurveilleDD(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 case TACHE_PROCESSUS:
-                    resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte,seuil);
                     break;
                 case TACHE_SERVICE:
                     resultat = creerTacheSurveilleService(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, redemarer_auto_service, description_tache, niveauDAlerte);

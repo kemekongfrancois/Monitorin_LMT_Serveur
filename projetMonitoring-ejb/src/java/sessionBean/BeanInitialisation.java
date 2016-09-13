@@ -131,7 +131,7 @@ public class BeanInitialisation {
         int NB_TENTATIVE_PING = 10;
 
         String adressTest = "192.168.100.182";
-        String periodecheckDD = " 1,30 * * * * ?";
+        String periodecheckDD = " */30 * * * * ?";
         String periodecheckProcessus = " 10,40 * * * * ?";
         String periodecheckService = " 15,45 * * * * ?";
         String periodecheckFichierExistant = " 21,51 * * * * ?";
@@ -154,7 +154,8 @@ public class BeanInitialisation {
         resultat += "\ncreation de la machine :-> " + bean.creerMachine(adressTest, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF", 1);
 
         resultat += "\ncreation de la tache DD :-> " + bean.creerTacheSurveilleDD(adressTest, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc.exe", Bean.START, true, false, "", 1);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc.exe", Bean.START, true, false, "", 1,3);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc2.exe", Bean.START, true, false, "", 1,3);
         resultat += "\ncreation de la tache Service :-> " + bean.creerTacheSurveilleService(adressTest, periodecheckService, "Connectify", Bean.START, true, true, true, "", 1);
         resultat += "\ncreation de la tache Ping :-> " + bean.creerTachePing(adressTest, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache Ping 2 :-> " + bean.creerTachePing(adressTest, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", 1);
@@ -168,7 +169,7 @@ public class BeanInitialisation {
         resultat += "\ncreation de la machine 2 :-> " + bean.creerMachine(adressTest2, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF virtuel", 1);
 
         resultat += "\ncreation de la tache DD 2:-> " + bean.creerTacheSurveilleDD(adressTest2, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus 2 :-> " + bean.creerTacheSurveilleProcessus(adressTest2, periodecheckProcessus, "vlc.exe", Bean.START, true, false, "", 1);
+        resultat += "\ncreation de la tache processus 2 :-> " + bean.creerTacheSurveilleProcessus(adressTest2, periodecheckProcessus, "vlc.exe", Bean.START, true, false, "", 1,0);
         resultat += "\ncreation de la tache Service 2 :-> " + bean.creerTacheSurveilleService(adressTest2, periodecheckService, "HUAWEIWiMAX", Bean.START, true, true, true, "", 1);
         resultat += "\ncreation de la tache Ping 2 2 :-> " + bean.creerTachePing(adressTest2, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache Ping 2 2 :-> " + bean.creerTachePing(adressTest2, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", 1);
@@ -192,6 +193,7 @@ public class BeanInitialisation {
         //création des Machine pour LMT
         resultat = "\n \n initialisation des machines et taches de LMT";
         int i;
+        int attenteEtRepetitionProcessus = 4;
         
         i=-2;
         String adresse = "192.168.100.95";
@@ -217,15 +219,15 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD E:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "E:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "MbankingAlerte_BICEC_New_V2.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "MbankingBalance_BIC_New.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "MbankingHistory_BIC_New.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "xampp-control.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging_SGC_2016.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging_Sonel_2015_V5.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging83_2015_V5.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkSimpleSMS_Sonel_2015_V5.exe", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "Advans_BulkMessaging_SansTraitementdoublons.exe", Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "MbankingAlerte_BICEC_New_V2.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "MbankingBalance_BIC_New.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "MbankingHistory_BIC_New.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "xampp-control.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging_SGC_2016.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging_Sonel_2015_V5.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging83_2015_V5.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkSimpleSMS_Sonel_2015_V5.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "Advans_BulkMessaging_SansTraitementdoublons.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
 
         i=-2;
         adresse = "192.168.200.150";
@@ -238,25 +240,25 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.16.38", 5016, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "217.113.69.8", 9000, Bean.START, true, true, "", 1);
+        //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "217.113.69.8", 9000, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "131.166.253.49", 7004, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "10.32.251.240", 3700, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "196.202.232.250", 3700, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.244.255.6", 5016, Bean.START, true, true, "", 1);
+        //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.244.255.6", 5016, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.202.220.73", 2775, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.202.206.65", 15019, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.202.206.69", 15019, Bean.START, true, true, "", 1);
+        //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.202.206.69", 15019, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "121.241.242.124", 2345, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.163", 50402, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.163", 50411, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.163", 50404, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.163", 50410, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.163", 50600, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 4848, Bean.START, true, true, "", 1);
+        //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 4848, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 8282, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 13001, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 6013, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 3306, Bean.START, true, true, "", 1);
+        //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 13001, Bean.START, true, true, "", 1);
+        //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 6013, Bean.START, true, true, "", 1);
+        //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 3306, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.152", 8087, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.152", 4848, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.152", 8080, Bean.START, true, true, "", 1);
@@ -285,8 +287,8 @@ public class BeanInitialisation {
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", 1);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "NCM.EXE", Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "onnet64.exe", Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "NCM.EXE", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "onnet64.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
 
         i=-2;
         adresse = "192.168.200.74";
