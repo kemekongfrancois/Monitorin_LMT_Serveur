@@ -140,7 +140,7 @@ public class BeanInitialisation {
         String periodecheckDateModif = " 35,5 * * * * ?";
         int tailleMaxFichie = 5;
         int tailleMinFichie = -5;
-        int seuilDateModif = 10;
+        int seuilDateModif = 600;
         String portEcoute = "9039";
 
         String resultat = "";
@@ -228,6 +228,11 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging83_2015_V5.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkSimpleSMS_Sonel_2015_V5.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "Advans_BulkMessaging_SansTraitementdoublons.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/web/bulk/upload/sgbcmbanking/sgbcfile", seuilDateModif, Bean.START, true, true, "SGBC", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 2-1", "D:/vas/web/bulk/upload/Tout/BGFI", seuilDateModif, Bean.START, true, true, "BGFI", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/bicec/mBanking-Alerte/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/bicec/mBanking-Balance/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/bicec/mBanking-History/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
 
         i=-2;
         adresse = "192.168.200.150";
@@ -291,7 +296,7 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "onnet64.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
 
         i=-2;
-        adresse = "192.168.200.74";
+        adresse = "192.168.100.74";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "root", 1);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
