@@ -63,9 +63,9 @@ public class BeanInitialisation {
 
     /**
      * renvoie les alertes des machine et met à jour le statu dans le cas où la
-     * machine es de nouveau accessible situation es de retour à la normal
+     * machine es de nouveau accessible
      */
-    @Schedule(hour = "7-22")//cette tache vas s'exécuté toute les  heure entre 7h et 22h
+    @Schedule(hour = "7-17")//cette tache vas s'exécuté toute les  heure entre 7h et 17h
     //@Schedule(second = "30", minute = "*", hour = "*")
     public void renvoiAlerteMachineEtUpdateMachine() {
         System.out.println("renvoie des alertes machine ou met à jour les alertes machines " + new Date());
@@ -140,12 +140,12 @@ public class BeanInitialisation {
         String periodecheckDateModif = " 35,5 * * * * ?";
         int tailleMaxFichie = 5;
         int tailleMinFichie = -5;
-        int seuilDateModif = 600;
+        int seuilDateModif = 360;
         String portEcoute = "9039";
 
         String resultat = "";
 
-        resultat += "\ninitialisation du serveur :-> " + bean.creerOuModifierServeur("monitoringlmtgroupe@gmail.com", "kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, false);
+        resultat += "\ninitialisation du serveur :-> " + bean.creerOuModifierServeur("monitoringlmtgroupe@gmail.com", "kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, true);
         //resultat += "\ncreation de la machine qui sera situe sur le serveur :-> " + creerMachine(ADRESSE_MACHINE_SERVEUR, portEcoute, DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "machine Serveur");
 
         resultat += "\ncreation du 1er utilisateur :-> " + bean.creerUtilisateur("kef", "0000", "kemekong", "francois", Bean.TYPE_COMPTE_SUPADMIN, "237699667694", "kemekongfrancois@gmail.com", 1);
@@ -166,7 +166,7 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adressTest, periodecheckDateModif, "C:/testMonitoring/test date modification", seuilDateModif, Bean.START, true, true, "", 1);
 
         String adressTest2 = "172.16.4.20";
-        resultat += "\ncreation de la machine 2 :-> " + bean.creerMachine(adressTest2, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF virtuel", 1);
+        //resultat += "\ncreation de la machine 2 :-> " + bean.creerMachine(adressTest2, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF virtuel", 1);
 
         resultat += "\ncreation de la tache DD 2:-> " + bean.creerTacheSurveilleDD(adressTest2, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache processus 2 :-> " + bean.creerTacheSurveilleProcessus(adressTest2, periodecheckProcessus, "vlc.exe", Bean.START, true, false, "", 1,0);
@@ -176,7 +176,7 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache fichier existant 2 :-> " + bean.creerTacheSurveilleFichierExist(adressTest2, periodecheckFichierExistant, "c:/testMonitoring/test.txt", Bean.START, true, true, "", 1);
 
         String adressTest3 = "172.16.4.21";
-        resultat += "\ncreation de la machine 2 :-> " + bean.creerMachine(adressTest3, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "ubuntu", 1);
+        //resultat += "\ncreation de la machine 2 :-> " + bean.creerMachine(adressTest3, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "ubuntu", 1);
 
         resultat += "\ncreation de la tache DD 3:-> " + bean.creerTacheSurveilleDD(adressTest3, periodecheckDD, "/mnt/hgfs", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache Ping 2 3 :-> " + bean.creerTachePing(adressTest3, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", 1);
@@ -195,25 +195,25 @@ public class BeanInitialisation {
         int i;
         int attenteEtRepetitionProcessus = 4;
         
-        i=-2;
+        i=0;
         String adresse = "192.168.100.95";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "ADMIN", 1);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD E:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "E:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
 
-        i=-2;
+        i=0;
         adresse = "192.168.100.93";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", 1);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD E:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "E:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
 
-        i=-2;
+        i=0;
         adresse = "192.168.100.81";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "lmt", 1);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         
-        i=-2;
+        i=0;
         adresse = "192.168.100.86";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", 1);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
@@ -228,18 +228,18 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkMessaging83_2015_V5.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "BulkSimpleSMS_Sonel_2015_V5.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "Advans_BulkMessaging_SansTraitementdoublons.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
-        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/web/bulk/upload/sgbcmbanking/sgbcfile", seuilDateModif, Bean.START, true, true, "SGBC", 1);
-        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 2-1", "D:/vas/web/bulk/upload/Tout/BGFI", seuilDateModif, Bean.START, true, true, "BGFI", 1);
-        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/bicec/mBanking-Alerte/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
-        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/bicec/mBanking-Balance/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
-        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 18 ? * 3-7", "D:/vas/bicec/mBanking-History/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 12 ? * 3-7", "D:/vas/web/bulk/upload/sgbcmbanking/sgbcfile", seuilDateModif, Bean.START, true, true, "SGBC", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 12 ? * 2-1", "D:/vas/web/bulk/upload/Tout/BGFI", seuilDateModif, Bean.START, true, true, "BGFI", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 12 ? * 3-7", "D:/vas/bicec/mBanking-Alerte/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 12 ? * 3-7", "D:/vas/bicec/mBanking-Balance/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 "+(i+=2)+" 12 ? * 3-7", "D:/vas/bicec/mBanking-History/info", seuilDateModif, Bean.START, true, true, "BICEC", 1);
 
-        i=-2;
+        i=0;
         adresse = "192.168.200.150";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "goldsms", 1);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         
-        i=-2;
+        i=0;
         adresse = "192.168.200.163";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "SICAP", 1);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
@@ -268,26 +268,26 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.152", 4848, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.152", 8080, Bean.START, true, true, "", 1);
 
-        i=-2;
+        i=0;
         adresse = "192.168.200.152";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "USSD", 1);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD /tmp -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/tmp", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
 
-        i=-2;
+        i=0;
         adresse = "192.168.100.77";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", 1);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         
-        i=-2;
+        i=0;
         adresse = "192.168.100.78";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", 1);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         
-        i=-2;
+        i=0;
         adresse = "192.168.100.79";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", 1);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
@@ -295,13 +295,13 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "NCM.EXE", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 "+(i+=2)+" * * * ?", "onnet64.exe", Bean.START, true, true, "", 1 ,attenteEtRepetitionProcessus);
 
-        i=-2;
+        i=0;
         adresse = "192.168.100.74";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "root", 1);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
 
-        i=-2;
+        i=0;
         adresse = "192.168.100.180";
         resultat += "\ncreation de la machine "+adresse+" :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "root", 1);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 "+(i+=2)+" * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);

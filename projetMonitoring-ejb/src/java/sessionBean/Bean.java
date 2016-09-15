@@ -60,7 +60,7 @@ public class Bean {
 
     public static final String TYPE_COMPTE_SUPADMIN = "supAdmin";
     public static final String TYPE_COMPTE_ADMIN = "admin";
-    public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 0 8 * * ?";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 22h)
+    public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 0 7-17 * * ?";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 17h)
     public static final int NB_TENTATIVE_PING_LOCAL = 2;
     public static final int TEMP_ATTENT_TELNET_SECOND = 5;//le temps es en secomde
 
