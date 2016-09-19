@@ -437,10 +437,11 @@ public class Bean {
             //Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la tache <<" + idTache + ">> n'existe pas dans la BD");
             return false;
         }
-        String corpsEmailEtSMS, sujetEmail;
+        String corpsEmailEtSMS,
+                sujetEmail = "Alerte Tache(id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
         switch (tache.getTypeTache()) {
             case TACHE_DD:
-                sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") espace disque sur la machine: " + tache.getIdMachine().getAdresseIP();
+                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") espace disque sur la machine: " + tache.getIdMachine().getAdresseIP();
                 if (codeErreur == 200) {//cas où la lettre de partition ne correspond à aucune partition
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la lettre de partition ne correspont a aucune partition ou elle es invalide : <<" + tache.getNom() + " >>";
                 } else {
@@ -449,7 +450,7 @@ public class Bean {
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 break;
             case TACHE_PROCESSUS:
-                sujetEmail = "Alerte:(idTache="+tache.getIdTache()+") Processus arrete sur: " + tache.getIdMachine().getAdresseIP();
+                //sujetEmail = "Alerte:(idTache="+tache.getIdTache()+") Processus arrete sur: " + tache.getIdMachine().getAdresseIP();
                 if (codeErreur == 0) {
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> es arreté";
                 } else {//cas où la valeur es 1: il ya un pb
@@ -458,7 +459,7 @@ public class Bean {
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 break;
             case TACHE_SERVICE:
-                sujetEmail = "Alerte:(idTache="+tache.getIdTache()+") Service arrete sur: " + tache.getIdMachine().getAdresseIP();
+                //sujetEmail = "Alerte:(idTache="+tache.getIdTache()+") Service arrete sur: " + tache.getIdMachine().getAdresseIP();
                 switch (codeErreur) {
                     case 0:
                         corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + ">> es arreté";
@@ -473,28 +474,28 @@ public class Bean {
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 break;
             case TACHE_PING:
-                sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") impossible de contacter: " + tache.getNom();
+                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") impossible de contacter: " + tache.getNom();
                 corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le ping vers : <<" + tache.getNom() + ">> ne passe pas";
 
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 break;
             case TACHE_FICHIER_EXISTE:
-                sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le fichier <<" + tache.getNom() + ">> n'existe pas";
+                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le fichier <<" + tache.getNom() + ">> n'existe pas";
                 corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'existe pas";
 
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 break;
             case TACHE_TAILLE_FICHIER:
                 if (codeErreur == -1) {
-                    sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le fichier <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le fichier <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 } else if (tache.getSeuilAlerte() < 0) {//cas où on verrifie que le fichier à surveille es toujour plus grand que le seuil
-                    sujetEmail = "Alerte: le fichier <<" + tache.getNom() + ">> es inférieure à la taille autorisé";
+                    //sujetEmail = "Alerte: le fichier <<" + tache.getNom() + ">> es inférieure à la taille autorisé";
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es inférieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 } else {//cas où on verrifie que le fichier à surveille es toujour plus petit que le seuil
-                    sujetEmail = "Alerte: le fichier <<" + tache.getNom() + ">> es supérieure à la taille autorisé";
+                    //sujetEmail = "Alerte: le fichier <<" + tache.getNom() + ">> es supérieure à la taille autorisé";
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es supérieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 }
@@ -502,18 +503,18 @@ public class Bean {
                 break;
             case TACHE_DATE_MODIFICATION_DERNIER_FICHIER:
                 if (codeErreur == -1) {
-                    sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le repertoir <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le repertoir <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le repertoir : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 } else {
-                    sujetEmail = "Alerte: la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
+                    //sujetEmail = "Alerte: la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
                     corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
                 }
 
                 break;
             case TACHE_TELNET:
-                sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") impossible de contacter: " + tache.getNom();
+                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") impossible de contacter: " + tache.getNom();
                 corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le telnet vers : <<" + tache.getNom() + ">> ne passe pas";
 
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
@@ -543,8 +544,8 @@ public class Bean {
         if (tache == null) {
             return false;
         }
-        String corpsEmailEtSMS = "La situation es de nouveau normal pour la tache:  nom= <<" + tache.getNom() + ">>, type= <<" + tache.getTypeTache() + ">> AdresseIP= <<" + tache.getIdMachine().getAdresseIP() + ">>";
-        String sujetEmail = "Situation OK pour la tache << id=" + tache.getIdTache() + " adresse machine = " + tache.getIdMachine().getAdresseIP() + ">>";
+        String sujetEmail = "Situation OK pour Tache(id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
+        String corpsEmailEtSMS =sujetEmail;
         Logger.getLogger(Bean.class.getName()).log(Level.INFO, corpsEmailEtSMS);
         envoiMessageAlertePourTache(tache, corpsEmailEtSMS, sujetEmail);
         tache.setStatue(START);
@@ -694,9 +695,10 @@ public class Bean {
         String msg;
 
         for (Tache tache : listTacheMachine) {//cette boucle permet de renvoyer les msg d'alerte des taches
-            msg = "Rappel d'alerte sur la machine <<" + machine.getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> et de type <<" + tache.getTypeTache() + ">>";
+            String sujetEmail = "Rappel Alerte Tache(id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
+            msg = sujetEmail;
             Logger.getLogger(Bean.class.getName()).log(Level.WARNING, msg);
-            envoiMessageAlerte("rappel alerte", msg, machine.getNiveauDAlerte());
+            envoiMessageAlerte(sujetEmail, msg, machine.getNiveauDAlerte());
         }
 
         if (listTachePB.isEmpty()) {//cas ou il n'ya pas de pb sur la machine
@@ -908,7 +910,7 @@ public class Bean {
                     resultat = creerTacheSurveilleDD(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 case TACHE_PROCESSUS:
-                    resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte,seuil);
+                    resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte, seuil);
                     break;
                 case TACHE_SERVICE:
                     resultat = creerTacheSurveilleService(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, redemarer_auto_service, description_tache, niveauDAlerte);
