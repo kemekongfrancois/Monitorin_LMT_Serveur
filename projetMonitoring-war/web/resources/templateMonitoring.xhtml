@@ -14,6 +14,7 @@
 
     <h:body>
         <p:layout fullPage="true">
+<!--
             <p:layoutUnit header="entête" position="north" resizable="true" closable="true" collapsible="true">
                 <ui:insert name="top">entête</ui:insert>
             </p:layoutUnit>
@@ -22,14 +23,17 @@
                 <ui:insert name="bottom">bas</ui:insert> 
             </p:layoutUnit>
 
+            <p:layoutUnit resizable="true" closable="true" collapsible="true" position="east" header="menu de droit" >
+                <ui:insert name="right">Droit</ui:insert>
+            </p:layoutUnit>
             
-
+-->
                 <ui:insert name="left">
                     <p:layoutUnit resizable="true" position="west" header="Menu" collapsible="true">
                     <h:form>
                         <p:menu>
-                            <p:menuitem value="Machine supervisé" action="#{beanMenu.pagelistMachines}" />
-                            <p:menuitem value="Liste des taches" action="#{beanMenu.pageListeTaches}" />
+                            <p:menuitem value="Machine supervisées" action="#{beanMenu.pagelistMachines}" />
+                            <p:menuitem value="Liste des tâches" action="#{beanMenu.pageListeTaches}" />
                             <p:menuitem title="administration du Serveur " value="Serveur" action="#{beanMenu.pageAdministrerServeur}" />
 
 
@@ -45,9 +49,7 @@
                 <ui:insert name="content">centre</ui:insert>
             </p:layoutUnit>
 
-            <p:layoutUnit resizable="true" closable="true" collapsible="true" position="east" header="menu de droit" >
-                <ui:insert name="right">Droit</ui:insert>
-            </p:layoutUnit>
+            
 
 
 

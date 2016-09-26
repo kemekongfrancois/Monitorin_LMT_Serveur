@@ -57,6 +57,9 @@
                                 Taches de la machines: #{beanListeTachesMachine.adresseMachine}
                             </f:facet>
                             <p:column style="text-align: center; width:130px">
+                                <f:facet name="header">
+                                    <h:outputText value="Fonctions"/>
+                                </f:facet>
                                 <p:commandButton icon="ui-icon-pencil" action="#{beanModifierTache.pageModifieTache(item.idTache)}" title="Editer tache"/>
                                 <p:commandButton icon="ui-icon-play" title="Démarrer la tache" action="#{beanListeTachesMachine.demarerOuRedemarerTache(item)}" ajax="true" update=":form" />
                                 <p:commandButton icon="ui-icon-stop" title="arrêter la tache" action="#{beanListeTachesMachine.stoperTache(item)}" ajax="true" update=":form" />
@@ -87,19 +90,19 @@
                                 <f:facet name="header">
                                     <h:outputText value="Nom"/>
                                 </f:facet>
-                                <h:outputText value="#{item.nom}"/>
+                                <h:outputText title="#{item.nom}" value="#{item.nom}"/>
                             </p:column>
                             <p:column sortBy="#{item.periodeVerrification}">
                                 <f:facet name="header">
                                     <h:outputText value="PeriodeVerrification"/>
                                 </f:facet>
-                                <h:outputText value="#{item.periodeVerrification}"/>
+                                <h:outputText title="#{item.periodeVerrification}" value="#{item.periodeVerrification}"/>
                             </p:column>
                             <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}">
                                 <f:facet name="header">
                                     <h:outputText value="TypeTache"/>
                                 </f:facet>
-                                <h:outputText value="#{item.typeTache}"/>
+                                <h:outputText title="#{item.typeTache}" value="#{item.typeTache}"/>
                             </p:column>
                             <p:column style="text-align: center; width:30px">
                                 <f:facet name="header">
@@ -137,7 +140,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="DescriptionTache"/>
                                 </f:facet>
-                                <h:outputText value="#{item.descriptionTache}"/>
+                                <h:outputText title="#{item.descriptionTache}" value="#{item.descriptionTache}"/>
                             </p:column>
 
                         </p:dataTable>

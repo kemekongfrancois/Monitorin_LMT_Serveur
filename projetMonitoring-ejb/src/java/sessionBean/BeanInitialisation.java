@@ -35,29 +35,46 @@ public class BeanInitialisation {
     public static List<String> listTypeCompte;
     public static List<String> listTypeStatue;
 
+    /**
+     * verrifie la disponibilité des agents et met à jour le statu dans le cas
+     * où la machine es de nouveau accessible
+     *
+     */
     @Schedule(minute = "*/5", hour = "*")//cette tache vas s'exécuté toute les 5 minute
     //@Schedule(second = "0", minute = "*", hour = "*")
-    public void verifieAgent() {
+    public void verifieEtUpdateAgent() {
+        String sujet, msg;
         System.out.println("verrification du fonctionnement des agents: " + new Date());
         List<Machine> listMAchineAvecStatue = bean.getAllMachineAvecBonStatue();
         for (Machine machine : listMAchineAvecStatue) {
-            if (machine.getStatue().equals(Bean.START) || machine.getStatue().equals(Bean.STOP)) {
-                Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le statue de: <<" + machine.getAdresseIP() + ">> es OK. statue= " + machine.getStatue());
-            } else {//le statue es imppossible de joindre l'agent ou machine inaccessible
-                Machine machineBD = bean.getMachineByIP(machine.getAdresseIP());//on recupére la machine réel en BD avec le statue réel
-                if (machineBD.getStatue().equals(Bean.ALERTE)) {//on verrifie si on avait déja envoyer cette alerte
-                    Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le message d'alerte à déja été envoyé pour la machine: <<" + machine.getAdresseIP() + ">>");
-                } else {//l'alerte n'avait pas encore été envoyer on le fait donc
-                    String sujet = "Alerte machine: <<" + machine.getAdresseIP() + ">> statue = " + machine.getStatue();
-                    String msg = "le statue de: <<" + machine.getAdresseIP() + ">> n'es pas bon!!!. statue= " + machine.getStatue();
-                    Logger.getLogger(BeanInitialisation.class.getName()).log(Level.SEVERE, msg);
-                    if (bean.envoiMessageAlerte(sujet, msg, machine.getNiveauDAlerte())) {//on envoie le msg d'alerte et on met le statue à alerte
-                        machine.setStatue(Bean.ALERTE);
+            Machine machineBD = bean.getMachineByIP(machine.getAdresseIP());//on recupére la machine réel en BD avec le statue
+            if (machineBD.getStatue().equals(Bean.ALERTE)) {//on verrifie si on avait déja envoyer cette alerte
+                if (machine.getStatue().equals(Bean.START)) {//la machine es de nouveau accessible
+                    sujet = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible";
+                    msg = sujet;
+                    Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
+                    if (bean.envoiMessageAlerte(sujet, msg, machine.getNiveauDAlerte())) {//on envoie le msg 
+                        machine.setStatue(Bean.START);
                         bean.updateMachie(machine);
                     }
+                    //continue;
+                } else {//alerte déja envoyer
+                    Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le message d'alerte à déja été envoyé pour la machine: <<" + machine.getAdresseIP() + ">>");
+                }
+            } else if (machine.getStatue().equals(Bean.START) || machine.getStatue().equals(Bean.STOP)) {
+                Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le statue de: <<" + machine.getAdresseIP() + ">> es OK. statue= " + machine.getStatue());
+            } else {//le statue es imppossible de joindre l'agent ou machine inaccessible
+                //l'alerte n'avait pas encore été envoyer on le fait donc
+                sujet = "Alerte machine: <<" + machine.getAdresseIP() + ">> statue = " + machine.getStatue();
+                msg = "le statue de: <<" + machine.getAdresseIP() + ">> n'es pas bon!!!. statue= " + machine.getStatue();
+                Logger.getLogger(BeanInitialisation.class.getName()).log(Level.SEVERE, msg);
+                if (bean.envoiMessageAlerte(sujet, msg, machine.getNiveauDAlerte())) {//on envoie le msg d'alerte et on met le statue à alerte
+                    machine.setStatue(Bean.ALERTE);
+                    bean.updateMachie(machine);
                 }
 
             }
+
         }
     }
 
@@ -80,7 +97,7 @@ public class BeanInitialisation {
                 bean.updateMachie(machine);
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
             } else {//la machine es toujour inaccessible, on revoie le message d'alerte
-                sujet = "Rappel Alerte machine: <<" + machine.getAdresseIP() + ">> statue = " + machine.getStatue();
+                sujet = "Rappel Alerte machine: <<" + machine.getAdresseIP() + ">> statue = " + statue;
                 msg = "La machine: <<" + machine.getAdresseIP() + ">> n'es toujours pas accessible: STATUE= " + statue;
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.WARNING, msg);
             }
@@ -151,7 +168,7 @@ public class BeanInitialisation {
         //resultat += "\ncreation de la machine qui sera situe sur le serveur :-> " + creerMachine(ADRESSE_MACHINE_SERVEUR, portEcoute, DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "machine Serveur");
 
         resultat += "\ncreation du 1er utilisateur :-> " + bean.creerUtilisateur("kef", "0000", "kemekong", "francois", Bean.TYPE_COMPTE_SUPADMIN, "237699667694", "kemekongfrancois@gmail.com", 1);
-        resultat += "\ncreation du 2ième utilisateur :-> " + bean.creerUtilisateur("kef2", "0000", "kemekong2", "francois2", Bean.TYPE_COMPTE_SUPADMIN, "237675954517", "kemekongfranois@yahoo.fr", 1);
+        resultat += "\ncreation du 2ième utilisateur :-> " + bean.creerUtilisateur("kemekongfrancois", "0000", "kemekong2", "francois2", Bean.TYPE_COMPTE_SUPADMIN, "237675954517", "kemekongfranois@yahoo.fr", 1);
 
         resultat += "\ncreation de la machine :-> " + bean.creerMachine(adressTest, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF", 1);
 
@@ -243,31 +260,31 @@ public class BeanInitialisation {
         i = 0;
         adresse = "192.168.200.163";
         resultat += "\ncreation de la machine " + adresse + " :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "SICAP", 1);
-        resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.16.38", 5016, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, (i += 2) + " */10 * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, (i += 2) + " */10 * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.16.38", 5016, Bean.START, true, true, "", 1);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "217.113.69.8", 9000, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "131.166.253.49", 7004, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "10.32.251.240", 3700, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "196.202.232.250", 3700, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "131.166.253.49", 7004, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "10.32.251.240", 3700, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "196.202.232.250", 3700, Bean.START, true, true, "", 1);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.244.255.6", 5016, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "41.202.220.73", 2775, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "41.202.206.65", 15019, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "41.202.220.73", 2775, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "41.202.206.65", 15019, Bean.START, true, true, "", 1);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.202.206.69", 15019, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "121.241.242.124", 2345, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.163", 50402, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.163", 50411, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.163", 50404, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.163", 50410, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.163", 50600, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "121.241.242.124", 2345, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163", 50402, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163", 50411, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163", 50404, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163", 50410, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163", 50600, Bean.START, true, true, "", 1);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 4848, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.150", 8282, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.150", 8282, Bean.START, true, true, "", 1);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 13001, Bean.START, true, true, "", 1);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 6013, Bean.START, true, true, "", 1);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 3306, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.152", 8087, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.152", 4848, Bean.START, true, true, "", 1);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 " + (i += 2) + " * * * ?", "192.168.200.152", 8080, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152", 8087, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152", 4848, Bean.START, true, true, "", 1);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152", 8080, Bean.START, true, true, "", 1);
 
         i = 0;
         adresse = "192.168.200.152";

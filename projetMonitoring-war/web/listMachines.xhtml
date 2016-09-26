@@ -17,8 +17,13 @@
                     <h:form id="formDesMachines">
                         <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
                         <p:dataTable  value="#{beansMachine.listMachines}" var="item" resizableColumns="true" liveResize="true" draggableColumns="true">
-
+                            <f:facet name="header">
+                                Liste des machines supervisées
+                            </f:facet>
                             <p:column style="text-align: center; width:160px">
+                                <f:facet name="header">
+                                    <h:outputText value="Fonctions"/>
+                                </f:facet>
                                 <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(item.adresseIP)}" title="Editer Machine"/>
                                 <p:commandButton icon="ui-icon-play" title="Démarrer la supervision ou là rafraichi" action="#{beansMachine.demarerOuRedemarerMachine(item)}" ajax="true" update=":formDesMachines" />
                                 <p:commandButton icon="ui-icon-stop" title="arrêter la supervision" action="#{beansMachine.stoperMachine(item)}" ajax="true" update=":formDesMachines" />
@@ -41,33 +46,33 @@
                                 </f:facet>
                                 <h:outputText value="#{item.idMachine}"/>
                             </p:column>
-                            <p:column sortBy="#{item.adresseIP}" style="text-align: center; width:90px">
+                            <p:column sortBy="#{item.adresseIP}" style="width:90px">
                                 <f:facet name="header">
-                                    <h:outputText value="AdresseIP"/>
+                                    <h:outputText value="Adresse IP"/>
                                 </f:facet>
                                 <h:outputText value="#{item.adresseIP}"/>
                             </p:column>
-                            <p:column sortBy="#{item.portEcoute}">
+                            <p:column sortBy="#{item.portEcoute}" style="width:40px">
                                 <f:facet name="header">
-                                    <h:outputText value="PortEcoute"/>
+                                    <h:outputText value="Port" title="Le port d'écouter : le port par le quelle le serveur vas communiquer avec la machine"/>
                                 </f:facet>
                                 <h:outputText value="#{item.portEcoute}"/>
                             </p:column>
-                            <p:column sortBy="#{item.nomMachine}" filterBy="#{item.nomMachine}" >
+                            <p:column sortBy="#{item.nomMachine}" filterBy="#{item.nomMachine}" style="width:105px">
                                 <f:facet name="header">
-                                    <h:outputText value="NomMachine"/>
+                                    <h:outputText value="Nom machine"/>
                                 </f:facet>
                                 <h:outputText value="#{item.nomMachine}"/>
                             </p:column>
-                            <p:column sortBy="#{item.typeOS}" >
+                            <p:column sortBy="#{item.typeOS}" style="width:70px">
                                 <f:facet name="header">
-                                    <h:outputText value="TypeOS"/>
+                                    <h:outputText value="Type OS"/>
                                 </f:facet>
                                 <h:outputText value="#{item.typeOS}"/>
                             </p:column>
                             <p:column sortBy="#{item.periodeDeCheck}">
                                 <f:facet name="header">
-                                    <h:outputText value="PeriodeDeCheck"/>
+                                    <h:outputText value="Periode" title="Période de vérification du bon fonctionnement des taches et la période de rappel des alertes"/>
                                 </f:facet>
                                 <h:outputText value="#{item.periodeDeCheck}"/>
                             </p:column>
@@ -77,9 +82,9 @@
                                 </f:facet>
                                 <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
                             </p:column>
-                            <p:column sortBy="#{item.niveauDAlerte}" >
+                            <p:column sortBy="#{item.niveauDAlerte}" style="width:50px">
                                 <f:facet name="header">
-                                    <h:outputText value="NiveauDAlerte"/>
+                                    <h:outputText value="Niveau" title="niveau d'alerte de la machine"/>
                                 </f:facet>
                                 <h:outputText value="#{item.niveauDAlerte}"/>
 
@@ -89,7 +94,7 @@
 
 
                         </p:dataTable>
-                        <p:dialog header="Parametre machine" widgetVar="parametreMachine" dynamic="true" modal="false" showEffect="fade" hideEffect="fade" resizable="true" width="640" height="340">
+                        <p:dialog header="Paramètre machine" widgetVar="parametreMachine" dynamic="true" modal="false" showEffect="fade" hideEffect="fade" resizable="true" width="640" height="340">
                             <p:outputPanel id="machineParam" style="text-align:center;">
                                 <p:panelGrid columns="2">
                                     <p:commandButton value="Plus de détail" action="#{beanListeTachesMachine.chargerPage(beansMachine.machine.adresseIP)}"/>

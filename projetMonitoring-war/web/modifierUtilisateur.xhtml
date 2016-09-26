@@ -23,7 +23,7 @@
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="IdUtilisateur:" for="idUtilisateur" />
                                 <p:inputText id="idUtilisateur" value="#{beanUtilisateur.utilisateur.idUtilisateur}" disabled="true" title="IdUtilisateur" required="true" />
-                                <p:outputLabel value="TypeCompte:" for="typeCompte" />
+                                <p:outputLabel value="Type de compte:" for="typeCompte" />
                                 <p:selectOneMenu id="typeCompte" value="#{beanUtilisateur.utilisateur.typeCompte}" >
                                     <f:selectItems value="#{beanVariableGlobal.listTypeCompte}"  />
                                 </p:selectOneMenu>
@@ -33,13 +33,13 @@
                                 <p:inputText id="prenom" value="#{beanUtilisateur.utilisateur.prenom}" title="Prenom" />
                                 <p:outputLabel value="Login:" for="login" />
                                 <p:inputText id="login" value="#{beanUtilisateur.utilisateur.login}" title="Login" required="true" />
-                                <p:outputLabel value="Pass:" for="pass" />
+                                <p:outputLabel value="Mot de passe:" for="pass" />
                                 <p:inputText id="pass" value="#{beanUtilisateur.utilisateur.pass}" title="Pass" />
-                                <p:outputLabel value="NumeroTelephone:" for="numeroTelephone" />
+                                <p:outputLabel value="Numero de téléphone:" for="numeroTelephone" />
                                 <p:inputText id="numeroTelephone" value="#{beanUtilisateur.utilisateur.numeroTelephone}" title="NumeroTelephone" required="true" />
-                                <p:outputLabel value="BoiteMail:" for="boiteMail" />
+                                <p:outputLabel value="Boite mail:" for="boiteMail" />
                                 <p:inputText id="boiteMail" value="#{beanUtilisateur.utilisateur.boiteMail}" title="BoiteMail" required="true" />
-                                <p:outputLabel value="NiveauDAlerte:" for="niveauDAlerte" />
+                                <p:outputLabel value="Niveau d'alerte:" for="niveauDAlerte" />
                                 <p:inputText id="niveauDAlerte" value="#{beanUtilisateur.utilisateur.niveauDAlerte}" title="DescriptionTache" required="true" />
                             </p:panelGrid>
                             <h:panelGrid  columns="2" >
@@ -50,7 +50,9 @@
 
                     </h:form>
                 </f:view>
-
+                <h:form>
+                    <p:commandButton icon="ui-icon-arrowthick-1-w" value="Précédant" action="#{beanMenu.pageAdministrerServeur}" /> 
+                </h:form>
             </ui:define>
 
         </ui:composition>

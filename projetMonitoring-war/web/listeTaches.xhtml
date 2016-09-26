@@ -19,9 +19,12 @@
 
                         <p:dataTable value="#{beanListeTaches.listTaches}" liveResize="true" draggableColumns="true" resizableColumns="true" var="item">
                             <f:facet name="header">
-                                Liste de toute les taches 
+                                Liste de toute les tâches 
                             </f:facet>
                             <p:column style="text-align: center; width:130px">
+                                <f:facet name="header">
+                                    <h:outputText value="Fonctions"/>
+                                </f:facet>
                                 <p:commandButton icon="ui-icon-pencil" action="#{beanModifierTache.pageModifieTache(item.idTache)}" title="Editer tache"/>
                                 <p:commandButton icon="ui-icon-play" title="Démarrer la tache" action="#{beanListeTachesMachine.demarerOuRedemarerTache(item)}" ajax="true" update=":form"/>
                                 <p:commandButton icon="ui-icon-stop" title="arrêter la tache" action="#{beanListeTachesMachine.stoperTache(item)}" ajax="true" update=":form"/>
@@ -42,44 +45,44 @@
                                 <h:outputText value="#{item.idTache}"/>
                             </p:column>
 
-                            <p:column style="text-align: center; width:100px" sortBy="#{item.idMachine.adresseIP}" filterBy="#{item.idMachine.adresseIP}" >
+                            <p:column style="width:130px" sortBy="#{item.idMachine.adresseIP}" filterBy="#{item.idMachine.adresseIP}" >
                                 <f:facet name="header">
                                     <h:outputText value="IP machine"/>
                                 </f:facet>
                                 <p:commandButton icon="ui-icon-search" action="#{beanListeTachesMachine.chargerPage(item.idMachine.adresseIP)}" title="Détaille pour : #{item.idMachine.adresseIP}" />
 
-                                <h:outputText value="#{item.idMachine.adresseIP} "/>
+                                <h:outputText title="#{item.idMachine.adresseIP}" value="#{item.idMachine.adresseIP} "/>
                             </p:column>
 
 
 
-                            <p:column sortBy="#{item.statue}"  style="width:50px">
+                            <p:column sortBy="#{item.statue}" filterBy="#{item.statue}"  style="width:100px">
                                 <f:facet name="header">
                                     <h:outputText value="Statue"/>
                                 </f:facet>
                                 <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
                             </p:column>
-                            <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
+                            <p:column sortBy="#{item.nom}" filterBy="#{item.nom}" style="width:100px">
                                 <f:facet name="header">
                                     <h:outputText value="Nom"/>
                                 </f:facet>
-                                <h:outputText value="#{item.nom}"/>
+                                <h:outputText title="#{item.nom}" value="#{item.nom}"/>
                             </p:column>
-                            <p:column sortBy="#{item.periodeVerrification}">
+                            <p:column sortBy="#{item.periodeVerrification}" style="width:80px">
                                 <f:facet name="header">
-                                    <h:outputText value="PeriodeVerrification"/>
+                                    <h:outputText value="Périodicité"/>
                                 </f:facet>
-                                <h:outputText value="#{item.periodeVerrification}"/>
+                                <h:outputText title="#{item.periodeVerrification}" value="#{item.periodeVerrification}"/>
                             </p:column>
-                            <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}">
+                            <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}" style="width:100px">
                                 <f:facet name="header">
-                                    <h:outputText value="TypeTache"/>
+                                    <h:outputText value="Type"/>
                                 </f:facet>
-                                <h:outputText value="#{item.typeTache}"/>
+                                <h:outputText title="#{item.typeTache}" value="#{item.typeTache}"/>
                             </p:column>
                             <p:column style="text-align: center; width:30px">
                                 <f:facet name="header">
-                                    <h:outputText title="seuil Alerte" value="Seuil"/>
+                                    <h:outputText title="seuil" value="Seuil"/>
                                 </f:facet>
                                 <h:outputText value="#{item.seuilAlerte}"/>
                             </p:column>
@@ -107,11 +110,11 @@
                                 </f:facet>
                                 <h:outputText value="#{item.niveauDAlerte}"/>
                             </p:column>
-                            <p:column sortBy="#{item.descriptionTache}" filterBy="#{item.descriptionTache}">
+                            <p:column sortBy="#{item.descriptionTache}" filterBy="#{item.descriptionTache}" style="width:85px">
                                 <f:facet name="header">
-                                    <h:outputText value="DescriptionTache"/>
+                                    <h:outputText value="Description"/>
                                 </f:facet>
-                                <h:outputText value="#{item.descriptionTache}"/>
+                                <h:outputText title="#{item.descriptionTache}" value="#{item.descriptionTache}"/>
                             </p:column>
 
 

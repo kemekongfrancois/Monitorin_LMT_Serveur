@@ -18,28 +18,28 @@
                         <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
                         <p:panel header="Modifier Serveur" >
                             <h:panelGrid columns="3">
-                                <p:outputLabel value="EmailEnvoiMail:" for="emailEnvoiMail" />
+                                <p:outputLabel value="Email pour l'envoi de mail:" for="emailEnvoiMail" />
                                 <p:inputText id="emailEnvoiMail" value="#{beanModifierServeur.serveur.emailEnvoiMail}" title="EmailEnvoiMail" required="true" />
                                 <p:message for="emailEnvoiMail"/>
-                                <p:outputLabel value="PassEnvoiMail:" for="passEnvoiMail" />
+                                <p:outputLabel value="Mot de passe pour l'envoie de mail :" for="passEnvoiMail" />
                                 <p:inputText id="passEnvoiMail" value="#{beanModifierServeur.serveur.passEnvoiMail}" title="PassEnvoiMail" required="true" />
                                 <p:message for="passEnvoiMail"/>
-                                <p:outputLabel value="LogingSMS:" for="logingSMS" />
+                                <p:outputLabel value="Login pour l'envoi de SMS :" for="logingSMS" />
                                 <p:inputText id="logingSMS" value="#{beanModifierServeur.serveur.logingSMS}" title="LogingSMS" required="true" />
                                 <p:message for="logingSMS"/>
-                                <p:outputLabel value="MotdepasseSMS:" for="motdepasseSMS"  />
+                                <p:outputLabel value="Mot de passe pour l'envoie de SMS :" for="motdepasseSMS"  />
                                 <p:inputText id="motdepasseSMS" value="#{beanModifierServeur.serveur.motdepasseSMS}" title="MotdepasseSMS" required="true" />
 
                                 <p:message for="motdepasseSMS"/>
-                                <p:outputLabel value="NumeroCourt:" for="numeroCourt" />
+                                <p:outputLabel value="Sender ID:" for="numeroCourt" />
                                 <p:inputText id="numeroCourt" value="#{beanModifierServeur.serveur.numeroCourt}" title="NumeroCourt" required="true" >
                                     <f:validateLength minimum="2" maximum="11" />
                                 </p:inputText>
                                 <p:message for="numeroCourt"/>
-                                <p:outputLabel value="EnvoialerteSMS:" for="envoialerteSMS" />
+                                <p:outputLabel value="Envoi alerte SMS:" for="envoialerteSMS" />
                                 <p:inputSwitch id="envoialerteSMS" value="#{beanModifierServeur.serveur.envoialerteSMS}" required="true"  />
                                 <p:message for="envoialerteSMS"/>
-                                <p:outputLabel value="EnvoieAlerteMail:" for="envoieAlerteMail" />
+                                <p:outputLabel value="Envoi alerte mail:" for="envoieAlerteMail" />
                                 <p:inputSwitch id="envoieAlerteMail" value="#{beanModifierServeur.serveur.envoieAlerteMail}" required="true" />
                                 <p:message for="envoieAlerteMail"/>
                             </h:panelGrid>

@@ -15,39 +15,39 @@
                 <p:fieldset legend="Serveur" toggleable="true" toggleSpeed="500">
                     <h:form>
                         <p:commandButton icon="ui-icon-pencil" action="#{beanModifierServeur.pageModifierServeur}" title="Editer Serveur"/>
-
-                        <p:panelGrid columns="2">
-                            <h:outputText value="EmailEnvoiMail:"/>
+                        <p:separator  />
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Email pour l'envoi de mail:"/>
                             <h:outputText value="#{beanAdministrerServeur.serveur.emailEnvoiMail}" title="EmailEnvoiMail"/>
-                            <h:outputText value="PassEnvoiMail:"/>
-                            <h:outputText value="#{beanAdministrerServeur.serveur.passEnvoiMail}" title="PassEnvoiMail"/>
-                            <h:outputText value="LogingSMS:"/>
+                            <h:outputText value="Loging pour l'envoi de SMS:"/>
                             <h:outputText value="#{beanAdministrerServeur.serveur.logingSMS}" title="LogingSMS"/>
-                            <h:outputText value="MotdepasseSMS:"/>
-                            <h:outputText value="#{beanAdministrerServeur.serveur.motdepasseSMS}" title="MotdepasseSMS"/>
-                            <h:outputText value="NumeroCourt:"/>
+                            <h:outputText value="Sender ID"/>
                             <h:outputText value="#{beanAdministrerServeur.serveur.numeroCourt}" title="NumeroCourt"/>
-                            <h:outputText value="EnvoialerteSMS:"/>
+                            <h:outputText value="Envoi alerte SMS:"/>
                             <h:outputText value="#{beanVariableGlobal.booleanEnString(beanAdministrerServeur.serveur.envoialerteSMS)}" style="color: #{beanVariableGlobal.booleanCouleur(beanAdministrerServeur.serveur.envoialerteSMS)}" />
-                            <h:outputText value="EnvoieAlerteMail:"/>
+                            <h:outputText value="Envoie alerte mail:"/>
                             <h:outputText value="#{beanVariableGlobal.booleanEnString(beanAdministrerServeur.serveur.envoieAlerteMail)}" style="color: #{beanVariableGlobal.booleanCouleur(beanAdministrerServeur.serveur.envoieAlerteMail)}" />
 
-                        </p:panelGrid>
+                        </h:panelGrid>
                     </h:form>
                 </p:fieldset>
-                <p:separator  />
-                <p:separator  />
+                
+                
+                <p:separator  style="height:10px;background-color: aquamarine"/>
+                
+                
                 <p:fieldset legend="Utilisateur" toggleable="true" toggleSpeed="500">
                     <f:view>
 
 
                         <h:form id="form">
-                            <p:separator  />
                             <p:commandButton icon="ui-icon-circle-plus" title="créer un nouveau utilisateur" action="#{beanUtilisateur.pageCreerUtilisateur()}"/>
-
                             <p:separator  />
                             <p:dataTable value="#{beanAdministrerServeur.allUtilisateur}" var="item" resizableColumns="true" liveResize="true" draggableColumns="true">
                                 <p:column style="text-align: center; width:70px">
+                                    <f:facet name="header">
+                                    <h:outputText value="Fonctions"/>
+                                </f:facet>
                                     <p:commandButton icon="ui-icon-pencil" action="#{beanUtilisateur.pageModifieUtilisateur(item.idUtilisateur)}" title="Editer utilisateur"/>
                                     <p:commandButton icon="ui-icon-closethick" title="supprimer l'utilisateur" actionListener="#{beanAdministrerServeur.suprimerUtilisateur(item)}" update=":form">
                                         <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer l'utilisateur :#{item.idUtilisateur} ?" icon="ui-icon-alert" />
@@ -65,53 +65,49 @@
                                     </f:facet>
                                     <h:outputText value="#{item.idUtilisateur}"/>
                                 </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="TypeCompte"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.typeCompte}"/>
-                                </p:column>
-                                <p:column>
+                                
+                                <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
                                     <f:facet name="header">
                                         <h:outputText value="Nom"/>
                                     </f:facet>
                                     <h:outputText value="#{item.nom}"/>
                                 </p:column>
-                                <p:column>
+                                <p:column sortBy="#{item.prenom}" filterBy="#{item.prenom}">
                                     <f:facet name="header">
                                         <h:outputText value="Prenom"/>
                                     </f:facet>
                                     <h:outputText value="#{item.prenom}"/>
                                 </p:column>
-                                <p:column>
+                                <p:column sortBy="#{item.login}" filterBy="#{item.login}">
                                     <f:facet name="header">
                                         <h:outputText value="Login"/>
                                     </f:facet>
                                     <h:outputText value="#{item.login}"/>
                                 </p:column>
-                                <p:column>
+                                
+                                <p:column sortBy="#{item.numeroTelephone}" filterBy="#{item.numeroTelephone}" style="width:100px">
                                     <f:facet name="header">
-                                        <h:outputText value="Pass"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.pass}"/>
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="NumeroTelephone"/>
+                                        <h:outputText value="N° téléphone" title="numéreau de téléphone"/>
                                     </f:facet>
                                     <h:outputText value="#{item.numeroTelephone}"/>
                                 </p:column>
-                                <p:column>
+                                <p:column sortBy="#{item.boiteMail}" filterBy="#{item.boiteMail}">
                                     <f:facet name="header">
-                                        <h:outputText value="BoiteMail"/>
+                                        <h:outputText value="Boite mail"/>
                                     </f:facet>
                                     <h:outputText value="#{item.boiteMail}"/>
                                 </p:column>
-                                <p:column>
+                                <p:column sortBy="#{item.niveauDAlerte}" style="width:40px">
                                     <f:facet name="header">
-                                        <h:outputText value="NiveauDAlerte"/>
+                                        <h:outputText value="Niveau" title="niveau d'alerte de l'utilisateur"/>
                                     </f:facet>
                                     <h:outputText value="#{item.niveauDAlerte}"/>
+                                </p:column>
+                                <p:column sortBy="#{item.typeCompte}" style="width:50px">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Type" title="type de compte"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.typeCompte}"/>
                                 </p:column>
                             </p:dataTable>
                         </h:form>
