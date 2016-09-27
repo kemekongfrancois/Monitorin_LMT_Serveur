@@ -27,21 +27,21 @@
                             <p:commandButton icon="ui-icon-circle-plus" title="créer une tache sur cette machine" action="#{beanCreerTache.pageCreerTache(beanListeTachesMachine.adresseMachine)}"/>
 
                             <p:panelGrid columns="2">
-                                <h:outputText value="IdMachine:"/>
+                                <h:outputText value="Id:"/>
                                 <h:outputText value="#{beanListeTachesMachine.machine.idMachine}" title="IdMachine"/>
-                                <h:outputText value="AdresseIP:"/>
+                                <h:outputText value="Adresse IP:"/>
                                 <h:outputText value="#{beanListeTachesMachine.machine.adresseIP}" title="AdresseIP"/>
-                                <h:outputText value="PortEcoute:"/>
+                                <h:outputText value="Port d'écoute:"/>
                                 <h:outputText value="#{beanListeTachesMachine.machine.portEcoute}" title="PortEcoute"/>
-                                <h:outputText value="NomMachine:"/>
+                                <h:outputText value="Nom de la machine:"/>
                                 <h:outputText value="#{beanListeTachesMachine.machine.nomMachine}" title="NomMachine"/>
-                                <h:outputText value="TypeOS:"/>
+                                <h:outputText value="Type d'OS:"/>
                                 <h:outputText value="#{beanListeTachesMachine.machine.typeOS}" title="TypeOS"/>
-                                <h:outputText value="PeriodeDeCheck:"/>
+                                <h:outputText value="Periode de vérification:"/>
                                 <h:outputText value="#{beanListeTachesMachine.machine.periodeDeCheck}" title="PeriodeDeCheck"/>
                                 <h:outputText value="Statue:"/>
                                 <h:outputText title="#{beanListeTachesMachine.machine.statue}" value="#{beanListeTachesMachine.machine.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(beanListeTachesMachine.machine.statue)}"/>
-                                <h:outputText value="NiveauDAlerte:"/>
+                                <h:outputText value="Niveau d'alerte:"/>
                                 <h:outputText value="#{beanListeTachesMachine.machine.niveauDAlerte}" title="NiveauDAlerte"/>
                             </p:panelGrid>
                         </h:form>
@@ -79,34 +79,33 @@
                                 </f:facet>
                                 <h:outputText value="#{item.idTache}"/>
                             </p:column>
-
-                            <p:column sortBy="#{item.statue}" style="text-align: center; width:70px">
+                            <p:column sortBy="#{item.statue}" filterBy="#{item.statue}"  style="width:100px">
                                 <f:facet name="header">
                                     <h:outputText value="Statue"/>
                                 </f:facet>
                                 <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
                             </p:column>
-                            <p:column sortBy="#{item.nom}" filterBy="#{item.nom}">
+                            <p:column sortBy="#{item.nom}" filterBy="#{item.nom}" style="width:100px">
                                 <f:facet name="header">
                                     <h:outputText value="Nom"/>
                                 </f:facet>
                                 <h:outputText title="#{item.nom}" value="#{item.nom}"/>
                             </p:column>
-                            <p:column sortBy="#{item.periodeVerrification}">
+                            <p:column sortBy="#{item.periodeVerrification}" style="width:80px">
                                 <f:facet name="header">
-                                    <h:outputText value="PeriodeVerrification"/>
+                                    <h:outputText value="Périodicité"/>
                                 </f:facet>
                                 <h:outputText title="#{item.periodeVerrification}" value="#{item.periodeVerrification}"/>
                             </p:column>
-                            <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}">
+                            <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}" style="width:100px">
                                 <f:facet name="header">
-                                    <h:outputText value="TypeTache"/>
+                                    <h:outputText value="Type"/>
                                 </f:facet>
                                 <h:outputText title="#{item.typeTache}" value="#{item.typeTache}"/>
                             </p:column>
                             <p:column style="text-align: center; width:30px">
                                 <f:facet name="header">
-                                    <h:outputText title="seuil Alerte" value="Seuil"/>
+                                    <h:outputText title="seuil" value="Seuil"/>
                                 </f:facet>
                                 <h:outputText value="#{item.seuilAlerte}"/>
                             </p:column>
@@ -128,17 +127,15 @@
                                 </f:facet>
                                 <h:outputText value="#{beanVariableGlobal.booleanEnString(item.redemarerAutoService)}" style="color: #{beanVariableGlobal.booleanCouleur(item.redemarerAutoService)}" />
                             </p:column>
-
-
                             <p:column sortBy="#{item.niveauDAlerte}" style="text-align: center; width:35px">
                                 <f:facet name="header">
                                     <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
                                 </f:facet>
                                 <h:outputText value="#{item.niveauDAlerte}"/>
                             </p:column>
-                            <p:column sortBy="#{item.descriptionTache}" filterBy="#{item.descriptionTache}">
+                            <p:column sortBy="#{item.descriptionTache}" filterBy="#{item.descriptionTache}" style="width:85px">
                                 <f:facet name="header">
-                                    <h:outputText value="DescriptionTache"/>
+                                    <h:outputText value="Description"/>
                                 </f:facet>
                                 <h:outputText title="#{item.descriptionTache}" value="#{item.descriptionTache}"/>
                             </p:column>

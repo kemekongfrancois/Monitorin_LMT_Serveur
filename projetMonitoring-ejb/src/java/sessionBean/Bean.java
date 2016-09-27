@@ -71,6 +71,7 @@ public class Bean {
     public static final String ADRESSE_UTILISE = "adresse ip utilise";
     public static final String NUMERO_COUR_INVALIDE = "senderID invalide";
     public static final String INFO_DEJA_EXISTANT_EN_BD = "le login ou la boite mail ou le numero de téléphone es déja utilisé";
+    public static final String ADREESSE_TELNET_INVALIDE = "Adresse Telnet invalide ; l’adresse et le port doivent être séparer par une virgule";
 
     public String OS_MACHINE;
     //public static final String expresRegulierNumeroTel = "(\\+?237)?\\d{9}";
@@ -848,8 +849,12 @@ public class Bean {
         return creerTache(adresIpMachine, TACHE_DATE_MODIFICATION_DERNIER_FICHIER, description_tache, periodeVerrification, cheminRepertoire, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
     }
 
-    public String creerTacheTelnet(String adresIpMachine, String periodeVerrification, String adresseTelnet, int port, String statue, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
-        String adresseEtPort = adresseTelnet + "," + port;
+    public String creerTacheTelnet(String adresIpMachine, String periodeVerrification, String adresseEtPort, String statue, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
+       // String adresseEtPort = adresseTelnet + "," + port;
+       if(!adresseEtPort.contains(",")){
+           Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "l'adresse pour le telnet est invalide: " + adresseEtPort + " l'adresse et le port doivent être céparer par une virgule ");
+            return ADREESSE_TELNET_INVALIDE;
+       }
         if (verifiNomTacheSurMachine(adresIpMachine, adresseEtPort)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le telnet vers: " + adresseEtPort + " es déja créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
@@ -925,7 +930,7 @@ public class Bean {
                     resultat = creerTacheSurveilleTailleFichier(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 case TACHE_TELNET:
-                    resultat = creerTacheTelnet(adresIpMachine, periodeVerrification, nom, seuil, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    resultat = creerTacheTelnet(adresIpMachine, periodeVerrification, nom, statue, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 default:
                     resultat = "Le type <<" + typeTache + ">> n’existe pas ";

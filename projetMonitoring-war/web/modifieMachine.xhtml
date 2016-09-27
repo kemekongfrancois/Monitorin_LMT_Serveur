@@ -22,24 +22,24 @@
 
                         <p:panel header="Modifier Machine" >
                             <h:panelGrid columns="3">
-                                <p:outputLabel value="IdMachine:" for="idMachine" />
+                                <p:outputLabel value="Id:" for="idMachine" />
                                 <p:inputText id="idMachine" value="#{beanModifierMachine.machine.idMachine}" title="IdMachine" required="true" disabled="true"/>
                                 <p:message for="idMachine" />
-                                <p:outputLabel value="AdresseIP:" for="adresseIP" />
+                                <p:outputLabel value="Adresse IP:" for="adresseIP" />
                                 <p:inputText id="adresseIP" value="#{beanModifierMachine.machine.adresseIP}" title="AdresseIP" required="true" requiredMessage="ce champ doit être non vide"/>
                                 <p:message for="adresseIP" />
-                                <p:outputLabel value="PortEcoute:" for="portEcoute" />
+                                <p:outputLabel value="Port d'écoute:" for="portEcoute" />
                                 <p:inputText id="portEcoute" value="#{beanModifierMachine.machine.portEcoute}" title="PortEcoute" required="true" requiredMessage="ce champ doit être non vide" />
                                 <p:message for="portEcoute" />
-                                <p:outputLabel value="NomMachine:" for="nomMachine" />
+                                <p:outputLabel value="Nom de la machine:" for="nomMachine" />
                                 <p:inputText id="nomMachine" value="#{beanModifierMachine.machine.nomMachine}" title="NomMachine" />
                                 <p:message for="nomMachine" />
-                                <p:outputLabel value="TypeOS:" for="typeOS" />
+                                <p:outputLabel value="Type d'OS:" for="typeOS" />
                                 <p:selectOneMenu id="typeOS" value="#{beanModifierMachine.machine.typeOS}" >
                                     <f:selectItems value="#{beanVariableGlobal.listOS}"  />
                                 </p:selectOneMenu>
                                 <p:message for="typeOS" />
-                                <p:outputLabel value="PeriodeDeCheck:" for="periodeDeCheck" />
+                                <p:outputLabel value="Periode de vérification:" for="periodeDeCheck" />
                                 <p:inputText id="periodeDeCheck" value="#{beanModifierMachine.machine.periodeDeCheck}" title="PeriodeDeCheck" required="true" requiredMessage="ce champ doit être non vide" />
                                 <p:message for="periodeDeCheck" />
                                 <p:outputLabel value="Statue:" for="statue" />
@@ -47,26 +47,22 @@
                                     <f:selectItems value="#{beanVariableGlobal.listTypeStatue}"  />
                                 </p:selectOneMenu>
                                 <p:message for="statue" />
-                                <p:outputLabel value="NiveauDAlerte:" for="niveauDAlerte" />
+                                <p:outputLabel value="Niveau d'alerte:" for="niveauDAlerte" />
                                 <p:inputText id="niveauDAlerte" value="#{beanModifierMachine.machine.niveauDAlerte}" title="NiveauDAlerte" />
                                 <p:message for="niveauDAlerte" />
-
-
                             </h:panelGrid>
                             <h:panelGrid  columns="2" >
                                 <p:commandButton type="reset"  value="Reinitialiser" /> 
                                 <p:commandButton  value="Enregistrer" icon="ui-icon-check" action="#{beanModifierMachine.enregistreMachine}" ajax="true" update="form"  validateClient="true"/> 
                             </h:panelGrid>
-
-
                         </p:panel>
-
                     </h:form>
-
-
                 </f:view>
                 <h:form>
-                    <p:commandButton icon="ui-icon-arrowthick-1-w"   value="List machine" action="#{beanMenu.pagelistMachines}" /> 
+                    <h:panelGrid  columns="2" >
+                        <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher la liste des taches de la machine"   value="liste tâche machine" action="#{beanListeTachesMachine.chargerPage(beanModifierMachine.adresMachine)}" /> 
+                        <p:commandButton icon="ui-icon-arrowthick-1-w"   value="Liste machine" action="#{beanMenu.pagelistMachines}" /> 
+                    </h:panelGrid>
                 </h:form>
             </ui:define>
 

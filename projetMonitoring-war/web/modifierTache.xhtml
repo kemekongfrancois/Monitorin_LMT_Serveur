@@ -19,15 +19,12 @@
 
                     <h:form id="form">
                         <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
-                        <p:panel header="Modifier Tache" >
+                        <p:panel header="Modifier Tâche" >
                             <h:panelGrid columns="3">
-                                <p:outputLabel value="IdTache:" for="idTache" />
+                                <p:outputLabel value="Id:" for="idTache" />
                                 <p:inputText id="idTache" value="#{beanModifierTache.tache.idTache}" title="IdTache" disabled="true"/>
                                 <p:message for="idTache" />
-                                <p:outputLabel value="RedemarerAutoService:" for="redemarerAutoService" />
-                                <p:inputSwitch id="redemarerAutoService" value="#{beanModifierTache.tache.redemarerAutoService}" />
-                                <p:message for="redemarerAutoService" />
-                                <p:outputLabel value="SeuilAlerte:" for="seuilAlerte" />
+                                <p:outputLabel value="Seuil alerte:" for="seuilAlerte" />
                                 <p:inputText id="seuilAlerte" value="#{beanModifierTache.tache.seuilAlerte}" title="SeuilAlerte" />
                                 <p:message for="seuilAlerte" />
                                 <p:outputLabel value="Nom:" for="nom" />
@@ -38,25 +35,28 @@
                                     <f:selectItems value="#{beanVariableGlobal.listTypeStatue}"  />
                                 </p:selectOneMenu>
                                 <p:message for="statue" />
-                                <p:outputLabel value="PeriodeVerrification:" for="periodeVerrification" />
+                                <p:outputLabel value="Période de vérification :" for="periodeVerrification" />
                                 <p:inputText id="periodeVerrification" value="#{beanModifierTache.tache.periodeVerrification}" title="PeriodeVerrification" required="true" requiredMessage="ce champ doit être non vide"/>
                                 <p:message for="periodeVerrification" />
-                                <p:outputLabel value="TypeTache:" for="typeTache" />
+                                <p:outputLabel value="Type de tache:" for="typeTache" />
                                 <p:selectOneMenu id="typeTache" value="#{beanModifierTache.tache.typeTache}" title="TypeTache" required="true" >
                                     <f:selectItems value="#{beanVariableGlobal.listTypeTache}"  />
                                 </p:selectOneMenu>
                                 <p:message for="typeTache" />
-                                <p:outputLabel value="EnvoiyerAlerteMail:" for="envoiyerAlerteMail" />
+                                <p:outputLabel value="Envoie alerte mail:" for="envoiyerAlerteMail" />
                                 <p:inputSwitch id="envoiyerAlerteMail" value="#{beanModifierTache.tache.envoiyerAlerteMail}"  />
                                 <p:message for="envoiyerAlerteMail" />
-                                <p:outputLabel value="EnvoyerAlerteSms:" for="envoyerAlerteSms" />
+                                <p:outputLabel value="Envoie alerte SMS:" for="envoyerAlerteSms" />
                                 <p:inputSwitch id="envoyerAlerteSms" value="#{beanModifierTache.tache.envoyerAlerteSms}"  />
                                 <p:message for="envoyerAlerteSms" />
-                                <p:outputLabel value="NiveauDAlerte:" for="niveauDAlerte" />
+                                <p:outputLabel value="Redemarage auto service:" title="permet de redemarer automatiquement un service le type de la tache doit être service" for="redemarerAutoService" />
+                                <p:inputSwitch id="redemarerAutoService" value="#{beanModifierTache.tache.redemarerAutoService}" />
+                                <p:message for="redemarerAutoService" />
+                                <p:outputLabel value="Niveau d'alerte:" for="niveauDAlerte" />
                                 <p:inputText id="niveauDAlerte" value="#{beanModifierTache.tache.niveauDAlerte}" title="DescriptionTache" required="true" />
                                 <p:message for="niveauDAlerte" />
-                                <p:outputLabel value="DescriptionTache:" for="descriptionTache" />
-                                <p:inputText id="descriptionTache" value="#{beanModifierTache.tache.descriptionTache}" title="DescriptionTache" />
+                                <p:outputLabel value="Description de la tache:" for="descriptionTache" />
+                                <p:inputTextarea id="descriptionTache" value="#{beanModifierTache.tache.descriptionTache}" title="DescriptionTache" />
                                 <p:message for="descriptionTache" />
 
                             </h:panelGrid>
@@ -69,8 +69,10 @@
                     </h:form>
                 </f:view>
                 <h:form>
-                    <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher la liste des taches de la machine hôte"   value="Machine hôte" action="#{beanModifierTache.pagePrecedente()}" /> 
-                    <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher toute les taches"   value="Toute les taches" action="#{beanMenu.pageListeTaches}" /> 
+                    <h:panelGrid  columns="2" >
+                        <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher la liste des taches de la machine hôte"   value="Machine hôte" action="#{beanModifierTache.pagePrecedente()}" /> 
+                        <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher toute les taches"   value="Toute les taches" action="#{beanMenu.pageListeTaches}" /> 
+                    </h:panelGrid>
                 </h:form>
             </ui:define>
 
