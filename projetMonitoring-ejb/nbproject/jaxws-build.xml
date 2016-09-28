@@ -43,8 +43,8 @@
     </target>
     <target name="wsimport-client-WSClientMonitoring" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
-        <property name="wsdl-WSClientMonitoring" location="${meta.inf}/xml-resources/web-service-references/WSClientMonitoring/wsdl/172.16.4.2_9039/WSClientMonitoring.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" destdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" wsdl="${wsdl-WSClientMonitoring}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://172.16.4.2:9039/WSClientMonitoring?wsdl" xnocompile="true" xendorsed="true" package="wsClient">
+        <property name="wsdl-WSClientMonitoring" location="${meta.inf}/xml-resources/web-service-references/WSClientMonitoring/wsdl/192.168.100.182_9039/WSClientMonitoring.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" destdir="${build.generated.dir}/jax-wsCache/WSClientMonitoring" wsdl="${wsdl-WSClientMonitoring}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://192.168.100.182:9039/WSClientMonitoring?wsdl" xnocompile="true" xendorsed="true" package="wsClient">
             <depends file="${wsdl-WSClientMonitoring}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
         </wsimport>

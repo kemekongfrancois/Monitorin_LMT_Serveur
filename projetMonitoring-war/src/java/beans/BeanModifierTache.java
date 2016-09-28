@@ -65,6 +65,17 @@ public class BeanModifierTache implements Serializable{
 
     }
 
+    public void executerTache(){
+        String resultat = bean.executerTache(tache);
+        if(resultat.equals(Bean.OK)){
+            FacesMessage msg = new FacesMessage("La tâche a été exécuter");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }else{
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"La tâche ne peut être exécuter pour le moment",resultat);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+         
+    }
     public void loadTache() {
         //System.out.println("appel de la méthode load "+this);
         this.tache = bean.getTache(idTache);

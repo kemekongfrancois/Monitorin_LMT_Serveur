@@ -61,9 +61,10 @@
                                     <h:outputText value="Fonctions"/>
                                 </f:facet>
                                 <p:commandButton icon="ui-icon-pencil" action="#{beanModifierTache.pageModifieTache(item.idTache)}" title="Editer tache"/>
-                                <p:commandButton icon="ui-icon-play" title="Démarrer la tache" action="#{beanListeTachesMachine.demarerOuRedemarerTache(item)}" ajax="true" update=":form" />
-                                <p:commandButton icon="ui-icon-stop" title="arrêter la tache" action="#{beanListeTachesMachine.stoperTache(item)}" ajax="true" update=":form" />
-                                <p:commandButton icon="ui-icon-closethick" title="supprimer la tache" actionListener="#{beanListeTachesMachine.suprimerTache(item)}" update=":form">
+                                <p:commandButton icon="ui-icon-check" title="Tester la tâche" action="#{beanListeTachesMachine.testerTache(item)}" ajax="true" update=":form" />
+                                <p:commandButton icon="ui-icon-play" title="Démarrer la tâche" action="#{beanListeTachesMachine.demarerOuRedemarerTache(item)}" ajax="true" update=":form" />
+                                <p:commandButton icon="ui-icon-stop" title="arrêter la tâche" action="#{beanListeTachesMachine.stoperTache(item)}" ajax="true" update=":form" />
+                                <p:commandButton icon="ui-icon-closethick" title="supprimer la tâche" actionListener="#{beanListeTachesMachine.suprimerTache(item)}" update=":form">
                                     <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer la tâche :#{item.idTache} ?" icon="ui-icon-alert" />
                                 </p:commandButton>
 

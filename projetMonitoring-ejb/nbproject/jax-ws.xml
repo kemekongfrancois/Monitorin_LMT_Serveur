@@ -39,8 +39,8 @@
       </wsimport-options>
     </client>
     <client name="WSClientMonitoring">
-      <wsdl-url>http://172.16.4.2:9039/WSClientMonitoring?wsdl</wsdl-url>
-      <local-wsdl-file>172.16.4.2_9039/WSClientMonitoring.wsdl</local-wsdl-file>
+      <wsdl-url>http://192.168.100.182:9039/WSClientMonitoring?wsdl</wsdl-url>
+      <local-wsdl-file>192.168.100.182_9039/WSClientMonitoring.wsdl</local-wsdl-file>
       <package-name forceReplace="true">wsClient</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
@@ -58,7 +58,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://172.16.4.2:9039/WSClientMonitoring?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://192.168.100.182:9039/WSClientMonitoring?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>

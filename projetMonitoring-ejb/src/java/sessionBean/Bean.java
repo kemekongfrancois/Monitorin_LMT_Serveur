@@ -66,6 +66,7 @@ public class Bean {
 
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
     public static final String TACHE_INEXISTANTE = "cette tache n'existe pas";
+    public static final String TACHE_STOPPER = "La tâche est stoppée";
     public static final String ADRESSE_INCONU = "adresse IP inconue";
     public static final String ECHEC_ECRITURE_BD = "enregistrement dans la BD impossible";
     public static final String ADRESSE_UTILISE = "adresse ip utilise";
@@ -73,6 +74,7 @@ public class Bean {
     public static final String INFO_DEJA_EXISTANT_EN_BD = "le login ou la boite mail ou le numero de téléphone es déja utilisé";
     public static final String ADREESSE_TELNET_INVALIDE = "Adresse Telnet invalide ; l’adresse et le port doivent être séparer par une virgule";
 
+    public static final String ERREUR_PARTITION_DD = "Il n’existe pas de partition de ce type sur la machine";
     public String OS_MACHINE;
     //public static final String expresRegulierNumeroTel = "(\\+?237)?\\d{9}";
     @PersistenceContext
@@ -546,7 +548,7 @@ public class Bean {
             return false;
         }
         String sujetEmail = "Situation OK pour Tache(id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
-        String corpsEmailEtSMS =sujetEmail;
+        String corpsEmailEtSMS = sujetEmail;
         Logger.getLogger(Bean.class.getName()).log(Level.INFO, corpsEmailEtSMS);
         envoiMessageAlertePourTache(tache, corpsEmailEtSMS, sujetEmail);
         tache.setStatue(START);
@@ -850,11 +852,11 @@ public class Bean {
     }
 
     public String creerTacheTelnet(String adresIpMachine, String periodeVerrification, String adresseEtPort, String statue, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
-       // String adresseEtPort = adresseTelnet + "," + port;
-       if(!adresseEtPort.contains(",")){
-           Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "l'adresse pour le telnet est invalide: " + adresseEtPort + " l'adresse et le port doivent être céparer par une virgule ");
+        // String adresseEtPort = adresseTelnet + "," + port;
+        if (!adresseEtPort.contains(",")) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "l'adresse pour le telnet est invalide: " + adresseEtPort + " l'adresse et le port doivent être céparer par une virgule ");
             return ADREESSE_TELNET_INVALIDE;
-       }
+        }
         if (verifiNomTacheSurMachine(adresIpMachine, adresseEtPort)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le telnet vers: " + adresseEtPort + " es déja créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
@@ -1012,7 +1014,7 @@ public class Bean {
         }
         WSClientMonitoring ws = appelWSMachineClient(adresse, tache.getIdMachine().getPortEcoute());
         if (ws == null) {
-            return false;//cas qui ne doit normalement pas arrivé car la fonction "testConnectionMachine" es passé
+            return false;//ne doit normalement pas arrivé car la fonction "testConnectionMachine" es passé
         }
         //tache.setStatue(START);
 //        if (!ws.demarerMetAJourOUStopperTache(tacheServeurToTacheClient(tache))) {
@@ -1457,4 +1459,53 @@ public class Bean {
         }
     }
 
+    /**
+     * cette fonction donne la possibilité d'exécuter la tache sans verrifiè la
+     * date de reveille de la tâche. Ainsi lorsque cette fonction est appeler la
+     * tâches vas être exécuté à l'instant
+     *
+     * @param tache
+     * @return
+     */
+    public String executerTache(Tache tache) {
+        if (tache.getStatue().equals(Bean.STOP)) {
+            return TACHE_STOPPER;
+        }
+        String statueMachine = testConnectionMachine(tache.getIdMachine());
+        if (!statueMachine.equals(START)) {
+            return statueMachine;
+        }
+        WSClientMonitoring ws = appelWSMachineClient(tache.getIdMachine().getAdresseIP(), tache.getIdMachine().getPortEcoute());
+        if (ws.executeJob(tache.getIdTache(), tache.getIdMachine().getIdMachine())) {
+            return OK;
+        } else {
+            return KO;
+        }
+    }
+
+    /**
+     * cette fonction permet de tester une tache. Elle permet de retourné ce qui
+     * permet à la tâche de fonctionné
+     *
+     * @param tache cette tache doit existé en base de données
+     * @return
+     */
+    public String testTache(Tache tache) {
+        WSClientMonitoring ws = appelWSMachineClient(tache.getIdMachine().getAdresseIP(), tache.getIdMachine().getPortEcoute());
+        if (ws == null) {
+            return PB;
+        }
+        String resultat = ws.testTache(tache.getIdTache());
+        switch (tache.getTypeTache()) {
+            case TACHE_DD:
+                if (resultat.equals(PB)) {
+                    return ERREUR_PARTITION_DD;
+                } else {
+                    return "Le pourcentage d’occupation de la partition << " + tache.getNom() + " >> est de :" + resultat + "%";
+                }
+            default:
+                return resultat;
+        }
+
+    }
 }

@@ -72,7 +72,15 @@
                     <h:panelGrid  columns="2" >
                         <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher la liste des taches de la machine hôte"   value="Machine hôte" action="#{beanModifierTache.pagePrecedente()}" /> 
                         <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher toute les taches"   value="Toute les taches" action="#{beanMenu.pageListeTaches}" /> 
+
                     </h:panelGrid>
+                    <p:commandButton icon="ui-icon-arrowthick-1-w" title="Exécuter la tâche sans tenir compte de la période de la tâche"   value="Exécuter la tâche" action="#{beanModifierTache.executerTache}" update="form" >
+                        <p:confirm header="Confirmation" message="Voulez-vous vraiment Exécuter la tâche maintenant" icon="ui-icon-alert" />
+                    </p:commandButton> 
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </ui:define>
 

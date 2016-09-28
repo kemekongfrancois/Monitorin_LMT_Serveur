@@ -61,7 +61,13 @@ public class BeanListeTachesMachine implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
         return null;
     }
-
+    
+    public void testerTache(Tache tache){
+        String resultat = bean.testTache(tache);
+        FacesMessage msg = new FacesMessage(resultat);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
     /**
      * cette fonction permet de stoper la machine elle agit dans la BD et sur la
      * machine physique si possible
