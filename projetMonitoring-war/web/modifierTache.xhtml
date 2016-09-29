@@ -30,15 +30,15 @@
                                 <p:outputLabel value="Nom:" for="nom" />
                                 <p:inputText id="nom" value="#{beanModifierTache.tache.nom}" title="Nom" required="true" requiredMessage="ce champ doit être non vide"/>
                                 <p:message for="nom" />
-                                <p:outputLabel value="Statue:" for="statue" />
-                                <p:selectOneMenu id="statue" value="#{beanModifierTache.tache.statue}" required="true" >
-                                    <f:selectItems value="#{beanVariableGlobal.listTypeStatue}"  />
+                                <p:outputLabel value="Statut:" for="statut" />
+                                <p:selectOneMenu id="statut" value="#{beanModifierTache.tache.statut}" required="true" >
+                                    <f:selectItems value="#{beanVariableGlobal.listTypeStatut}"  />
                                 </p:selectOneMenu>
-                                <p:message for="statue" />
+                                <p:message for="statut" />
                                 <p:outputLabel value="Période de vérification :" for="periodeVerrification" />
                                 <p:inputText id="periodeVerrification" value="#{beanModifierTache.tache.periodeVerrification}" title="PeriodeVerrification" required="true" requiredMessage="ce champ doit être non vide"/>
                                 <p:message for="periodeVerrification" />
-                                <p:outputLabel value="Type de tache:" for="typeTache" />
+                                <p:outputLabel value="Type:" for="typeTache" />
                                 <p:selectOneMenu id="typeTache" value="#{beanModifierTache.tache.typeTache}" title="TypeTache" required="true" >
                                     <f:selectItems value="#{beanVariableGlobal.listTypeTache}"  />
                                 </p:selectOneMenu>
@@ -49,13 +49,13 @@
                                 <p:outputLabel value="Envoie alerte SMS:" for="envoyerAlerteSms" />
                                 <p:inputSwitch id="envoyerAlerteSms" value="#{beanModifierTache.tache.envoyerAlerteSms}"  />
                                 <p:message for="envoyerAlerteSms" />
-                                <p:outputLabel value="Redemarage auto service:" title="permet de redemarer automatiquement un service le type de la tache doit être service" for="redemarerAutoService" />
+                                <p:outputLabel value="Redémarrage auto service:" title="permet de redemarer automatiquement un service le type de la tache doit être service" for="redemarerAutoService" />
                                 <p:inputSwitch id="redemarerAutoService" value="#{beanModifierTache.tache.redemarerAutoService}" />
                                 <p:message for="redemarerAutoService" />
                                 <p:outputLabel value="Niveau d'alerte:" for="niveauDAlerte" />
                                 <p:inputText id="niveauDAlerte" value="#{beanModifierTache.tache.niveauDAlerte}" title="DescriptionTache" required="true" />
                                 <p:message for="niveauDAlerte" />
-                                <p:outputLabel value="Description de la tache:" for="descriptionTache" />
+                                <p:outputLabel value="Description:" for="descriptionTache" />
                                 <p:inputTextarea id="descriptionTache" value="#{beanModifierTache.tache.descriptionTache}" title="DescriptionTache" />
                                 <p:message for="descriptionTache" />
 
@@ -74,7 +74,7 @@
                         <p:commandButton icon="ui-icon-arrowthick-1-w" title="Afficher toute les taches"   value="Toute les taches" action="#{beanMenu.pageListeTaches}" /> 
 
                     </h:panelGrid>
-                    <p:commandButton icon="ui-icon-arrowthick-1-w" title="Exécuter la tâche sans tenir compte de la période de la tâche"   value="Exécuter la tâche" action="#{beanModifierTache.executerTache}" update="form" >
+                    <p:commandButton icon="ui-icon-arrowrefresh-1-n" title="Exécuter la tâche sans tenir compte de la période de la tâche"   value="Exécuter la tâche" action="#{beanModifierTache.executerTache}" update="form" >
                         <p:confirm header="Confirmation" message="Voulez-vous vraiment Exécuter la tâche maintenant" icon="ui-icon-alert" />
                     </p:commandButton> 
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

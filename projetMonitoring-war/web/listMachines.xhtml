@@ -76,11 +76,11 @@
                                 </f:facet>
                                 <h:outputText value="#{item.periodeDeCheck}"/>
                             </p:column>
-                            <p:column sortBy="#{item.statue}" filterBy="#{item.statue}" >
+                            <p:column sortBy="#{item.statut}" filterBy="#{item.statut}" >
                                 <f:facet name="header">
-                                    <h:outputText value="Statue"/>
+                                    <h:outputText value="Statut"/>
                                 </f:facet>
-                                <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
+                                <h:outputText title="#{item.statut}" value="#{item.statut}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatut(item.statut)}"/>
                             </p:column>
                             <p:column sortBy="#{item.niveauDAlerte}" style="width:50px">
                                 <f:facet name="header">
@@ -94,10 +94,10 @@
 
 
                         </p:dataTable>
-                        <p:dialog header="Paramètre machine" widgetVar="parametreMachine" dynamic="true" modal="false" showEffect="fade" hideEffect="fade" resizable="true" width="640" height="340">
+                        <p:dialog header="Détails machine" widgetVar="parametreMachine" dynamic="true" modal="false" showEffect="fade" hideEffect="fade" resizable="true" width="640" height="340">
                             <p:outputPanel id="machineParam" style="text-align:center;">
                                 <p:panelGrid columns="2">
-                                    <p:commandButton value="Plus de détail" action="#{beanListeTachesMachine.chargerPage(beansMachine.machine.adresseIP)}"/>
+                                    <p:commandButton value="Plus de détails" action="#{beanListeTachesMachine.chargerPage(beansMachine.machine.adresseIP)}"/>
                                     <p:commandButton icon="ui-icon-circle-plus" title="créer une tache sur cette machine" action="#{beanCreerTache.pageCreerTache(beansMachine.machine.adresseIP)}"/>
 
                                 </p:panelGrid>
@@ -107,7 +107,7 @@
                                     <h:form>
                                         <p:dataTable value="#{beansMachine.listTache}" resizableColumns="true" var="item">
                                             <f:facet name="header">
-                                                Taches de la machines: #{beansMachine.machine.adresseIP}
+                                                Tâches de la machine: #{beansMachine.machine.adresseIP}
                                             </f:facet>
 
                                             <p:column>

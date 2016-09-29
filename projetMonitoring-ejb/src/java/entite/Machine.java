@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Machine.findByNomMachine", query = "SELECT m FROM Machine m WHERE m.nomMachine = :nomMachine"),
     @NamedQuery(name = "Machine.findByTypeOS", query = "SELECT m FROM Machine m WHERE m.typeOS = :typeOS"),
     @NamedQuery(name = "Machine.findByPeriodeDeCheck", query = "SELECT m FROM Machine m WHERE m.periodeDeCheck = :periodeDeCheck"),
-    @NamedQuery(name = "Machine.findByStatue", query = "SELECT m FROM Machine m WHERE m.statue = :statue"),
+    @NamedQuery(name = "Machine.findByStatut", query = "SELECT m FROM Machine m WHERE m.statut = :statut"),
     @NamedQuery(name = "Machine.findByNiveauDAlerte", query = "SELECT m FROM Machine m WHERE m.niveauDAlerte = :niveauDAlerte")})
 public class Machine implements Serializable {
 
@@ -65,8 +65,8 @@ public class Machine implements Serializable {
     @Column(name = "periode_de_check")
     private String periodeDeCheck;
     @Size(max = 254)
-    @Column(name = "statue")
-    private String statue;
+    @Column(name = "statut")
+    private String statut;
     @Column(name = "niveau_d_alerte")
     private Integer niveauDAlerte;
     @OneToMany(mappedBy = "idMachine")
@@ -132,12 +132,12 @@ public class Machine implements Serializable {
         this.periodeDeCheck = periodeDeCheck;
     }
 
-    public String getStatue() {
-        return statue;
+    public String getStatut() {
+        return statut;
     }
 
-    public void setStatue(String statue) {
-        this.statue = statue;
+    public void setStatut(String statut) {
+        this.statut = statut;
     }
 
     public Integer getNiveauDAlerte() {

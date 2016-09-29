@@ -12,7 +12,7 @@
             <ui:define name="content">
                 <h:form id="form">
                     <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
-                    <p:panel header="Connection" >
+                    <p:panel header="connexion" >
                         <p:messages autoUpdate="true"/>
 
                         <h:panelGrid id="grid" columns="3" cellpadding="5" >
@@ -27,7 +27,7 @@
 
                         </h:panelGrid>
 
-                        <p:commandButton value="Connection"  action="#{beanIndex.connection()}" ajax="true"  validateClient="true" update=":form" style="margin-right:10px" />
+                        <p:commandButton value="connexion"  action="#{beanIndex.connection()}" ajax="true"  validateClient="true" update=":form" style="margin-right:10px" />
                     </p:panel>
                 </h:form>
             </ui:define>

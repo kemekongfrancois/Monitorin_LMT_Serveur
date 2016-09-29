@@ -35,30 +35,30 @@ public class BeansMachine implements Serializable {
     @PostConstruct
     public void init() {
         System.out.println("recupération de la liste des machines pour affichage");
-        listMachines = bean.getAllMachineAvecBonStatue();
+        listMachines = bean.getAllMachineAvecBonStatut();
     }
 
     /**
      * cette fonction permet d'enregistre les modeifications dans la BD et sur
      * la machine physique si possible
      *
-     * @param statue
+     * @param statut
      * @return
      */
-    private String stopeOuRedemarerMachine(String statue) {
-        machine.setStatue(statue);
-        bean.updateMachie(machine);//on enregistre la nouvelle valeur du statue dans la BD
+    private String stopeOuRedemarerMachine(String statut) {
+        machine.setStatut(statut);
+        bean.updateMachie(machine);//on enregistre la nouvelle valeur du statut dans la BD
         String resultat = bean.redemarerTachePrincipaleEtSousTache(machine);
         if (resultat.equals(Bean.OK)) {
-            //machine.setStatue(statue);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statue de la machine <" + machine.getAdresseIP() + "> es :" + machine.getStatue(), " Les modification ont été enregistrer");
+            //machine.setStatut(statut);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la machine <" + machine.getAdresseIP() + "> es :" + machine.getStatut(), " Les modification ont été enregistrer");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
 
         //System.out.println("msgAlert= " + resultat);
-        if (statue.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statue
-            machine.setStatue(resultat);
+        if (statut.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statut
+            machine.setStatut(resultat);
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machine.getAdresseIP(), "Cause: "+resultat);
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -90,7 +90,7 @@ public class BeansMachine implements Serializable {
     }
     
     public String suprimerMachine(Machine machine) {
-        if (!machine.getStatue().equals(Bean.STOP)) {
+        if (!machine.getStatut().equals(Bean.STOP)) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la machine :" + machine.getAdresseIP(), "Le statut doit être à <<" + Bean.STOP + ">> ");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;

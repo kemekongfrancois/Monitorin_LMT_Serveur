@@ -32,7 +32,7 @@ public class BeanCreerTache implements Serializable{
      */
     public BeanCreerTache() {
         this.tache = new Tache();
-        tache.setStatue(Bean.STOP);
+        tache.setStatut(Bean.STOP);
         tache.setEnvoiyerAlerteMail(true);
         tache.setEnvoyerAlerteSms(true);;
         tache.setRedemarerAutoService(false);

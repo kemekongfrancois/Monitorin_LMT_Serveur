@@ -42,11 +42,11 @@
                                 <p:outputLabel value="Periode de vérification:" for="periodeDeCheck" />
                                 <p:inputText id="periodeDeCheck" value="#{beanModifierMachine.machine.periodeDeCheck}" title="PeriodeDeCheck" required="true" requiredMessage="ce champ doit être non vide" />
                                 <p:message for="periodeDeCheck" />
-                                <p:outputLabel value="Statue:" for="statue" />
-                                <p:selectOneMenu id="statue" value="#{beanModifierMachine.machine.statue}" required="true" >
-                                    <f:selectItems value="#{beanVariableGlobal.listTypeStatue}"  />
+                                <p:outputLabel value="Statut:" for="statut" />
+                                <p:selectOneMenu id="statut" value="#{beanModifierMachine.machine.statut}" required="true" >
+                                    <f:selectItems value="#{beanVariableGlobal.listTypeStatut}"  />
                                 </p:selectOneMenu>
-                                <p:message for="statue" />
+                                <p:message for="statut" />
                                 <p:outputLabel value="Niveau d'alerte:" for="niveauDAlerte" />
                                 <p:inputText id="niveauDAlerte" value="#{beanModifierMachine.machine.niveauDAlerte}" title="NiveauDAlerte" />
                                 <p:message for="niveauDAlerte" />

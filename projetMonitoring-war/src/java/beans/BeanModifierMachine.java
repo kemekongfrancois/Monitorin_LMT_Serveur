@@ -57,7 +57,7 @@ public class BeanModifierMachine implements Serializable {
         }
         String resultat = bean.updateMachie(machine);
         if (resultat.equals(bean.OK)) {
-            if (!machine.getStatue().equals(Bean.STOP)) {//on applique les modification sur la machine physique si celle-ci n'a pas la valeur de STOP
+            if (!machine.getStatut().equals(Bean.STOP)) {//on applique les modification sur la machine physique si celle-ci n'a pas la valeur de STOP
                 bean.redemarerTachePrincipaleEtSousTache(machine);
             }
             return "listMachines?faces-redirect=true&amp";

@@ -24,7 +24,7 @@ public class BeanVariableGlobal implements Serializable{
     private List<String> listOS;
     private List<String> listTypeTache;
     private List<String> listTypeCompte;
-    private List<String> listTypeStatue;
+    private List<String> listTypeStatut;
     /**
      * Creates a new instance of BeanVariableGlobal
      */
@@ -33,14 +33,14 @@ public class BeanVariableGlobal implements Serializable{
         listOS = BeanInitialisation.listOS;
         listTypeTache = BeanInitialisation.listTypeTache;
         listTypeCompte = BeanInitialisation.listTypeCompte;
-        listTypeStatue = BeanInitialisation.listTypeStatue;
+        listTypeStatut = BeanInitialisation.listTypeStatut;
         //System.out.println("============"+listOS.get(0));
         //System.out.println("============"+listTypeTache.get(0));
     }
     
-    public String couleurStatue(String statue){
+    public String couleurStatut(String statut){
         String couleur;
-        switch(statue){
+        switch(statut){
             case Bean.ALERTE: couleur = "#ff6633"; break;
             case Bean.START: couleur = "green"; break;
             case Bean.STOP: couleur = "black"; break;
@@ -83,12 +83,12 @@ public class BeanVariableGlobal implements Serializable{
         this.listTypeCompte = listTypeCompte;
     }
 
-    public List<String> getListTypeStatue() {
-        return listTypeStatue;
+    public List<String> getListTypeStatut() {
+        return listTypeStatut;
     }
 
-    public void setListTypeStatue(List<String> listTypeStatue) {
-        this.listTypeStatue = listTypeStatue;
+    public void setListTypeStatut(List<String> listTypeStatut) {
+        this.listTypeStatut = listTypeStatut;
     }
 
     

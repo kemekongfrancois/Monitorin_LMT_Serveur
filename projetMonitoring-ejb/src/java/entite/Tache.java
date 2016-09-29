@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tache.findByRedemarerAutoService", query = "SELECT t FROM Tache t WHERE t.redemarerAutoService = :redemarerAutoService"),
     @NamedQuery(name = "Tache.findBySeuilAlerte", query = "SELECT t FROM Tache t WHERE t.seuilAlerte = :seuilAlerte"),
     @NamedQuery(name = "Tache.findByNom", query = "SELECT t FROM Tache t WHERE t.nom = :nom"),
-    @NamedQuery(name = "Tache.findByStatue", query = "SELECT t FROM Tache t WHERE t.statue = :statue"),
+    @NamedQuery(name = "Tache.findByStatut", query = "SELECT t FROM Tache t WHERE t.statut = :statut"),
     @NamedQuery(name = "Tache.findByPeriodeVerrification", query = "SELECT t FROM Tache t WHERE t.periodeVerrification = :periodeVerrification"),
     @NamedQuery(name = "Tache.findByTypeTache", query = "SELECT t FROM Tache t WHERE t.typeTache = :typeTache"),
     @NamedQuery(name = "Tache.findByEnvoiyerAlerteMail", query = "SELECT t FROM Tache t WHERE t.envoiyerAlerteMail = :envoiyerAlerteMail"),
@@ -56,8 +56,8 @@ public class Tache implements Serializable {
     @Column(name = "nom")
     private String nom;
     @Size(max = 254)
-    @Column(name = "statue")
-    private String statue;
+    @Column(name = "statut")
+    private String statut;
     @Size(max = 254)
     @Column(name = "periode_verrification")
     private String periodeVerrification;
@@ -116,12 +116,12 @@ public class Tache implements Serializable {
         this.nom = nom;
     }
 
-    public String getStatue() {
-        return statue;
+    public String getStatut() {
+        return statut;
     }
 
-    public void setStatue(String statue) {
-        this.statue = statue;
+    public void setStatut(String statut) {
+        this.statut = statut;
     }
 
     public String getPeriodeVerrification() {

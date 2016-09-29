@@ -19,7 +19,7 @@
 
                         <p:dataTable value="#{beanListeTaches.listTaches}" liveResize="true" draggableColumns="true" resizableColumns="true" var="item">
                             <f:facet name="header">
-                                Liste de toute les tâches 
+                                Liste de toutes les tâches
                             </f:facet>
                             <p:column style="text-align: center; width:130px">
                                 <f:facet name="header">
@@ -56,11 +56,11 @@
 
 
 
-                            <p:column sortBy="#{item.statue}" filterBy="#{item.statue}"  style="width:100px">
+                            <p:column sortBy="#{item.statut}" filterBy="#{item.statut}"  style="width:100px">
                                 <f:facet name="header">
-                                    <h:outputText value="Statue"/>
+                                    <h:outputText value="Statut"/>
                                 </f:facet>
-                                <h:outputText title="#{item.statue}" value="#{item.statue}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatue(item.statue)}"/>
+                                <h:outputText title="#{item.statut}" value="#{item.statut}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatut(item.statut)}"/>
                             </p:column>
                             <p:column sortBy="#{item.nom}" filterBy="#{item.nom}" style="width:100px">
                                 <f:facet name="header">

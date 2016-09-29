@@ -39,23 +39,23 @@ public class BeanListeTachesMachine implements Serializable {
      * cette fonction permet d'enregistre les modeifications dans la BD et sur
      * la machine physique si possible
      *
-     * @param statue
+     * @param statut
      * @return
      */
-    private String stopeOuRedemarerMachine(String statue) {
-        machine.setStatue(statue);
-        bean.updateMachie(machine);//on enregistre la nouvelle valeur du statue dans la BD
+    private String stopeOuRedemarerMachine(String statut) {
+        machine.setStatut(statut);
+        bean.updateMachie(machine);//on enregistre la nouvelle valeur du statut dans la BD
         String resultat = bean.redemarerTachePrincipaleEtSousTache(machine);
         if (resultat.equals(Bean.OK)) {
-            //machine.setStatue(statue);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statue de la machine <" + machine.getAdresseIP() + "> es :" + machine.getStatue(), " Les modification ont été enregistrer");
+            //machine.setStatut(statut);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la machine <" + machine.getAdresseIP() + "> es :" + machine.getStatut(), " Les modification ont été enregistrer");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
 
         //System.out.println("msgAlert= " + resultat);
-        if (statue.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statue
-            machine.setStatue(resultat);
+        if (statut.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statut
+            machine.setStatut(resultat);
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machine.getAdresseIP(), "Cause: "+resultat);
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -98,17 +98,17 @@ public class BeanListeTachesMachine implements Serializable {
     public void loadListeTacheEtMachine() {
         //System.out.println("appel de la méthode load " + this);
         this.listTaches = bean.getListTacheMachine(adresseMachine);
-        this.machine = bean.getMachineAvecBonStatue(adresseMachine);
+        this.machine = bean.getMachineAvecBonStatut(adresseMachine);
         //this.machine = manageBean.getCompteById(idCompte);
     }
 
-    private String stopeOuRedemarerTache(String statue) {
-        tache.setStatue(statue);
-        bean.updateTache(tache);//on enregistre la nouvelle valeur du statue dans la BD
+    private String stopeOuRedemarerTache(String statut) {
+        tache.setStatut(statut);
+        bean.updateTache(tache);//on enregistre la nouvelle valeur du statut dans la BD
 
         boolean resultat = bean.startRefreshStopTacheSurMachinePhy(tache.getIdTache());
         if (resultat) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statue de la tache <" + tache.getIdTache() + "> es :" + tache.getStatue(), " Les modification ont été enregistrer");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la tache <" + tache.getIdTache() + "> es :" + tache.getStatut(), " Les modification ont été enregistrer");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
@@ -129,7 +129,7 @@ public class BeanListeTachesMachine implements Serializable {
     }
 
     public String suprimerTache(Tache tache) {
-        if (!tache.getStatue().equals(Bean.STOP)) {
+        if (!tache.getStatut().equals(Bean.STOP)) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la tache :" + tache.getIdTache(), "Le statut doit être à <<" + Bean.STOP + ">> ");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;

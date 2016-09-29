@@ -38,7 +38,7 @@ public class BeanListeTaches implements Serializable{
     }
     
     public String suprimerTache(Tache tache) {
-        if (!tache.getStatue().equals(Bean.STOP)) {
+        if (!tache.getStatut().equals(Bean.STOP)) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la tache :" + tache.getIdTache(), "Le statut doit être à <<" + Bean.STOP + ">> ");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
