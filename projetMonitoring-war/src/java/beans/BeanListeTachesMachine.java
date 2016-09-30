@@ -28,66 +28,27 @@ public class BeanListeTachesMachine implements Serializable {
     private Bean bean;
 
     private List<Tache> listTaches;
-    private Tache tache;
+    //private Tache tache;
     private String adresseMachine;
     private Machine machine;
 
     public BeanListeTachesMachine() {
     }
 
-    /**
-     * cette fonction permet d'enregistre les modeifications dans la BD et sur
-     * la machine physique si possible
-     *
-     * @param statut
-     * @return
-     */
-    private String stopeOuRedemarerMachine(String statut) {
-        machine.setStatut(statut);
-        bean.updateMachie(machine);//on enregistre la nouvelle valeur du statut dans la BD
-        String resultat = bean.redemarerTachePrincipaleEtSousTache(machine);
-        if (resultat.equals(Bean.OK)) {
-            //machine.setStatut(statut);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la machine <" + machine.getAdresseIP() + "> es :" + machine.getStatut(), " Les modification ont été enregistrer");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-
-        //System.out.println("msgAlert= " + resultat);
-        if (statut.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statut
-            machine.setStatut(resultat);
-        }
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machine.getAdresseIP(), "Cause: "+resultat);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        return null;
-    }
-    
-    public void testerTache(Tache tache){
-        String resultat = bean.testTache(tache);
-        FacesMessage msg = new FacesMessage(resultat);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-    
-    /**
-     * cette fonction permet de stoper la machine elle agit dans la BD et sur la
-     * machine physique si possible
-     *
-     * @return
-     */
-    public String stoperMachine() {
-        return stopeOuRedemarerMachine(Bean.STOP);
+    public void stoperMachine() {
+        //this.machine = machine;
+        BeansMachine.stopeOuRedemarerMachine(Bean.STOP,machine,bean);
     }
 
-    /**
-     * cette fonction permet de démarer la machine ou de la rafrechire elle agit
-     * dans la BD et sur la machine physique si possible
-     *
-     * @return
-     */
-    public String demarerOuRedemarerMachine() {
-        return stopeOuRedemarerMachine(Bean.START);
-    }
     
+    public void demarerOuRedemarerMachine() {
+        //this.machine = machine;
+        BeansMachine.stopeOuRedemarerMachine(Bean.START,machine,bean);
+    }
+    public void testerTache(Tache tache) {
+        BeanListeTaches.testerTacheStatic(bean, tache);
+    }
+
     public String chargerPage(String adresseMachine) {
         System.out.println("apple de la page de la liste des taches de la machines:" + adresseMachine);
         //return "modifieMachines?faces-redirect=true&amp";
@@ -102,49 +63,18 @@ public class BeanListeTachesMachine implements Serializable {
         //this.machine = manageBean.getCompteById(idCompte);
     }
 
-    private String stopeOuRedemarerTache(String statut) {
-        tache.setStatut(statut);
-        bean.updateTache(tache);//on enregistre la nouvelle valeur du statut dans la BD
-
-        boolean resultat = bean.startRefreshStopTacheSurMachinePhy(tache.getIdTache());
-        if (resultat) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la tache <" + tache.getIdTache() + "> es :" + tache.getStatut(), " Les modification ont été enregistrer");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + tache.getIdMachine().getAdresseIP(), "Veillez démarrer la supervision de cette machine");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        return null;
+    public void stoperTache(Tache tache) {
+        //this.tache = tache;
+        BeanListeTaches.stopeOuRedemarerTache(Bean.STOP,tache,bean);
     }
 
-    public String stoperTache(Tache tache) {
-        this.tache = tache;
-        return stopeOuRedemarerTache(Bean.STOP);
+    public void demarerOuRedemarerTache(Tache tache) {
+       // this.tache = tache;
+        BeanListeTaches.stopeOuRedemarerTache(Bean.START,tache,bean);
     }
 
-    public String demarerOuRedemarerTache(Tache tache) {
-        this.tache = tache;
-        return stopeOuRedemarerTache(Bean.START);
-    }
-
-    public String suprimerTache(Tache tache) {
-        if (!tache.getStatut().equals(Bean.STOP)) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la tache :" + tache.getIdTache(), "Le statut doit être à <<" + Bean.STOP + ">> ");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
-        if (bean.supprimerTache(tache.getIdTache())) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès ", "La tache a été supprimé ");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            listTaches.remove(tache);
-            return null;
-            //return chargerPage(tache.getIdMachine().getAdresseIP());
-        } else {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Problème inconnue ", "impossible de supprimer la tache");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
-        }
+    public void suprimerTache(Tache tache) {
+        BeanListeTaches.suprimerTacheStatic(tache, listTaches, bean);
     }
 
     public List<Tache> getListTaches() {
@@ -163,13 +93,13 @@ public class BeanListeTachesMachine implements Serializable {
         this.adresseMachine = adresseMachine;
     }
 
-    public Tache getTache() {
-        return tache;
+    /*public Tache getTache() {
+    return tache;
     }
-
+    
     public void setTache(Tache tache) {
-        this.tache = tache;
-    }
+    this.tache = tache;
+    }*/
 
     public Machine getMachine() {
         return machine;

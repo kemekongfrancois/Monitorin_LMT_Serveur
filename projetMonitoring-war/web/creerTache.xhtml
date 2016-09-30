@@ -32,7 +32,7 @@
                                         <p:outputLabel value="Période de vérification:" for="periodeVerrification" />
                                         <p:inputText id="periodeVerrification" value="#{beanCreerTache.tache.periodeVerrification}" title="PeriodeVerrification" required="true" requiredMessage="ce champ doit être non vide"/>
                                         <p:message for="periodeVerrification" />
-                                        <p:outputLabel value="Type de tache:" for="typeTache" />
+                                        <p:outputLabel value="Type:" for="typeTache" />
                                         <p:selectOneMenu id="typeTache" value="#{beanCreerTache.tache.typeTache}" title="TypeTache" required="true" >
                                             <f:selectItems value="#{beanVariableGlobal.listTypeTache}"  />
                                         </p:selectOneMenu>
@@ -49,7 +49,7 @@
                                         <p:outputLabel value="Niveau d'alerte:" for="niveauDAlerte" />
                                         <p:inputText id="niveauDAlerte" value="#{beanCreerTache.tache.niveauDAlerte}" title="DescriptionTache" required="true" />
                                         <p:message for="niveauDAlerte" />
-                                        <p:outputLabel value="DescriptionTache:" for="descriptionTache" />
+                                        <p:outputLabel value="Description:" for="descriptionTache" />
                                         <p:inputTextarea id="descriptionTache" value="#{beanCreerTache.tache.descriptionTache}" title="DescriptionTache" />
                                         <p:message for="descriptionTache" />
 

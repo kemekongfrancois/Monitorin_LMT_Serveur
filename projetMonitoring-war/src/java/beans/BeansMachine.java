@@ -30,7 +30,6 @@ public class BeansMachine implements Serializable {
 
     private List<Machine> listMachines;
     private Machine machine;
-    private List<Tache> listTache;
 
     @PostConstruct
     public void init() {
@@ -45,24 +44,24 @@ public class BeansMachine implements Serializable {
      * @param statut
      * @return
      */
-    private String stopeOuRedemarerMachine(String statut) {
-        machine.setStatut(statut);
-        bean.updateMachie(machine);//on enregistre la nouvelle valeur du statut dans la BD
-        String resultat = bean.redemarerTachePrincipaleEtSousTache(machine);
+    public static void stopeOuRedemarerMachine(String statut,Machine machineLocal, Bean beanLocal) {
+        machineLocal.setStatut(statut);
+        beanLocal.updateMachie(machineLocal);//on enregistre la nouvelle valeur du statut dans la BD
+        String resultat = beanLocal.redemarerTachePrincipaleEtSousTache(machineLocal);
         if (resultat.equals(Bean.OK)) {
             //machine.setStatut(statut);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la machine <" + machine.getAdresseIP() + "> es :" + machine.getStatut(), " Les modification ont été enregistrer");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la machine <" + machineLocal.getAdresseIP() + "> es :" + machineLocal.getStatut(), " Les modification ont été enregistrer");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return null;
+            return;
         }
 
         //System.out.println("msgAlert= " + resultat);
         if (statut.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statut
-            machine.setStatut(resultat);
+            machineLocal.setStatut(resultat);
         }
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machine.getAdresseIP(), "Cause: "+resultat);
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machineLocal.getAdresseIP(), "Cause: "+resultat);
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        return null;
+        return;
     }
 
     /**
@@ -72,9 +71,9 @@ public class BeansMachine implements Serializable {
      * @param machine
      * @return
      */
-    public String stoperMachine(Machine machine) {
-        this.machine = machine;
-        return stopeOuRedemarerMachine(Bean.STOP);
+    public void stoperMachine(Machine machine) {
+        //this.machine = machine;
+        stopeOuRedemarerMachine(Bean.STOP,machine,bean);
     }
 
     /**
@@ -84,9 +83,9 @@ public class BeansMachine implements Serializable {
      * @param machine
      * @return
      */
-    public String demarerOuRedemarerMachine(Machine machine) {
-        this.machine = machine;
-        return stopeOuRedemarerMachine(Bean.START);
+    public void demarerOuRedemarerMachine(Machine machine) {
+        //this.machine = machine;
+        stopeOuRedemarerMachine(Bean.START,machine,bean);
     }
     
     public String suprimerMachine(Machine machine) {
