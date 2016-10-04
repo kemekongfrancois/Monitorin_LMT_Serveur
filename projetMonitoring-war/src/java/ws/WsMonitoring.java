@@ -52,7 +52,7 @@ public class WsMonitoring {
        //clientWS.Tache tache = convertiTacheBeanEnTacheClient(tacheBean);
        
        //resultat += "\n demarage de la tache DD"+ws.demarerMetAJourOUStopperTache(tacheBean);
-        
+        //bean.testInutil(txt);
         return "Hello je suis le WS Serveur " + txt + " ! version= 2.00";
     }
     

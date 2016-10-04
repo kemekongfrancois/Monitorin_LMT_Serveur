@@ -15,9 +15,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.mail.Address;
 import javax.mail.Message;
@@ -63,6 +65,7 @@ public class Bean {
     public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 0 7-21 ? * MON-SAT";//represente la valeur par defaut de la période de check des machines (toute les heures entre 7h et 17h)
     public static final int NB_TENTATIVE_PING_LOCAL = 2;
     public static final int TEMP_ATTENT_TELNET_SECOND = 5;//le temps es en secomde
+    public static final int NIVEAU_ALERTE = 3;
 
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
     public static final String TACHE_INEXISTANTE = "cette tache n'existe pas";
@@ -803,7 +806,7 @@ public class Bean {
         return creerTache(adresIpMachine, TACHE_DD, description_tache, periodeVerrification, lettre_partition, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
     }
 
-    public String creerTacheSurveilleProcessus(String adresIpMachine, String periodeVerrification, String nomProcessus, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte, int nbTentative) {
+    public String creerTacheSurveilleProcessus(String adresIpMachine, String periodeVerrification, String nomProcessus, int nbTentative, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         if (verifiNomTacheSurMachine(adresIpMachine, nomProcessus)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, nomProcessus + ": ce processus es déja surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
@@ -851,7 +854,7 @@ public class Bean {
         return creerTache(adresIpMachine, TACHE_DATE_MODIFICATION_DERNIER_FICHIER, description_tache, periodeVerrification, cheminRepertoire, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
     }
 
-    public String creerTacheTelnet(String adresIpMachine, String periodeVerrification, String adresseEtPort, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
+    public String creerTacheTelnet(String adresIpMachine, String periodeVerrification, String adresseEtPort,int nbTentative, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         // String adresseEtPort = adresseTelnet + "," + port;
         if (!adresseEtPort.contains(",")) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "l'adresse pour le telnet est invalide: " + adresseEtPort + " l'adresse et le port doivent être céparer par une virgule ");
@@ -861,7 +864,7 @@ public class Bean {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le telnet vers: " + adresseEtPort + " es déja créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
-        return creerTache(adresIpMachine, TACHE_TELNET, description_tache, periodeVerrification, adresseEtPort, 0, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
+        return creerTache(adresIpMachine, TACHE_TELNET, description_tache, periodeVerrification, adresseEtPort, nbTentative, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
     }
 
     private String creerTache(String adresIpMachine, String typeTache, String description_tache, String periodeVerrification, String nom, int seuil, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, boolean redemarer_auto_service, int niveauDAlerte) {
@@ -917,7 +920,7 @@ public class Bean {
                     resultat = creerTacheSurveilleDD(adresIpMachine, periodeVerrification, nom, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 case TACHE_PROCESSUS:
-                    resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, statut, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte, seuil);
+                    resultat = creerTacheSurveilleProcessus(adresIpMachine, periodeVerrification, nom, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 case TACHE_SERVICE:
                     resultat = creerTacheSurveilleService(adresIpMachine, periodeVerrification, nom, statut, envoiyer_alerte_mail, envoyer_alerte_sms, redemarer_auto_service, description_tache, niveauDAlerte);
@@ -932,7 +935,7 @@ public class Bean {
                     resultat = creerTacheSurveilleTailleFichier(adresIpMachine, periodeVerrification, nom, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 case TACHE_TELNET:
-                    resultat = creerTacheTelnet(adresIpMachine, periodeVerrification, nom, statut, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
+                    resultat = creerTacheTelnet(adresIpMachine, periodeVerrification, nom, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, description_tache, niveauDAlerte);
                     break;
                 default:
                     resultat = "Le type <<" + typeTache + ">> n’existe pas ";
@@ -996,7 +999,7 @@ public class Bean {
 
     /**
      * cette fonction permet de rafraichir(démarer, stopper ou redemarer) une
-     * tache dans une machine physique
+     * tache dans une machine physique. elle agit sur la machine physique si celle-ci n'est pas sur STOP
      *
      * @param idTache
      * @return true si les modifications ont été pris en compte dans la machine
@@ -1007,8 +1010,12 @@ public class Bean {
         if (tache == null) {
             return false;
         }
-        String adresse = tache.getIdMachine().getAdresseIP();
-        String statutMachine = testConnectionMachine(tache.getIdMachine());
+        Machine machine = tache.getIdMachine();
+        if(machine.getStatut().equals(STOP)){
+            return false;
+        }
+        String adresse = machine.getAdresseIP();
+        String statutMachine = testConnectionMachine(machine);
         if (!statutMachine.equals(START)) {//si la machine n'es pas en cour de fonctionnement on ne peut pas actualisé une tache deçu
             return false;
         }
@@ -1496,7 +1503,34 @@ public class Bean {
             return null;
         }
         return ws.testTache(tache.getIdTache());
-        
-
     }
+
+    @Asynchronous
+    public void testInutil(String nbString) {
+        int nb = new Integer(nbString);
+        String resultat;
+        Random random = new Random();
+        int nbAleatoire1, nbAleatoire2, nbAleatoire3;
+        String adresse = "172.16.4.205";
+
+        resultat = "\ncreation de la machine 2 :-> " + creerMachine(adresse, "9999", DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "KEF virtuel", 1);
+        System.out.println(resultat);
+        for (int i = 0; i < nb; i++) {
+
+            nbAleatoire1 = random.nextInt(nb + 1);
+            nbAleatoire2 = random.nextInt(nb + 1);
+            nbAleatoire3 = random.nextInt(nb + 1);
+            resultat = i + ": " + creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "C:" + nbAleatoire1 + nbAleatoire2 + nbAleatoire3, 50, Bean.START, true, true, "", 1);
+            System.out.println(resultat);
+            if (i == nb / 2) {
+                System.out.println("on est à la moitié");
+                try {
+                    Thread.sleep(20 * 1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
 }
