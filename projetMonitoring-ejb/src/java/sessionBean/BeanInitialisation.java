@@ -82,7 +82,7 @@ public class BeanInitialisation {
      * renvoie les alertes des machine et met à jour le statu dans le cas où la
      * machine es de nouveau accessible
      */
-    @Schedule(hour = "7-17")//cette tache vas s'exécuté toute les  heure entre 7h et 17h
+    @Schedule(hour = "7,12,16,21")//cette tache vas s'exécuté toute les  heure entre 7h et 17h
     //@Schedule(second = "30", minute = "*", hour = "*")
     public void renvoiAlerteMachineEtUpdateMachine() {
         System.out.println("renvoie des alertes machine ou met à jour les alertes machines " + new Date());
@@ -133,6 +133,7 @@ public class BeanInitialisation {
         listTypeTache.add(Bean.TACHE_DATE_MODIFICATION_DERNIER_FICHIER);
         listTypeTache.add(Bean.TACHE_FICHIER_EXISTE);
         listTypeTache.add(Bean.TACHE_TAILLE_FICHIER);
+        listTypeTache.add(Bean.TACHE_UPTIME_MACHINE);
     }
 
     @PostConstruct
@@ -160,11 +161,12 @@ public class BeanInitialisation {
         String periodecheckFichierTaille = " 25,55 * * * * ?";
         String periodecheckTelnet = " 29,59 * * * * ?";
         String periodecheckDateModif = " 35,5 * * * * ?";
-        int tailleMaxFichie = 5;
-        int tailleMinFichie = -2;
+        int tailleMaxFichie = 3200;
+        int tailleMinFichie = -9409;
         int seuilDateModif = 360;
         String portEcoute = "9039";
-        
+        int SEUIL_ALERT_UPTIME = 2;
+        String periodecheckUptime = " 35,5 * * * * ?";
 
         String resultat = "";
 
@@ -177,6 +179,8 @@ public class BeanInitialisation {
         resultat += "\ncreation de la machine :-> " + bean.creerMachine(adressTest, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF", niveauAlerte);
 
         resultat += "\ncreation de la tache DD :-> " + bean.creerTacheSurveilleDD(adressTest, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
+                resultat += "\ncreation de la tache DD :-> " + bean.creerTacheUptimeMachine(adressTest, periodecheckUptime, SEUIL_ALERT_UPTIME, Bean.START, true, true, "", niveauAlerte);
+
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc.exe", attenteEtRepetitionProcessus, Bean.START, true, false, "", niveauAlerte);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc2.exe", attenteEtRepetitionProcessus, Bean.START, true, false, "", niveauAlerte);
         resultat += "\ncreation de la tache Service :-> " + bean.creerTacheSurveilleService(adressTest, periodecheckService, "Connectify", Bean.START, true, true, true, "", niveauAlerte);
