@@ -134,6 +134,7 @@ public class BeanInitialisation {
         listTypeTache.add(Bean.TACHE_FICHIER_EXISTE);
         listTypeTache.add(Bean.TACHE_TAILLE_FICHIER);
         listTypeTache.add(Bean.TACHE_UPTIME_MACHINE);
+        listTypeTache.add(Bean.TACHE_TEST_LIEN);
     }
 
     @PostConstruct
@@ -153,7 +154,7 @@ public class BeanInitialisation {
         int niveauAlerte = Bean.NIVEAU_ALERTE;
         int attenteEtRepetitionProcessus = 4;
 
-        String adressTest = "192.168.100.182";
+        String adresse = "192.168.100.182";
         String periodecheckDD = " */30 * * * * ?";
         String periodecheckProcessus = " 10,40 * * * * ?";
         String periodecheckService = " 15,45 * * * * ?";
@@ -165,8 +166,10 @@ public class BeanInitialisation {
         int tailleMinFichie = -9409;
         int seuilDateModif = 360;
         String portEcoute = "9039";
-        int SEUIL_ALERT_UPTIME = 2;
-        String periodecheckUptime = " 35,5 * * * * ?";
+        String periodecheckUptime = " 35 * * * * ?";
+        int SEUIL_ALERT_UPTIME = 10;
+        String periodecheckLien = " 5 * * * * ?";
+        int NB_TENTATIVE_LIEN = 5;
 
         String resultat = "";
 
@@ -176,41 +179,45 @@ public class BeanInitialisation {
         resultat += "\ncreation du 1er utilisateur :-> " + bean.creerUtilisateur("kef", "0000", "kemekong", "francois", Bean.TYPE_COMPTE_SUPADMIN, "237699667694", "kemekongfrancois@gmail.com", 1);
         resultat += "\ncreation du 2ième utilisateur :-> " + bean.creerUtilisateur("kemekongfrancois", "0000", "kemekong2", "francois2", Bean.TYPE_COMPTE_SUPADMIN, "237675954517", "kemekongfranois@yahoo.fr", niveauAlerte);
 
-        resultat += "\ncreation de la machine :-> " + bean.creerMachine(adressTest, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF", niveauAlerte);
+        resultat += "\ncreation de la machine :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF", niveauAlerte);
 
-        resultat += "\ncreation de la tache DD :-> " + bean.creerTacheSurveilleDD(adressTest, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
-                resultat += "\ncreation de la tache DD :-> " + bean.creerTacheUptimeMachine(adressTest, periodecheckUptime, SEUIL_ALERT_UPTIME, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache DD :-> " + bean.creerTacheSurveilleDD(adresse, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache redémarrage :-> " + bean.creerTacheUptimeMachine(adresse, periodecheckUptime, SEUIL_ALERT_UPTIME, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, periodecheckProcessus, "vlc.exe", attenteEtRepetitionProcessus, Bean.START, true, false, "", niveauAlerte);
+        resultat += "\ncreation de la tache Service :-> " + bean.creerTacheSurveilleService(adresse, periodecheckService, "Connectify", Bean.START, true, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache Ping :-> " + bean.creerTachePing(adresse, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, periodecheckLien, "http://192.168.100.86:8090/modispatcher", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, periodecheckLien, "http://41.204.94.27:50402/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, periodecheckLien, "http://41.204.94.27:50411/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, periodecheckLien, "http://41.204.94.27:50404/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, periodecheckLien, "http://41.204.94.27:50600/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, periodecheckLien, "http://41.204.94.29:8282/Managesms-war/j_security_check", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache Ping 2 :-> " + bean.creerTachePing(adresse, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache fichier existant :-> " + bean.creerTacheSurveilleFichierExist(adresse, periodecheckFichierExistant, "c:/testMonitoring/test.txt", Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache fichier superieur :-> " + bean.creerTacheSurveilleTailleFichier(adresse, periodecheckFichierTaille, "c:/testMonitoring/Setup_Oscillo.exe", tailleMaxFichie, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache fichier inférieur :-> " + bean.creerTacheSurveilleTailleFichier(adresse, periodecheckFichierTaille, "c:/testMonitoring/TeamViewer_Setup_fr.exe", tailleMinFichie, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, periodecheckTelnet, "41.204.94.29,8282", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, periodecheckDateModif, "C:/testMonitoring/test date modification", seuilDateModif, Bean.START, true, true, "", niveauAlerte);
 
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc.exe", attenteEtRepetitionProcessus, Bean.START, true, false, "", niveauAlerte);
-        resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adressTest, periodecheckProcessus, "vlc2.exe", attenteEtRepetitionProcessus, Bean.START, true, false, "", niveauAlerte);
-        resultat += "\ncreation de la tache Service :-> " + bean.creerTacheSurveilleService(adressTest, periodecheckService, "Connectify", Bean.START, true, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache Ping :-> " + bean.creerTachePing(adressTest, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache Ping 2 :-> " + bean.creerTachePing(adressTest, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache fichier existant :-> " + bean.creerTacheSurveilleFichierExist(adressTest, periodecheckFichierExistant, "c:/testMonitoring/test.txt", Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache fichier superieur :-> " + bean.creerTacheSurveilleTailleFichier(adressTest, periodecheckFichierTaille, "c:/testMonitoring/Setup_Oscillo.exe", tailleMaxFichie, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache fichier inférieur :-> " + bean.creerTacheSurveilleTailleFichier(adressTest, periodecheckFichierTaille, "c:/testMonitoring/TeamViewer_Setup_fr.exe", tailleMinFichie, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adressTest, periodecheckTelnet, "41.204.94.29,8282",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adressTest, periodecheckDateModif, "C:/testMonitoring/test date modification", seuilDateModif, Bean.START, true, true, "", niveauAlerte);
-
-        String adressTest2 = "172.16.4.20";
+        adresse = "172.16.4.20";
         //resultat += "\ncreation de la machine 2 :-> " + bean.creerMachine(adressTest2, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF virtuel", niveauAlerte);
 
-        resultat += "\ncreation de la tache DD 2:-> " + bean.creerTacheSurveilleDD(adressTest2, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache processus 2 :-> " + bean.creerTacheSurveilleProcessus(adressTest2, periodecheckProcessus, "vlc.exe", attenteEtRepetitionProcessus, Bean.START, true, false, "", niveauAlerte);
-        resultat += "\ncreation de la tache Service 2 :-> " + bean.creerTacheSurveilleService(adressTest2, periodecheckService, "HUAWEIWiMAX", Bean.START, true, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache Ping 2 2 :-> " + bean.creerTachePing(adressTest2, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache Ping 2 2 :-> " + bean.creerTachePing(adressTest2, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache fichier existant 2 :-> " + bean.creerTacheSurveilleFichierExist(adressTest2, periodecheckFichierExistant, "c:/testMonitoring/test.txt", Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache DD 2:-> " + bean.creerTacheSurveilleDD(adresse, periodecheckDD, "c:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache processus 2 :-> " + bean.creerTacheSurveilleProcessus(adresse, periodecheckProcessus, "vlc.exe", attenteEtRepetitionProcessus, Bean.START, true, false, "", niveauAlerte);
+        resultat += "\ncreation de la tache Service 2 :-> " + bean.creerTacheSurveilleService(adresse, periodecheckService, "HUAWEIWiMAX", Bean.START, true, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache Ping 2 2 :-> " + bean.creerTachePing(adresse, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache Ping 2 2 :-> " + bean.creerTachePing(adresse, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache fichier existant 2 :-> " + bean.creerTacheSurveilleFichierExist(adresse, periodecheckFichierExistant, "c:/testMonitoring/test.txt", Bean.START, true, true, "", niveauAlerte);
 
-        String adressTest3 = "172.16.4.21";
+        adresse = "172.16.4.21";
         //resultat += "\ncreation de la machine 2 :-> " + bean.creerMachine(adressTest3, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "ubuntu", niveauAlerte);
 
-        resultat += "\ncreation de la tache DD 3:-> " + bean.creerTacheSurveilleDD(adressTest3, periodecheckDD, "/mnt/hgfs", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache Ping 2 3 :-> " + bean.creerTachePing(adressTest3, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache Ping 2 3 :-> " + bean.creerTachePing(adressTest3, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache fichier existant 3 :-> " + bean.creerTacheSurveilleFichierExist(adressTest3, periodecheckFichierExistant, "/home/ubuntu/Desktop/dist/parametre.txt", Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache fichier superieur 3 :-> " + bean.creerTacheSurveilleTailleFichier(adressTest3, periodecheckFichierTaille, "/home/ubuntu/Desktop/dist/log.txt", tailleMaxFichie, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache fichier inférieur 3 :-> " + bean.creerTacheSurveilleTailleFichier(adressTest3, periodecheckFichierTaille, "/home/ubuntu/Desktop/dist/---keen'v - DIS MOI OUI (MARINA) Clip Officiel - YouTube.flv", tailleMinFichie, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache DD 3:-> " + bean.creerTacheSurveilleDD(adresse, periodecheckDD, "/mnt/hgfs", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache Ping 2 3 :-> " + bean.creerTachePing(adresse, periodecheckPing, "www.google.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache Ping 2 3 :-> " + bean.creerTachePing(adresse, periodecheckPing, "www.yahoo.com", NB_TENTATIVE_PING, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache fichier existant 3 :-> " + bean.creerTacheSurveilleFichierExist(adresse, periodecheckFichierExistant, "/home/ubuntu/Desktop/dist/parametre.txt", Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache fichier superieur 3 :-> " + bean.creerTacheSurveilleTailleFichier(adresse, periodecheckFichierTaille, "/home/ubuntu/Desktop/dist/log.txt", tailleMaxFichie, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache fichier inférieur 3 :-> " + bean.creerTacheSurveilleTailleFichier(adresse, periodecheckFichierTaille, "/home/ubuntu/Desktop/dist/---keen'v - DIS MOI OUI (MARINA) Clip Officiel - YouTube.flv", tailleMinFichie, Bean.START, true, true, "", niveauAlerte);
         // resultat += "\ncreation de la tache processus 3 :-> " + bean.creerTacheSurveilleProcessus(adressTest3, periodecheckProcessus, "vlc.exe", START, false);
         //resultat += "\ncreation de la tache Service 3 :-> " + bean.creerTacheSurveilleService(adressTest3, periodecheckService, "HUAWEIWiMAX", START, true, true);
 
@@ -221,10 +228,9 @@ public class BeanInitialisation {
         resultat += "\ncreation de l'utilisateur de LMT :-> " + bean.creerUtilisateur("pushsms", "pushsms", "LMT", "monitoring", Bean.TYPE_COMPTE_SUPADMIN, "237699130076", "pushsms@lmtgroup.com", niveauAlerte);
 
         int i;
-        
 
         i = 0;
-        String adresse = "192.168.100.95";
+        adresse = "192.168.100.95";
         resultat += "\ncreation de la machine " + adresse + " :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "ADMIN", niveauAlerte);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache DD E:-> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "E:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
@@ -272,29 +278,29 @@ public class BeanInitialisation {
         resultat += "\ncreation de la machine " + adresse + " :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "SICAP", niveauAlerte);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, (i += 2) + " */10 * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, (i += 2) + " */10 * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.16.38,5016",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.16.38,5016", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "217.113.69.8",nbTentativeTelnet , 9000, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "131.166.253.49,7004",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "10.32.251.240,3700",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "196.202.232.250,3700",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "131.166.253.49,7004", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "10.32.251.240,3700", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "196.202.232.250,3700", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.244.255.6",nbTentativeTelnet , 5016, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "41.202.220.73,2775",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "41.202.206.65,15019",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "41.202.220.73,2775", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "41.202.206.65,15019", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "41.202.206.69", 15019, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "121.241.242.124,2345",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50402",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50411",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50404",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50410",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50600",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "121.241.242.124,2345", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50402", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50411", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50404", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50410", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.163,50600", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 4848, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.150,8282",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.150,8282", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 13001, Bean.START, true, true, "", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 6013, Bean.START, true, true, "", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "192.168.200.150", 3306, Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152,8087",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152,4848",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152,8080",nbTentativeTelnet , Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152,8087", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152,4848", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", "192.168.200.152,8080", nbTentativeTelnet, Bean.START, true, true, "", niveauAlerte);
 
         i = 0;
         adresse = "192.168.200.152";
@@ -308,12 +314,14 @@ public class BeanInitialisation {
         resultat += "\ncreation de la machine " + adresse + " :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", niveauAlerte);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache redémarrage :-> " + bean.creerTacheUptimeMachine(adresse, "0 " + (i += 2) + " 12 * * ?", SEUIL_ALERT_UPTIME, Bean.START, true, true, "", niveauAlerte);
 
         i = 0;
         adresse = "192.168.100.78";
         resultat += "\ncreation de la machine " + adresse + " :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "Administrateur", niveauAlerte);
         resultat += "\ncreation de la tache DD C:-> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "C:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache redémarrage :-> " + bean.creerTacheUptimeMachine(adresse, "0 " + (i += 2) + " 12 * * ?", SEUIL_ALERT_UPTIME, Bean.START, true, true, "", niveauAlerte);
 
         i = 0;
         adresse = "192.168.100.79";
@@ -322,12 +330,14 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache DD D:-> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "D:", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 " + (i += 2) + " * * * ?", "NCM.EXE", attenteEtRepetitionProcessus, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 " + (i += 2) + " * * * ?", "onnet64.exe", attenteEtRepetitionProcessus, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache redémarrage :-> " + bean.creerTacheUptimeMachine(adresse, "0 " + (i += 2) + " 12 * * ?", SEUIL_ALERT_UPTIME, Bean.START, true, true, "", niveauAlerte);
 
         i = 0;
         adresse = "192.168.100.74";
         resultat += "\ncreation de la machine " + adresse + " :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.OSLinux, "root", niveauAlerte);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache redémarrage :-> " + bean.creerTacheUptimeMachine(adresse, "0 " + (i += 2) + " 12 * * ?", SEUIL_ALERT_UPTIME, Bean.START, true, true, "", niveauAlerte);
 
         i = 0;
         adresse = "192.168.100.180";
@@ -335,6 +345,12 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "/home", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", "/", SEUIL_ALERT_DD, Bean.START, true, true, "", niveauAlerte);
         resultat += "\ncreation de la tache Ping vers la 76 :-> " + bean.creerTachePing(adresse, (i += 2) + " */10 * * * ?", "192.168.100.76", NB_TENTATIVE_PING, Bean.START, true, true, "Ping vers la 76", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, "0 " + (i += 2) + "/10 * * * ?", "http://192.168.100.86:8090/modispatcher", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, "0 " + (i += 2) + "/10 * * * ?", "http://192.168.200.163:50402/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, "0 " + (i += 2) + "/10 * * * ?", "http://192.168.200.163:50411/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, "0 " + (i += 2) + "/10 * * * ?", "http://192.168.200.163:50404/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, "0 " + (i += 2) + "/10 * * * ?", "http://192.168.200.163:50600/backoffice.view", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
+        resultat += "\ncreation de la tache test de lien :-> " + bean.creerTacheTestLien(adresse, "0 " + (i += 2) + "/10 * * * ?", "http://192.168.200.150:8282/Managesms-war/j_security_check", NB_TENTATIVE_LIEN, Bean.START, true, true, "", niveauAlerte);
 
         System.out.println(resultat);
 

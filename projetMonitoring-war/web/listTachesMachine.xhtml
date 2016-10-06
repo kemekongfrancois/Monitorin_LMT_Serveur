@@ -22,6 +22,7 @@
                         <h:form id="formDesMachines">
                             <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
                             <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(beanListeTachesMachine.machine.adresseIP)}" title="Editer Machine"/>
+                            <p:commandButton icon="ui-icon-check" title="Tester l'agent" action="#{beanListeTachesMachine.testerAgent(beanListeTachesMachine.machine)}" ajax="true" update=":formDesMachines" />
                             <p:commandButton icon="ui-icon-play" title="Démarrer la supervision ou là rafraichi" action="#{beanListeTachesMachine.demarerOuRedemarerMachine()}" ajax="true" update=":formDesMachines" />
                             <p:commandButton icon="ui-icon-stop" title="arrêter la supervision" action="#{beanListeTachesMachine.stoperMachine()}" ajax="true" update=":formDesMachines" />
                             <p:commandButton icon="ui-icon-circle-plus" title="créer une tache sur cette machine" action="#{beanCreerTache.pageCreerTache(beanListeTachesMachine.adresseMachine)}"/>

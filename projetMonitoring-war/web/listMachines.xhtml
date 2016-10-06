@@ -14,23 +14,24 @@
                 <f:view>
 
 
-                    <h:form id="formDesMachines">
+                    <h:form id="form">
                         <p:growl id="growl" sticky="true" showDetail="true" life="2000" />
                         <p:dataTable  value="#{beansMachine.listMachines}" var="item" resizableColumns="true" liveResize="true" draggableColumns="true">
                             <f:facet name="header">
                                 Liste des machines supervisées
                             </f:facet>
-                            <p:column style="text-align: center; width:160px">
+                            <p:column style="text-align: center; width:190px">
                                 <f:facet name="header">
                                     <h:outputText value="Fonctions"/>
                                 </f:facet>
                                 <p:commandButton icon="ui-icon-pencil" action="#{beanModifierMachine.pageModifieMachine(item.adresseIP)}" title="Editer Machine"/>
-                                <p:commandButton icon="ui-icon-play" title="Démarrer la supervision ou là rafraichi" action="#{beansMachine.demarerOuRedemarerMachine(item)}" ajax="true" update=":formDesMachines" />
-                                <p:commandButton icon="ui-icon-stop" title="arrêter la supervision" action="#{beansMachine.stoperMachine(item)}" ajax="true" update=":formDesMachines" />
-                                <p:commandButton update=":formDesMachines:machineParam" oncomplete="PF('parametreMachine').show()" icon="ui-icon-search" title="Aperçu des taches">
+                                <p:commandButton icon="ui-icon-check" title="Tester l'agent" action="#{beansMachine.testerAgent(item)}" ajax="true" update=":form" />
+                                <p:commandButton icon="ui-icon-play" title="Démarrer la supervision ou là rafraichi" action="#{beansMachine.demarerOuRedemarerMachine(item)}" ajax="true" update=":form" />
+                                <p:commandButton icon="ui-icon-stop" title="arrêter la supervision" action="#{beansMachine.stoperMachine(item)}" ajax="true" update=":form" />
+                                <p:commandButton update=":form:machineParam" oncomplete="PF('parametreMachine').show()" icon="ui-icon-search" title="Aperçu des taches">
                                     <f:setPropertyActionListener value="#{item}" target="#{beansMachine.machine}" />
                                 </p:commandButton>
-                                <p:commandButton icon="ui-icon-closethick" title="supprimer la machine" actionListener="#{beansMachine.suprimerMachine(item)}" update="formDesMachines">
+                                <p:commandButton icon="ui-icon-closethick" title="supprimer la machine" actionListener="#{beansMachine.suprimerMachine(item)}" update="form">
                                     <p:confirm header="Confirmation" message="Voulez-vous vraiment supprimer la machine :#{item.adresseIP} ? Toute les taches associées seront aussi supprimées " icon="ui-icon-alert" />
                                 </p:commandButton>
 

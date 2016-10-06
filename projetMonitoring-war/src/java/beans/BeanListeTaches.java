@@ -105,18 +105,136 @@ public class BeanListeTaches implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return;
         }
-        String enteteAlerte = "Résultat de l’exécution de la tâche id= " + tache.getIdTache();
+        String enteteAlerte = "Résultat de l’exécution de la tâche id= " + tache.getIdTache() + "\n valeur= " + resultat;
         msg.setSummary(enteteAlerte);
         switch (tache.getTypeTache()) {
             case Bean.TACHE_DD:
                 if (resultat.equals(Bean.PB)) {
                     //msg = new FacesMessage(FacesMessage.SEVERITY_WARN,enteteAlerte, Bean.ERREUR_PARTITION_DD);
-                    msg.setSeverity(FacesMessage.SEVERITY_WARN);
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
                     msg.setDetail(Bean.ERREUR_PARTITION_DD);
                 } else {
                     //msg = new FacesMessage(FacesMessage.SEVERITY_INFO,enteteAlerte,"Le pourcentage d’occupation de la partition << " + tache.getNom() + " >> est de :" + resultat + "%");
                     msg.setSeverity(FacesMessage.SEVERITY_INFO);
                     msg.setDetail("Le pourcentage d’occupation de la partition << " + tache.getNom() + " >> est de :" + resultat + "%");
+                }
+                break;
+            case Bean.TACHE_PROCESSUS:
+                switch (resultat) {
+                    case Bean.OK:
+                        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                        msg.setDetail("Le processus << " + tache.getNom() + " >> est bien en cours de fonctionnement");
+                        break;
+                    case Bean.KO:
+                        msg.setSeverity(FacesMessage.SEVERITY_WARN);
+                        msg.setDetail("Le processus << " + tache.getNom() + " >> n'est pas en cours de fonctionnement");
+                        break;
+                    default:
+                        //cas ou il ya eu une exception
+                        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                        msg.setDetail("Une Exception c’est produite lors de l’exécution");
+                        break;
+                }
+                break;
+            case Bean.TACHE_SERVICE:
+                switch (resultat) {
+                    case Bean.OK:
+                        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                        msg.setDetail("Le service << " + tache.getNom() + " >> est bien en cours de fonctionnement");
+                        break;
+                    case Bean.KO:
+                        msg.setSeverity(FacesMessage.SEVERITY_WARN);
+                        msg.setDetail("Le service << " + tache.getNom() + " >> n'est pas en cours de fonctionnement");
+                        break;
+                    default:
+                        //cas ou il ya eu une exception
+                        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                        msg.setDetail("Une Exception c’est produite lors de l’exécution");
+                        break;
+                }
+                break;
+            case Bean.TACHE_PING:
+                switch (resultat) {
+                    case Bean.OK:
+                        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                        msg.setDetail("Le ping vers << " + tache.getNom() + " >> est OK");
+                        break;
+                    default:
+                        msg.setSeverity(FacesMessage.SEVERITY_WARN);
+                        msg.setDetail("Le ping vers << " + tache.getNom() + " >> ne passe pas");
+                        break;
+                }
+                break;
+            case Bean.TACHE_FICHIER_EXISTE:
+                switch (resultat) {
+                    case Bean.OK:
+                        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                        msg.setDetail("Le fichier << " + tache.getNom() + " >> existe");
+                        break;
+                    default:
+                        msg.setSeverity(FacesMessage.SEVERITY_WARN);
+                        msg.setDetail("Le fichier<< " + tache.getNom() + " >> n'existe pas");
+                        break;
+                }
+                break;
+            case Bean.TACHE_TAILLE_FICHIER:
+                if (resultat.equals(Bean.PB)) {
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    msg.setDetail("Une Exception c’est produit lors de l’exécution ceci peut être dû au fait que le fichier n’existe pas");
+                } else {
+                    msg.setSeverity(FacesMessage.SEVERITY_INFO);
+
+                    msg.setDetail("La taille du fichier << " + tache.getNom() + " >> est de :" + resultat + " octets soit " + new Integer(resultat) / 1024 + " kilooctets");
+                }
+                break;
+            case Bean.TACHE_TELNET:
+                switch (resultat) {
+                    case Bean.OK:
+                        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                        String tab[] = tache.getNom().split(",");
+                        String adresse = tab[0];
+                        int port = new Integer(tab[1]);
+                        msg.setDetail("Le ping vers l'adresse << " + adresse + " >> et le port << " + port + " >> est OK");
+                        break;
+                    default:
+                        msg.setSeverity(FacesMessage.SEVERITY_WARN);
+                        msg.setDetail("Le Telne ne passe pas");
+                        break;
+                }
+                break;
+            case Bean.TACHE_DATE_MODIFICATION_DERNIER_FICHIER:
+                if (resultat.equals(Bean.PB)) {
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    msg.setDetail("Une Exception c’est produit lors de l’exécution ceci peut être dû au fait que le repertoire n’est pas valide");
+                } else {
+                    msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                    msg.setDetail("La date de modification du répertoire : << " + tache.getNom() + " >> est :\n" + resultat);
+                }
+                break;
+            case Bean.TACHE_UPTIME_MACHINE:
+                if (resultat.equals(Bean.PB)) {
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    msg.setDetail("Une Exception c’est produit lors de l’exécution ceci peut être dû au fait que le fichier \"uptime.exe\" ne se trouve pas dans le même repertoire que l'agent");
+                } else {
+                    msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                    msg.setDetail("La machine  << " + tache.getIdMachine().getAdresseIP() + " >> est allumée depuis " + resultat + " jours");
+                }
+                break;
+            case Bean.TACHE_TEST_LIEN:
+                switch (resultat) {
+                    case Bean.OK:
+                        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+                        msg.setDetail("Le lien << " + tache.getNom() + " >> est UP");
+                        break;
+                    case Bean.KO:
+                        msg.setSeverity(FacesMessage.SEVERITY_WARN);
+                        msg.setDetail("Le lien << " + tache.getNom() + " >> est DOWN");
+                        break;
+                    default:
+                        //cas ou il ya eu une exception
+                        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                        msg.setDetail("Une Exception c’est produite lors de l’exécution");
+                        break;
                 }
                 break;
             default:

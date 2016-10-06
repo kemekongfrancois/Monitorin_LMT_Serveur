@@ -141,10 +141,7 @@ public class WsMonitoring {
     public Tache getTache(@WebParam(name = "idMachine")int IdMachine) {
         return bean.getTache(IdMachine);
     }
-    @WebMethod
-    public boolean verifiNomTacheSurMachine(String adresIpMachine, String nomTache) {
-        return bean.verifiNomTacheSurMachine(adresIpMachine,nomTache);
-    }
+    
     @WebMethod
     public boolean problemeTacheResolu(@WebParam(name = "idTache")int idTache) {
         return bean.problemeTacheResolu(idTache);
@@ -164,5 +161,6 @@ public class WsMonitoring {
             @WebParam(name = "lettre_partition") String lettre_partition){
         return bean.creerTacheSurveilleDD(adresIpMachine, periode, lettre_partition,seuil, STOP);
     }
+    
     */
 }

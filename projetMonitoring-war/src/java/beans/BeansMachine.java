@@ -36,6 +36,28 @@ public class BeansMachine implements Serializable {
         System.out.println("recupération de la liste des machines pour affichage");
         listMachines = bean.getAllMachineAvecBonStatut();
     }
+    
+    public void testerAgent(Machine machine) {
+        testerAgentStatic(bean, machine);
+    }
+
+    public static void testerAgentStatic(Bean beanLocal, Machine machine) {
+        FacesMessage msg = new FacesMessage();
+        String resultat = beanLocal.testAgent(machine);
+        if (resultat == null) {
+            //msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Problème avec la machine hôte ou l’agent" , Bean.PB_AGENT + "\n ou \n " + Bean.INACCESSIBLE);
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            msg.setSummary("Impossible de communique avec l’agent");
+            msg.setDetail("cause: "+beanLocal.testConnectionMachine(machine));
+            //return;
+        } else {
+            msg.setSeverity(FacesMessage.SEVERITY_INFO);
+            msg.setSummary("communication OK avec l'agent");
+            msg.setDetail(resultat);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+
+    }
 
     /**
      * cette fonction permet d'enregistre les modeifications dans la BD et sur
@@ -44,7 +66,7 @@ public class BeansMachine implements Serializable {
      * @param statut
      * @return
      */
-    public static void stopeOuRedemarerMachine(String statut,Machine machineLocal, Bean beanLocal) {
+    public static void stopeOuRedemarerMachine(String statut, Machine machineLocal, Bean beanLocal) {
         machineLocal.setStatut(statut);
         beanLocal.updateMachie(machineLocal);//on enregistre la nouvelle valeur du statut dans la BD
         String resultat = beanLocal.redemarerTachePrincipaleEtSousTache(machineLocal);
@@ -59,7 +81,7 @@ public class BeansMachine implements Serializable {
         if (statut.equals(Bean.START)) {//cette instruction permet de mettre à jour l'interface graphique avec la veritable valeur du statut
             machineLocal.setStatut(resultat);
         }
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machineLocal.getAdresseIP(), "Cause: "+resultat);
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "impossible de communique avec la machine: " + machineLocal.getAdresseIP(), "Cause: " + resultat);
         FacesContext.getCurrentInstance().addMessage(null, msg);
         return;
     }
@@ -73,7 +95,7 @@ public class BeansMachine implements Serializable {
      */
     public void stoperMachine(Machine machine) {
         //this.machine = machine;
-        stopeOuRedemarerMachine(Bean.STOP,machine,bean);
+        stopeOuRedemarerMachine(Bean.STOP, machine, bean);
     }
 
     /**
@@ -85,9 +107,9 @@ public class BeansMachine implements Serializable {
      */
     public void demarerOuRedemarerMachine(Machine machine) {
         //this.machine = machine;
-        stopeOuRedemarerMachine(Bean.START,machine,bean);
+        stopeOuRedemarerMachine(Bean.START, machine, bean);
     }
-    
+
     public String suprimerMachine(Machine machine) {
         if (!machine.getStatut().equals(Bean.STOP)) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "impossible de suprimer la machine :" + machine.getAdresseIP(), "Le statut doit être à <<" + Bean.STOP + ">> ");
@@ -107,7 +129,6 @@ public class BeansMachine implements Serializable {
         }
     }
 
-
     public BeansMachine() {
     }
 
@@ -118,9 +139,11 @@ public class BeansMachine implements Serializable {
     public void setListMachines(List<Machine> listMachines) {
         this.listMachines = listMachines;
     }
-public Machine getMachine() {
+
+    public Machine getMachine() {
         return machine;
     }
+
     public void setMachine(Machine machine) {
         this.machine = machine;
     }
@@ -128,7 +151,5 @@ public Machine getMachine() {
     public List<Tache> getListTache() {
         return bean.getListTacheMachine(machine.getAdresseIP());
     }
-    
-    
 
 }

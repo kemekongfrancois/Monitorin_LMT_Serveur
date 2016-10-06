@@ -39,7 +39,10 @@ public class BeanListeTachesMachine implements Serializable {
         //this.machine = machine;
         BeansMachine.stopeOuRedemarerMachine(Bean.STOP,machine,bean);
     }
-
+    
+    public void testerAgent(Machine machine) {
+        BeansMachine.testerAgentStatic(bean, machine);
+    }
     
     public void demarerOuRedemarerMachine() {
         //this.machine = machine;
