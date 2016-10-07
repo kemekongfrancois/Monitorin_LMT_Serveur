@@ -191,10 +191,7 @@ public class BeanListeTaches implements Serializable {
                 switch (resultat) {
                     case Bean.OK:
                         msg.setSeverity(FacesMessage.SEVERITY_INFO);
-                        String tab[] = tache.getNom().split(",");
-                        String adresse = tab[0];
-                        int port = new Integer(tab[1]);
-                        msg.setDetail("Le ping vers l'adresse << " + adresse + " >> et le port << " + port + " >> est OK");
+                        msg.setDetail("Le ping vers l'adresse << " + tache.getNom() + " >>  est OK");
                         break;
                     default:
                         msg.setSeverity(FacesMessage.SEVERITY_WARN);

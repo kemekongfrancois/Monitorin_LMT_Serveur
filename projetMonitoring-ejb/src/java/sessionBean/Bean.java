@@ -56,7 +56,7 @@ public class Bean {
     public static final String TACHE_DATE_MODIFICATION_DERNIER_FICHIER = "Last Date";
     public static final String TACHE_FICHIER_EXISTE = "Fichier existe";
     public static final String TACHE_TAILLE_FICHIER = "Taille fichier";
-    public static final String TACHE_UPTIME_MACHINE = "Redémarrage machine";
+    public static final String TACHE_UPTIME_MACHINE = "Uptime machine";
     public static final String TACHE_TEST_LIEN = "Tester lien";
 
     public static final String PB_AGENT = "Impossible de contacter l’agent";
@@ -77,7 +77,7 @@ public class Bean {
     public static final String ADRESSE_UTILISE = "adresse ip utilise";
     public static final String NUMERO_COUR_INVALIDE = "senderID invalide";
     public static final String INFO_DEJA_EXISTANT_EN_BD = "le login ou la boite mail ou le numero de téléphone es déja utilisé";
-    public static final String ADREESSE_TELNET_INVALIDE = "Adresse Telnet invalide ; l’adresse et le port doivent être séparer par une virgule";
+    public static final String ADREESSE_TELNET_INVALIDE = "Adresse Telnet invalide. l’adresse et le port doivent être séparer par un double point (:)";
 
     public static final String ERREUR_PARTITION_DD = "Il n’existe pas de partition de ce type sur la machine";
     public String OS_MACHINE;
@@ -905,8 +905,8 @@ public class Bean {
     public String creerTacheTelnet(String adresIpMachine, String periodeVerrification, String adresseEtPort, int nbTentative, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         // String adresseEtPort = adresseTelnet + "," + port;
         String typeTache = TACHE_TELNET;
-        if (!adresseEtPort.contains(",")) {
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "l'adresse pour le telnet est invalide: " + adresseEtPort + " l'adresse et le port doivent être céparer par une virgule ");
+        if (!adresseEtPort.contains(":")) {
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "l'adresse pour le telnet est invalide: " + adresseEtPort + " l'adresse et le port doivent être séparer par un double point (:) ");
             return ADREESSE_TELNET_INVALIDE;
         }
         if (verifiNomTacheSurMachine(adresIpMachine, adresseEtPort, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
