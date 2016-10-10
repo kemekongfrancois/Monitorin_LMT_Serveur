@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -447,114 +448,119 @@ public class Bean {
             //Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la tache <<" + idTache + ">> n'existe pas dans la BD");
             return false;
         }
-        String corpsEmailEtSMS,
-                sujetEmail = "Alerte Tache(id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
+        String corpsEmail,
+                //sujetEmail = "Alerte tâche (id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
+                sujetEmail = "Alerte tâche (id=" + tache.getIdTache() + ") de type \"" + tache.getTypeTache() + "\" de nom \"" + tache.getNom() + "\" sur la machine \"" + tache.getIdMachine().getAdresseIP() + "\" : " + tache.getDescriptionTache();
         switch (tache.getTypeTache()) {
             case TACHE_DD:
-                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") espace disque sur la machine: " + tache.getIdMachine().getAdresseIP();
                 if (codeErreur == 200) {//cas où la lettre de partition ne correspond à aucune partition
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la lettre de partition ne correspont a aucune partition ou elle es invalide : <<" + tache.getNom() + " >>";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " La lettre de partition ne correspond à aucune partition ou elle est invalide : <<" + tache.getNom() + " >>";
+                    corpsEmail = "La lettre de partition ne correspond à aucune partition ou elle est invalide: \"" + tache.getNom() + " \"";
                 } else {
-                    corpsEmailEtSMS = " espace restant du disque <<" + tache.getNom() + ">>" + "de la machine<<" + tache.getIdMachine().getAdresseIP() + ">> es faible ";
+                    //corpsEmailEtSMS = " espace restant du disque <<" + tache.getNom() + ">>" + "de la machine<<" + tache.getIdMachine().getAdresseIP() + ">> es faible ";
+                    corpsEmail = "Espace restant du disque \"" + tache.getNom() + "\" es faible ";
                 }
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_PROCESSUS:
-                //sujetEmail = "Alerte:(idTache="+tache.getIdTache()+") Processus arrete sur: " + tache.getIdMachine().getAdresseIP();
                 if (codeErreur == 0) {
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> es arreté";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> es arreté";
+                    corpsEmail = "Le processus : \"" + tache.getNom() + " \" est arrêté";
                 } else {//cas où la valeur es 1: il ya un pb
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> n'es pas reconnue";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> n'es pas reconnue";
+                    corpsEmail = "Le processus : \"" + tache.getNom() + " \" n’est pas reconnue ou il a généré une exception";
                 }
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_SERVICE:
-                //sujetEmail = "Alerte:(idTache="+tache.getIdTache()+") Service arrete sur: " + tache.getIdMachine().getAdresseIP();
                 switch (codeErreur) {
                     case 0:
-                        corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + ">> es arreté";
+                        //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + ">> es arreté";
+                        corpsEmail = "Le service : \"" + tache.getNom() + "\" est arrêté";
                         break;
                     case -1:
-                        corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + " >> a été redémarer par l'agent";
+                        //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + " >> a été redémarer par l'agent";
+                        corpsEmail = "Le service : \"" + tache.getNom() + " \" a été redémarrer par l'agent";
                         break;
                     default:
-                        corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + " >> n'es pas reconnue";
+                        //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + " >> n'es pas reconnue";
+                        corpsEmail = "Le service : \"" + tache.getNom() + " \" n'est pas reconnue";
                         break;
                 }
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_PING:
-                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") impossible de contacter: " + tache.getNom();
-                corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le ping vers : <<" + tache.getNom() + ">> ne passe pas";
-
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le ping vers : <<" + tache.getNom() + ">> ne passe pas";
+                corpsEmail = "Le Ping vers: \"" + tache.getNom() + "\" ne passe pas";
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_FICHIER_EXISTE:
-                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le fichier <<" + tache.getNom() + ">> n'existe pas";
-                corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'existe pas";
-
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'existe pas";
+                corpsEmail = "Le fichier : \"" + tache.getNom() + "\" n'existe pas";
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_TAILLE_FICHIER:
                 if (codeErreur == -1) {
-                    //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le fichier <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    corpsEmail = "Le fichier : \"" + tache.getNom() + "\" n'est pas valide ou il y'a un problème inconnue";
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 } else if (tache.getSeuilAlerte() < 0) {//cas où on verrifie que le fichier à surveille es toujour plus grand que le seuil
-                    //sujetEmail = "Alerte: le fichier <<" + tache.getNom() + ">> es inférieure à la taille autorisé";
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es inférieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es inférieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
+                    corpsEmail = "Le fichier : \"" + tache.getNom() + "\" est inférieure à la taille autorisé";
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 } else {//cas où on verrifie que le fichier à surveille es toujour plus petit que le seuil
-                    //sujetEmail = "Alerte: le fichier <<" + tache.getNom() + ">> es supérieure à la taille autorisé";
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es supérieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es supérieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
+                    corpsEmail = "Le fichier : \"" + tache.getNom() + "\" est supérieure à la taille autorisé";
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 }
 
                 break;
             case TACHE_DATE_MODIFICATION_DERNIER_FICHIER:
                 if (codeErreur == -1) {
-                    //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") le repertoir <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le repertoir : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le repertoir : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    corpsEmail = "Le répertoire : \"" + tache.getNom() + "\" n'est pas valide ou il y'a un problème inconnu";
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 } else {
-                    //sujetEmail = "Alerte: la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
+                    corpsEmail = "La date de modification du dernier fichier contenue dans le répertoire \"" + tache.getNom() + "\" n'est pas valide";
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 }
-
                 break;
             case TACHE_TELNET:
-                //sujetEmail = "Alerte: (idTache="+tache.getIdTache()+") impossible de contacter: " + tache.getNom();
-                corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le telnet vers : <<" + tache.getNom() + ">> ne passe pas";
-
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le telnet vers : <<" + tache.getNom() + ">> ne passe pas";
+                corpsEmail = "Le Telnet  vers : \"" + tache.getNom() + "\"ne passe pas";
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_UPTIME_MACHINE:
                 if (codeErreur < 0) {
-                    corpsEmailEtSMS = "Sur la machine " + tache.getIdMachine().getAdresseIP() + ", il est impossible de connaitre le nombre de jour depuis le quelle la machine est allumer une exception c'est produit lors de l’exécution de la commande";
+                    //corpsEmailEtSMS = "Sur la machine " + tache.getIdMachine().getAdresseIP() + ", il est impossible de connaitre le nombre de jour depuis le quelle la machine est allumer une exception c'est produit lors de l’exécution de la commande";
+                    corpsEmail = "Impossible de connaitre le nombre de jour depuis le quelle la machine est allumer une exception c'est produit lors de l’exécution de la commande";
                 } else {
-                    corpsEmailEtSMS = "la machine " + tache.getIdMachine().getAdresseIP() + " est alumer depuis " + codeErreur + " jours hors le seuil est de " + tache.getSeuilAlerte();
+                    //corpsEmailEtSMS = "la machine " + tache.getIdMachine().getAdresseIP() + " est alumer depuis " + codeErreur + " jours hors le seuil est de " + tache.getSeuilAlerte();
+                    corpsEmail = "La machine " + tache.getIdMachine().getAdresseIP() + " est alumer depuis " + codeErreur + " jours hors le seuil est de " + tache.getSeuilAlerte();
                 }
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_TEST_LIEN:
                 if (codeErreur == 0) {
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le lien vers : <<" + tache.getNom() + ">> est inaccessible ";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le lien vers : <<" + tache.getNom() + ">> est inaccessible ";
+                    corpsEmail = "Le lien : \"" + tache.getNom() + "\" est inaccessible ";
                 } else {
-                    corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le test du lien : <<" + tache.getNom() + ">> a générer une exception ";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le test du lien : <<" + tache.getNom() + ">> a générer une exception ";
+                    corpsEmail = "Le test du lien : \"" + tache.getNom() + "\" a générer une exception ";
                 }
-                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmailEtSMS);
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             default:
-                corpsEmailEtSMS = tache.getTypeTache() + ": ce type n'es pas reconnue ";
-                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, corpsEmailEtSMS);
-                envoiMessageAlerte(sujetEmail, corpsEmailEtSMS, NIVEAU_ALERTE);
+                corpsEmail = tache.getTypeTache() + ": le message d’alerte de ce type n’a pas encore été défini";
+                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, corpsEmail);
+                envoiMessageAlerte(sujetEmail, corpsEmail, corpsEmail, NIVEAU_ALERTE);
                 return false;
         }
 
         //*************envoie des messages d'alerte*********************
-        envoiMessageAlertePourTache(tache, corpsEmailEtSMS, sujetEmail);
         tache.setStatut(ALERTE);
+        envoiMessageAlertePourTache(tache, corpsEmail, sujetEmail + "\n" + corpsEmail, sujetEmail);
         return true;
 
     }
@@ -572,11 +578,12 @@ public class Bean {
         if (tache == null) {
             return false;
         }
-        String sujetEmail = "Situation OK pour Tache(id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
-        String corpsEmailEtSMS = sujetEmail;
-        Logger.getLogger(Bean.class.getName()).log(Level.INFO, corpsEmailEtSMS);
-        envoiMessageAlertePourTache(tache, corpsEmailEtSMS, sujetEmail);
+       //String sujetEmailEtSMS = "Situation OK pour la tâche(id=" + tache.getIdTache() + "): sur \"" + tache.getIdMachine().getAdresseIP() + "\" de nom \"" + tache.getNom() + "\" de type \"" + tache.getTypeTache() + "\" " + tache.getDescriptionTache();
+        String sujetEmailEtSMS = "Situation OK pour tâche (id=" + tache.getIdTache() + ") de type \"" + tache.getTypeTache() + "\" de nom \"" + tache.getNom() + "\" sur la machine \"" + tache.getIdMachine().getAdresseIP() + "\" : " + tache.getDescriptionTache();
+        String corpsEmail = "Situation OK pour la tâche";
+        Logger.getLogger(Bean.class.getName()).log(Level.INFO, corpsEmail);
         tache.setStatut(START);
+        envoiMessageAlertePourTache(tache, corpsEmail, sujetEmailEtSMS, sujetEmailEtSMS);
         return true;
 
     }
@@ -589,11 +596,11 @@ public class Bean {
      * suivant les caractéristique de la tache pris en paramettre
      *
      * @param tache
-     * @param corpsEmailEtSMS
      * @param sujetEmail
      * @return
      */
-    private boolean envoiMessageAlertePourTache(Tache tache, String corpsEmailEtSMS, String sujetEmail) {
+    @Asynchronous
+    private boolean envoiMessageAlertePourTache(Tache tache, String corpsEmail, String sms, String sujetEmail) {
         Serveur serveur = getServeurOuInitialiseBD();
         if (!serveur.getEnvoialerteSMS() && !serveur.getEnvoieAlerteMail()) {//cas où les msg d'alerte sont désactivé au niveau serveur (à ne pas suprimer)
             Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alerte SMS et MAIL es désactivé au niveau serveur");
@@ -609,7 +616,7 @@ public class Bean {
         boolean traiter = false;
         if (serveur.getEnvoieAlerteMail()) {
             if (tache.getEnvoiyerAlerteMail()) {
-                if (envoieDeMail(getLlisteEmail(tache.getNiveauDAlerte()), corpsEmailEtSMS, sujetEmail)) {
+                if (envoieDeMail(getLlisteEmail(tache.getNiveauDAlerte()), getTabHTML(tache, corpsEmail), sujetEmail)) {
                     traiter = true;
                 }
             } else {
@@ -621,7 +628,7 @@ public class Bean {
 
         if (serveur.getEnvoialerteSMS()) {
             if (tache.getEnvoyerAlerteSms()) {
-                if (envoieSMS(corpsEmailEtSMS, getListNumero(tache.getNiveauDAlerte()))) {
+                if (envoieSMS(sms, getListNumero(tache.getNiveauDAlerte()))) {
                     traiter = true;
                 }
             } else {
@@ -645,11 +652,12 @@ public class Bean {
      * été envoiyé (on retournera "true")
      *
      * @param sujetMail
-     * @param corpsEmailEtSMS
+     * @param corpsEmail
+     * @param sms
      * @param niveauDAlert
      * @return
      */
-    public boolean envoiMessageAlerte(String sujetMail, String corpsEmailEtSMS, int niveauDAlert) {
+    public boolean envoiMessageAlerte(String sujetMail, String corpsEmail, String sms, int niveauDAlert) {
         //envoie de l'alerte aux administrateur (si les mail ou les SMS on pus être envoyer alors le problème à été traité)
         Serveur serveur = getServeurOuInitialiseBD();
         if (!serveur.getEnvoialerteSMS() && !serveur.getEnvoieAlerteMail()) {
@@ -658,13 +666,13 @@ public class Bean {
         }
         boolean envoiMail = false;
         if (serveur.getEnvoieAlerteMail()) {
-            envoiMail = envoieDeMail(getLlisteEmail(niveauDAlert), corpsEmailEtSMS, sujetMail);
+            envoiMail = envoieDeMail(getLlisteEmail(niveauDAlert), corpsEmail, sujetMail);
         } else {
             Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alertes mail es désactivé");
         }
         boolean envoiSMS = false;
         if (serveur.getEnvoialerteSMS()) {
-            envoiSMS = envoieSMS(corpsEmailEtSMS, getListNumero(niveauDAlert));
+            envoiSMS = envoieSMS(sms, getListNumero(niveauDAlert));
         } else {
             Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alertes SMS es désactivé");
         }
@@ -723,18 +731,19 @@ public class Bean {
         String msg;
 
         for (Tache tache : listTacheMachine) {//cette boucle permet de renvoyer les msg d'alerte des taches
-            String sujetEmail = "Rappel Alerte Tache(id=" + tache.getIdTache() + "): sur <<" + tache.getIdMachine().getAdresseIP() + ">> de nom <<" + tache.getNom() + ">> de type <<" + tache.getTypeTache() + ">>";
-            msg = sujetEmail;
+            //String sujetEmailEtSMS = "Rappel Alerte Tache(id=" + tache.getIdTache() + "): sur \"" + tache.getIdMachine().getAdresseIP() + "\" de nom \"" + tache.getNom() + "\" de type \"" + tache.getTypeTache() + "\" "+tache.getDescriptionTache();
+            String sujetEmailEtSMS = "Rappel alerte tâche (id=" + tache.getIdTache() + ") de type \"" + tache.getTypeTache() + "\" de nom \"" + tache.getNom() + "\" sur la machine \"" + tache.getIdMachine().getAdresseIP() + "\" : " + tache.getDescriptionTache();
+            msg = getTabHTML(tache, "Rappel alerte tâche");
             Logger.getLogger(Bean.class.getName()).log(Level.WARNING, msg);
-            envoiMessageAlerte(sujetEmail, msg, machine.getNiveauDAlerte());
+            envoiMessageAlerte(sujetEmailEtSMS, msg, sujetEmailEtSMS, machine.getNiveauDAlerte());
         }
 
         if (listTachePB.isEmpty()) {//cas ou il n'ya pas de pb sur la machine
             Logger.getLogger(Bean.class.getName()).log(Level.INFO, "communication OK avec la machine: adresse=" + machine.getAdresseIP());
         } else {
-            msg = "des JOB on été redémarer sur la machine <<" + machine.getAdresseIP() + ">>";
+            msg = "des JOB on été redémarer sur la machine \"" + machine.getAdresseIP() + "\"";
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, msg);
-            return envoiMessageAlerte("problème très anormal sur" + machine.getAdresseIP(), msg, machine.getNiveauDAlerte());
+            return envoiMessageAlerte("problème très anormal sur" + machine.getAdresseIP(), msg, msg, machine.getNiveauDAlerte());
         }
         return true;
     }
@@ -1249,7 +1258,7 @@ public class Bean {
             }
 
             mailMessage.setRecipients(Message.RecipientType.TO, tabAdresse);
-            mailMessage.setContent(message, "text/plain");
+            mailMessage.setContent(message, "text/html; charset=utf-8");
             mailMessage.setSubject(sujet);
 
             Transport transport = mailSession.getTransport("smtp");
@@ -1563,13 +1572,15 @@ public class Bean {
         }
         return ws.testTache(tache.getIdTache());
     }
-    
+
     /**
-     * cette fonction permet de tester la communication avec un agent. il permet aussi de connaitre la version de l'agents
+     * cette fonction permet de tester la communication avec un agent. il permet
+     * aussi de connaitre la version de l'agents
+     *
      * @param machine
-     * @return 
+     * @return
      */
-    public String testAgent(Machine machine){
+    public String testAgent(Machine machine) {
         WSClientMonitoring ws = appelWSMachineClient(machine.getAdresseIP(), machine.getPortEcoute());
         if (ws == null) {
             return null;
@@ -1605,4 +1616,45 @@ public class Bean {
         }
     }
 
+    /**
+     * cette fonction retourne un table HTML qui represente une tâche
+     *
+     * @param tache
+     * @param msg
+     * @return
+     */
+    private String getTabHTML(Tache tache, String msg) {
+        if (tache == null) {
+            return null;
+        }
+        return "<TABLE BORDER CELLPADDING=10 CELLSPACING=0>"
+                + "	<TR>"
+                + "		<TD>Message</TD> <TD>" + msg + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>Machine hôte</TD> <TD>" + tache.getIdMachine().getAdresseIP() + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>Type</TD> <TD>" + tache.getTypeTache() + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>Nom</TD> <TD>" + tache.getNom() + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>Date</TD> <TD>" + new Date() + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>Description</TD> <TD>" + tache.getDescriptionTache() + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>Statut</TD> <TD>" + tache.getStatut() + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>Seuil</TD> <TD>" + tache.getSeuilAlerte() + "</TD> "
+                + "	</TR>"
+                + "	<TR>"
+                + "		<TD>ID</TD> <TD>" + tache.getIdTache() + "</TD> "
+                + "	</TR>"
+                + "</TABLE>";
+    }
 }

@@ -44,16 +44,16 @@ public class BeanInitialisation {
     //@Schedule(second = "0", minute = "*", hour = "*")
     public void verifieEtUpdateAgent() {
         String sujet, msg;
-        System.out.println("verrification du fonctionnement des agents: " + new Date());
+        System.out.println("verrification du fonctionnement des agents: ");
         List<Machine> listMAchineAvecStatut = bean.getAllMachineAvecBonStatut();
         for (Machine machine : listMAchineAvecStatut) {
             Machine machineBD = bean.getMachineByIP(machine.getAdresseIP());//on recupére la machine réel en BD avec le statut
             if (machineBD.getStatut().equals(Bean.ALERTE)) {//on verrifie si on avait déja envoyer cette alerte
                 if (machine.getStatut().equals(Bean.START)) {//la machine es de nouveau accessible
-                    sujet = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible";
-                    msg = sujet;
+                    sujet = "La machine : <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
+                    msg = sujet +" ("+new Date()+")" ;
                     Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
-                    if (bean.envoiMessageAlerte(sujet, msg, machine.getNiveauDAlerte())) {//on envoie le msg 
+                    if (bean.envoiMessageAlerte(sujet, msg,msg, machine.getNiveauDAlerte())) {//on envoie le msg 
                         machine.setStatut(Bean.START);
                         bean.updateMachie(machine);
                     }
@@ -62,13 +62,13 @@ public class BeanInitialisation {
                     Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le message d'alerte à déja été envoyé pour la machine: <<" + machine.getAdresseIP() + ">>");
                 }
             } else if (machine.getStatut().equals(Bean.START) || machine.getStatut().equals(Bean.STOP)) {
-                Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le statut de: <<" + machine.getAdresseIP() + ">> es OK. statut= " + machine.getStatut());
+                Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le statut de: <<" + machine.getAdresseIP() + ">> es OK. STATUT= " + machine.getStatut());
             } else {//le statut es imppossible de joindre l'agent ou machine inaccessible
                 //l'alerte n'avait pas encore été envoyer on le fait donc
-                sujet = "Alerte machine: <<" + machine.getAdresseIP() + ">> statut = " + machine.getStatut();
-                msg = "le statut de: <<" + machine.getAdresseIP() + ">> n'es pas bon!!!. statut= " + machine.getStatut();
+                sujet = "Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + machine.getStatut();
+                msg = "le statut de: <<" + machine.getAdresseIP() + ">> n'est pas bon!!!. STATUT= " + machine.getStatut()+" ("+new Date()+")";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.SEVERE, msg);
-                if (bean.envoiMessageAlerte(sujet, msg, machine.getNiveauDAlerte())) {//on envoie le msg d'alerte et on met le statut à alerte
+                if (bean.envoiMessageAlerte(sujet, msg,msg, machine.getNiveauDAlerte())) {//on envoie le msg d'alerte et on met le statut à alerte
                     machine.setStatut(Bean.ALERTE);
                     bean.updateMachie(machine);
                 }
@@ -85,23 +85,23 @@ public class BeanInitialisation {
     @Schedule(hour = "7,12,16,21", dayOfWeek = "Mon-Sat" )//cette tache vas s'exécuté de lundi à samedi à 7,12,16 et 21 heure
     //@Schedule(second = "30", minute = "*", hour = "*")
     public void renvoiAlerteMachineEtUpdateMachine() {
-        System.out.println("renvoie des alertes machine ou met à jour les alertes machines " + new Date());
+        System.out.println("renvoie des alertes machine ou met à jour les alertes machines ");
         List<Machine> listMachineAlerte = bean.getAllMachineByStatut(Bean.ALERTE);
         for (Machine machine : listMachineAlerte) {
             String msg, sujet,
                     statut = bean.testConnectionMachine(machine);
             if (statut.equals(Bean.START)) {//si le statut de la machine à changé
-                sujet = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible";
-                msg = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible";
+                sujet = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
+                msg = sujet +" ("+new Date()+")";
                 machine.setStatut(Bean.START);
                 bean.updateMachie(machine);
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
             } else {//la machine es toujour inaccessible, on revoie le message d'alerte
-                sujet = "Rappel Alerte machine: <<" + machine.getAdresseIP() + ">> statut = " + statut;
-                msg = "La machine: <<" + machine.getAdresseIP() + ">> n'es toujours pas accessible: STATUE= " + statut;
+                sujet = "Rappel Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + statut;
+                msg = "La machine: <<" + machine.getAdresseIP() + ">> n'est toujours pas accessible: STATUT= " + statut+" ("+new Date()+")";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.WARNING, msg);
             }
-            bean.envoiMessageAlerte(sujet, msg, machine.getNiveauDAlerte());
+            bean.envoiMessageAlerte(sujet, msg,sujet, machine.getNiveauDAlerte());
         }
     }
 
@@ -164,7 +164,7 @@ public class BeanInitialisation {
         String periodecheckDateModif = " 35,5 * * * * ?";
         int tailleMaxFichie = 3200;
         int tailleMinFichie = -9409;
-        int seuilDateModif = 360;
+        int seuilDateModif = 720;
         String portEcoute = "9039";
         String periodecheckUptime = " 35 * * * * ?";
         int SEUIL_ALERT_UPTIME = 10;
