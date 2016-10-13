@@ -38,6 +38,9 @@
                                 <p:outputLabel value="Période de vérification :" for="periodeVerrification" />
                                 <p:inputText id="periodeVerrification" value="#{beanModifierTache.tache.periodeVerrification}" title="PeriodeVerrification" required="true" requiredMessage="ce champ doit être non vide"/>
                                 <p:message for="periodeVerrification" />
+                                <p:outputLabel value="Description de la période de vérification:" for="descriptionDeLaPeriode" />
+                                <p:inputTextarea id="descriptionDeLaPeriode" value="#{beanModifierTache.tache.descriptionDeLaPeriode}" title="descriptionDeLaPeriode" />
+                                <p:message for="descriptionDeLaPeriode" />
                                 <p:outputLabel value="Type:" for="typeTache" />
                                 <p:selectOneMenu id="typeTache" value="#{beanModifierTache.tache.typeTache}" title="TypeTache" required="true" >
                                     <f:selectItems value="#{beanVariableGlobal.listTypeTache}"  />

@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tache.findByNom", query = "SELECT t FROM Tache t WHERE t.nom = :nom"),
     @NamedQuery(name = "Tache.findByStatut", query = "SELECT t FROM Tache t WHERE t.statut = :statut"),
     @NamedQuery(name = "Tache.findByPeriodeVerrification", query = "SELECT t FROM Tache t WHERE t.periodeVerrification = :periodeVerrification"),
+    @NamedQuery(name = "Tache.findByDescriptionDeLaPeriode", query = "SELECT t FROM Tache t WHERE t.descriptionDeLaPeriode = :descriptionDeLaPeriode"),
     @NamedQuery(name = "Tache.findByTypeTache", query = "SELECT t FROM Tache t WHERE t.typeTache = :typeTache"),
     @NamedQuery(name = "Tache.findByEnvoiyerAlerteMail", query = "SELECT t FROM Tache t WHERE t.envoiyerAlerteMail = :envoiyerAlerteMail"),
     @NamedQuery(name = "Tache.findByEnvoyerAlerteSms", query = "SELECT t FROM Tache t WHERE t.envoyerAlerteSms = :envoyerAlerteSms"),
@@ -61,6 +62,9 @@ public class Tache implements Serializable {
     @Size(max = 254)
     @Column(name = "periode_verrification")
     private String periodeVerrification;
+    @Size(max = 254)
+    @Column(name = "description_de_la_periode")
+    private String descriptionDeLaPeriode;
     @Size(max = 254)
     @Column(name = "type_tache")
     private String typeTache;
@@ -130,6 +134,14 @@ public class Tache implements Serializable {
 
     public void setPeriodeVerrification(String periodeVerrification) {
         this.periodeVerrification = periodeVerrification;
+    }
+
+    public String getDescriptionDeLaPeriode() {
+        return descriptionDeLaPeriode;
+    }
+
+    public void setDescriptionDeLaPeriode(String descriptionDeLaPeriode) {
+        this.descriptionDeLaPeriode = descriptionDeLaPeriode;
     }
 
     public String getTypeTache() {

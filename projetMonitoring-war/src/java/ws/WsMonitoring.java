@@ -109,7 +109,7 @@ public class WsMonitoring {
             @WebParam(name = "Port")String port, 
             @WebParam(name = "nonOS") String nonOS, 
             @WebParam(name = "nomMachine") String nomMachine){
-        return bean.creerOuVerifiMachine(AdresIP,port, Bean.DEFAUL_PERIODE_CHECK_MACHINE, nonOS, nomMachine);
+        return bean.creerOuVerifiMachine(AdresIP,port, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.DEFAUL_DESCRIPTION_PERIODE_CHECK_MACHINE, nonOS, nomMachine);
     }
     
     @WebMethod

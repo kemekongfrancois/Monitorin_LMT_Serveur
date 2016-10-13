@@ -69,11 +69,11 @@
                                 </f:facet>
                                 <h:outputText title="#{item.nom}" value="#{item.nom}"/>
                             </p:column>
-                            <p:column sortBy="#{item.periodeVerrification}" style="width:80px">
+                            <p:column sortBy="#{item.descriptionDeLaPeriode}" style="width:80px">
                                 <f:facet name="header">
                                     <h:outputText value="Périodicité"/>
                                 </f:facet>
-                                <h:outputText title="#{item.periodeVerrification}" value="#{item.periodeVerrification}"/>
+                                <h:outputText title="#{item.descriptionDeLaPeriode}" value="#{item.descriptionDeLaPeriode}"/>
                             </p:column>
                             <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}" style="width:100px">
                                 <f:facet name="header">

@@ -42,6 +42,9 @@
                                 <p:outputLabel value="Periode de vérification:" for="periodeDeCheck" />
                                 <p:inputText id="periodeDeCheck" value="#{beanModifierMachine.machine.periodeDeCheck}" title="PeriodeDeCheck" required="true" requiredMessage="ce champ doit être non vide" />
                                 <p:message for="periodeDeCheck" />
+                                <p:outputLabel value="Description de la periode de vérification:" for="descriptionDeLaPeriode" />
+                                <p:inputTextarea id="descriptionDeLaPeriode" value="#{beanModifierMachine.machine.descriptionDeLaPeriode}" title="DescriptionDeLaPeriode"  />
+                                <p:message for="descriptionDeLaPeriode" />
                                 <p:outputLabel value="Statut:" for="statut" />
                                 <p:selectOneMenu id="statut" value="#{beanModifierMachine.machine.statut}" required="true" >
                                     <f:selectItems value="#{beanVariableGlobal.listTypeStatut}"  />

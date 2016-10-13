@@ -71,11 +71,11 @@
                                 </f:facet>
                                 <h:outputText value="#{item.typeOS}"/>
                             </p:column>
-                            <p:column sortBy="#{item.periodeDeCheck}">
+                            <p:column sortBy="#{item.descriptionDeLaPeriode}">
                                 <f:facet name="header">
                                     <h:outputText value="Periode" title="Période de vérification du bon fonctionnement des taches et la période de rappel des alertes"/>
                                 </f:facet>
-                                <h:outputText value="#{item.periodeDeCheck}"/>
+                                <h:outputText value="#{item.descriptionDeLaPeriode}"/>
                             </p:column>
                             <p:column sortBy="#{item.statut}" filterBy="#{item.statut}" >
                                 <f:facet name="header">

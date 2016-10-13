@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Machine.findByNomMachine", query = "SELECT m FROM Machine m WHERE m.nomMachine = :nomMachine"),
     @NamedQuery(name = "Machine.findByTypeOS", query = "SELECT m FROM Machine m WHERE m.typeOS = :typeOS"),
     @NamedQuery(name = "Machine.findByPeriodeDeCheck", query = "SELECT m FROM Machine m WHERE m.periodeDeCheck = :periodeDeCheck"),
+    @NamedQuery(name = "Machine.findByDescriptionDeLaPeriode", query = "SELECT m FROM Machine m WHERE m.descriptionDeLaPeriode = :descriptionDeLaPeriode"),
     @NamedQuery(name = "Machine.findByStatut", query = "SELECT m FROM Machine m WHERE m.statut = :statut"),
     @NamedQuery(name = "Machine.findByNiveauDAlerte", query = "SELECT m FROM Machine m WHERE m.niveauDAlerte = :niveauDAlerte")})
 public class Machine implements Serializable {
@@ -64,6 +65,9 @@ public class Machine implements Serializable {
     @Size(max = 254)
     @Column(name = "periode_de_check")
     private String periodeDeCheck;
+    @Size(max = 254)
+    @Column(name = "description_de_la_periode")
+    private String descriptionDeLaPeriode;
     @Size(max = 254)
     @Column(name = "statut")
     private String statut;
@@ -130,6 +134,14 @@ public class Machine implements Serializable {
 
     public void setPeriodeDeCheck(String periodeDeCheck) {
         this.periodeDeCheck = periodeDeCheck;
+    }
+
+    public String getDescriptionDeLaPeriode() {
+        return descriptionDeLaPeriode;
+    }
+
+    public void setDescriptionDeLaPeriode(String descriptionDeLaPeriode) {
+        this.descriptionDeLaPeriode = descriptionDeLaPeriode;
     }
 
     public String getStatut() {
