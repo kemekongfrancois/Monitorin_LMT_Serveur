@@ -111,12 +111,7 @@
                                                 Tâches de la machine: #{beansMachine.machine.adresseIP}
                                             </f:facet>
 
-                                            <p:column>
-                                                <f:facet name="header">
-                                                    <h:outputText value="SeuilAlerte"/>
-                                                </f:facet>
-                                                <h:outputText value="#{item.seuilAlerte}"/>
-                                            </p:column>
+                                            
                                             <p:column>
                                                 <f:facet name="header">
                                                     <h:outputText value="Nom"/>
@@ -124,35 +119,24 @@
                                                 <h:outputText value="#{item.nom}"/>
                                             </p:column>
 
-                                            <p:column>
+                                            <p:column style="width:90px">
                                                 <f:facet name="header">
-                                                    <h:outputText value="PeriodeVerrification"/>
-                                                </f:facet>
-                                                <h:outputText value="#{item.periodeVerrification}"/>
-                                            </p:column>
-                                            <p:column>
-                                                <f:facet name="header">
-                                                    <h:outputText value="TypeTache"/>
+                                                    <h:outputText value="Type"/>
                                                 </f:facet>
                                                 <h:outputText value="#{item.typeTache}"/>
                                             </p:column>
-                                            <p:column>
-                                                <f:facet name="header">
-                                                    <h:outputText value="EnvoiyerAlerteMail"/>
+                                            <p:column style="width:40px">
+                                                <f:facet name="header" >
+                                                    <h:outputText value="Seuil"/>
                                                 </f:facet>
-                                                <h:outputText value="#{item.envoiyerAlerteMail}"/>
+                                                <h:outputText value="#{item.seuilAlerte}"/>
                                             </p:column>
-                                            <p:column>
+                                            
+                                            <p:column style="width:60px">
                                                 <f:facet name="header">
-                                                    <h:outputText value="EnvoyerAlerteSms"/>
+                                                    <h:outputText value="Statut"/>
                                                 </f:facet>
-                                                <h:outputText value="#{item.envoyerAlerteSms}"/>
-                                            </p:column>
-                                            <p:column >
-                                                <f:facet name="header">
-                                                    <h:outputText title="Niveau d'alerte de la tache" value="Niveau"/>
-                                                </f:facet>
-                                                <h:outputText value="#{item.niveauDAlerte}"/>
+                                                <h:outputText value="#{item.statut}"/>
                                             </p:column>
 
                                         </p:dataTable>

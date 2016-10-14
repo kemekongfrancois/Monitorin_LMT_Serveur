@@ -57,7 +57,7 @@
                             <f:facet name="header">
                                 Tâches de la machine: #{beanListeTachesMachine.adresseMachine}
                             </f:facet>
-                            <p:column style="text-align: center; width:130px">
+                            <p:column style="text-align: center; width:110px">
                                 <f:facet name="header">
                                     <h:outputText value="Fonctions"/>
                                 </f:facet>
@@ -81,7 +81,7 @@
                                 </f:facet>
                                 <h:outputText value="#{item.idTache}"/>
                             </p:column>
-                            <p:column sortBy="#{item.statut}" filterBy="#{item.statut}"  style="width:100px">
+                            <p:column sortBy="#{item.statut}" filterBy="#{item.statut}"  style="width:80px">
                                 <f:facet name="header">
                                     <h:outputText value="Statut"/>
                                 </f:facet>
@@ -93,7 +93,7 @@
                                 </f:facet>
                                 <h:outputText title="#{item.nom}" value="#{item.nom}"/>
                             </p:column>
-                            <p:column sortBy="#{item.descriptionDeLaPeriode}" style="width:80px">
+                            <p:column sortBy="#{item.descriptionDeLaPeriode}" style="width:110px">
                                 <f:facet name="header">
                                     <h:outputText value="Périodicité"/>
                                 </f:facet>

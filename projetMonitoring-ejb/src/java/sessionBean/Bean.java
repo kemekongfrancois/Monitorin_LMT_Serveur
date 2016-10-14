@@ -66,12 +66,11 @@ public class Bean {
     public static final String TYPE_COMPTE_SUPADMIN = "supAdmin";
     public static final String TYPE_COMPTE_ADMIN = "admin";
     public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 0 7,10,13,16,21 ? * MON-SAT";//represente la valeur par defaut de la période de check des machines 
-    public static final String DEFAUL_DESCRIPTION_PERIODE_CHECK_MACHINE = "De Lun-Dim: 7H, 10H, 13H, 16H et 21H";
+    public static final String DEFAUL_DESCRIPTION_PERIODE_CHECK_MACHINE = "De Lun-Sam: 7H, 10H, 13H, 16H et 21H";
     public static final int NB_TENTATIVE_PING_LOCAL = 2;
     public static final int TEMP_ATTENT_TELNET_SECOND = 5;//le temps es en secomde
     public static final int NIVEAU_ALERTE = 2;
-    public static final String ADRESSE_PING_TEST_CONNECTION_INTERNET = "8.8.8.8";
-    public static final int NB_TENTATIVE_TEST_CONNECTION_INTERNET = 40;
+    
 
     public static final String TACHE_EXISTE_DEJA = "cette tache existe deja sur cette machine";
     public static final String TACHE_INEXISTANTE = "cette tache n'existe pas";
@@ -465,7 +464,7 @@ public class Bean {
      *
      * @return
      */
-    private List<String> getAllListNumero() {
+    public List<String> getAllListNumero() {
         List<String> listeNumero = new ArrayList<>();
         //listeNumero.add("237699667694");
         //listeNumero.add("237675954517");
@@ -1269,26 +1268,7 @@ public class Bean {
      * @param sujet
      */
     private boolean envoieDeMail(List<String> listAdresseDestinataires, String message, String sujet) {
-        //getAllListNumero();
-        //getAllLlisteEmail();
-        //on verrifie que la connection internet passe
-        if (pinger(ADRESSE_PING_TEST_CONNECTION_INTERNET, NB_TENTATIVE_TEST_CONNECTION_INTERNET)) {//la connection passe
-            BeanInitialisation.SMS_ENVOYER = false;//on met à jour la variable pour dire que la connection passe
-        } else {//la connection ne passe pas
-            if (BeanInitialisation.SMS_ENVOYER) {//on a déja envoyer le sms d'alerte
-                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "La connexion internet ne passe pas : le sms d’alerte a déjà été envoyer ");
-            } else//on n'a pas encore envoyer le msg d'alerte
-            {
-                if (envoieSMS("La connexion internet ne passe pas (" + new Date() + ")", getAllListNumero(), false)) {//le sms d'alerte à été envoyer
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas : le sms d’alerte vient d’être envoyé");
-                    BeanInitialisation.SMS_ENVOYER = true;
-                } else {//le sms d'alerte n'a pas pus être envoyer
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas : le sms d’alerte n’a pas pu être envoyer ");
-                }
-            }
-            return false;//on n'enoie pas de mail 
-        }
-
+        
         try {
             Serveur serveur = getServeurOuInitialiseBD();
             String adresseEmetteur = serveur.getEmailEnvoiMail();
@@ -1344,7 +1324,7 @@ public class Bean {
      * le sms n'a pas pus être envoyé
      * @return
      */
-    private boolean envoieSMS(String message, List<String> destinataires, boolean envoiMailPB) {
+    public boolean envoieSMS(String message, List<String> destinataires, boolean envoiMailPB) {
         Serveur serveur = getServeurOuInitialiseBD();
         String userLogoin = serveur.getLogingSMS();
         String userpassword = serveur.getMotdepasseSMS();
@@ -1362,7 +1342,7 @@ public class Bean {
                     msgAlerte = " Une exception s'est produite dans le systeme lors de l'envoie des SMS";
                     break;
                 case 100:
-                    msgAlerte = " pas assez de credit SMS ";
+                    msgAlerte = "Pas assez de crédit SMS";
                     break;
                 case 404:
                     msgAlerte = " login ou mot de passe LMT non valide";
@@ -1375,7 +1355,7 @@ public class Bean {
 
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, msgAlerte);
             if (envoiMailPB) {
-                envoieDeMail(getAllLlisteEmail(), msgAlerte, "echec lors de l'envoie des SMS");//on envoi une alerte mail pour dire que l'envoi de SMS n'es pas possible
+                envoieDeMail(getAllLlisteEmail(), msgAlerte, "Échec lors de l'envoie");//on envoi une alerte mail pour dire que l'envoi de SMS n'es pas possible
             }
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
@@ -1452,10 +1432,10 @@ public class Bean {
      * @param nbTentative represente le nb de fois qu'on vas faire le ping
      * @return
      */
-    private boolean pinger(String adres, int nbTentative) {
+    public boolean pinger(String adres, int nbTentative) {
         System.out.println("ping à l'adresse " + adres);
         int i = 0;
-        boolean pingOK = false;
+        //boolean pingOK = false;
         do {
             // System.out.println(i + ": ping à l'adresse " + adres);
             char param;
@@ -1471,15 +1451,14 @@ public class Bean {
             }
             for (String ligne : resultat) {
                 if (ligne.contains("ttl=") || ligne.contains("TTL=")) {
-                    pingOK = true;
-                    break;
+                    return true;
                 }
             }
             i++;
             System.out.println(i + "- tentative ping à l'adresse " + adres);
-        } while (i < nbTentative && !pingOK);
+        } while (i < nbTentative );
         //System.out.println("le nombre es: " + valeurDeRetour);
-        return pingOK;
+        return false;
 
     }
 

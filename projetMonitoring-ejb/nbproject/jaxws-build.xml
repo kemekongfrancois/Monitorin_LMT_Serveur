@@ -24,23 +24,6 @@
             <classpath path="${j2ee.platform.wsimport.classpath}"/>
         </taskdef>
     </target>
-    <target name="wsimport-client-ServiceSMS" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
-        <property name="wsdl-ServiceSMS" location="${meta.inf}/xml-resources/web-service-references/ServiceSMS/wsdl/lmtgoldsms.dyndns.org_8282/Managesms-war/ServiceSMS.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ServiceSMS" destdir="${build.generated.dir}/jax-wsCache/ServiceSMS" wsdl="${wsdl-ServiceSMS}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://lmtgoldsms.dyndns.org:8282/Managesms-war/ServiceSMS?WSDL" xnocompile="true" xendorsed="true" package="ws_SMS_LMT">
-            <depends file="${wsdl-ServiceSMS}"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
-        </wsimport>
-        <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/ServiceSMS">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="wsimport-client-clean-ServiceSMS" depends="-init-project">
-        <delete dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
-        <delete dir="${build.generated.sources.dir}/jax-ws/ws_SMS_LMT"/>
-    </target>
     <target name="wsimport-client-WSClientMonitoring" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
         <property name="wsdl-WSClientMonitoring" location="${meta.inf}/xml-resources/web-service-references/WSClientMonitoring/wsdl/192.168.100.182_9039/WSClientMonitoring.wsdl"/>
@@ -58,5 +41,22 @@
         <delete dir="${build.generated.dir}/jax-wsCache/WSClientMonitoring"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/wsClient"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-ServiceSMS, wsimport-client-WSClientMonitoring"/>
+    <target name="wsimport-client-ServiceSMS" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
+        <property name="wsdl-ServiceSMS" location="${meta.inf}/xml-resources/web-service-references/ServiceSMS/wsdl/192.168.200.150_8282/Managesms-war/ServiceSMS.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ServiceSMS" destdir="${build.generated.dir}/jax-wsCache/ServiceSMS" wsdl="${wsdl-ServiceSMS}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://192.168.200.150:8282/Managesms-war/ServiceSMS?WSDL" xnocompile="true" xendorsed="true" package="ws_SMS_LMT">
+            <depends file="${wsdl-ServiceSMS}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ServiceSMS">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ServiceSMS" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws_SMS_LMT"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-WSClientMonitoring, wsimport-client-ServiceSMS"/>
 </project>

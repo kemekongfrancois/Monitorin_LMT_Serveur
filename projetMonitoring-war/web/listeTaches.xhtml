@@ -46,7 +46,7 @@
                                 <h:outputText value="#{item.idTache}"/>
                             </p:column>
 
-                            <p:column style="width:130px" sortBy="#{item.idMachine.adresseIP}" filterBy="#{item.idMachine.adresseIP}" >
+                            <p:column style="width:100px" sortBy="#{item.idMachine.adresseIP}" filterBy="#{item.idMachine.adresseIP}" >
                                 <f:facet name="header">
                                     <h:outputText value="IP machine"/>
                                 </f:facet>
@@ -54,28 +54,25 @@
 
                                 <h:outputText title="#{item.idMachine.adresseIP}" value="#{item.idMachine.adresseIP} "/>
                             </p:column>
-
-
-
-                            <p:column sortBy="#{item.statut}" filterBy="#{item.statut}"  style="width:100px">
+                            <p:column sortBy="#{item.statut}" filterBy="#{item.statut}"  style="width:80px">
                                 <f:facet name="header">
                                     <h:outputText value="Statut"/>
                                 </f:facet>
                                 <h:outputText title="#{item.statut}" value="#{item.statut}" style="font-weight:bold;color: #{beanVariableGlobal.couleurStatut(item.statut)}"/>
                             </p:column>
-                            <p:column sortBy="#{item.nom}" filterBy="#{item.nom}" style="width:100px">
+                            <p:column sortBy="#{item.nom}" filterBy="#{item.nom}" style="width:130px">
                                 <f:facet name="header">
                                     <h:outputText value="Nom"/>
                                 </f:facet>
                                 <h:outputText title="#{item.nom}" value="#{item.nom}"/>
                             </p:column>
-                            <p:column sortBy="#{item.descriptionDeLaPeriode}" style="width:80px">
+                            <p:column sortBy="#{item.descriptionDeLaPeriode}" style="width:110px">
                                 <f:facet name="header">
                                     <h:outputText value="Périodicité"/>
                                 </f:facet>
                                 <h:outputText title="#{item.descriptionDeLaPeriode}" value="#{item.descriptionDeLaPeriode}"/>
                             </p:column>
-                            <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}" style="width:100px">
+                            <p:column sortBy="#{item.typeTache}" filterBy="#{item.typeTache}" style="width:85px">
                                 <f:facet name="header">
                                     <h:outputText value="Type"/>
                                 </f:facet>

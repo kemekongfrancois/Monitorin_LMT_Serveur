@@ -2,42 +2,6 @@
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
   <services/>
   <clients>
-    <client name="ServiceSMS">
-      <wsdl-url>http://lmtgoldsms.dyndns.org:8282/Managesms-war/ServiceSMS?WSDL</wsdl-url>
-      <local-wsdl-file>lmtgoldsms.dyndns.org_8282/Managesms-war/ServiceSMS.wsdl</local-wsdl-file>
-      <package-name forceReplace="true">ws_SMS_LMT</package-name>
-      <catalog-file>catalog.xml</catalog-file>
-      <wsimport-options>
-        <wsimport-option>
-          <wsimport-option-name>extension</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>verbose</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>fork</wsimport-option-name>
-          <wsimport-option-value>false</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://lmtgoldsms.dyndns.org:8282/Managesms-war/ServiceSMS?WSDL</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>xnocompile</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>xendorsed</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>package</wsimport-option-name>
-          <wsimport-option-value>ws_SMS_LMT</wsimport-option-value>
-        </wsimport-option>
-      </wsimport-options>
-    </client>
     <client name="WSClientMonitoring">
       <wsdl-url>http://192.168.100.182:9039/WSClientMonitoring?wsdl</wsdl-url>
       <local-wsdl-file>192.168.100.182_9039/WSClientMonitoring.wsdl</local-wsdl-file>
@@ -71,6 +35,42 @@
         <wsimport-option>
           <wsimport-option-name>package</wsimport-option-name>
           <wsimport-option-value>wsClient</wsimport-option-value>
+        </wsimport-option>
+      </wsimport-options>
+    </client>
+    <client name="ServiceSMS">
+      <wsdl-url>http://192.168.200.150:8282/Managesms-war/ServiceSMS?WSDL</wsdl-url>
+      <local-wsdl-file>192.168.200.150_8282/Managesms-war/ServiceSMS.wsdl</local-wsdl-file>
+      <package-name forceReplace="true">ws_SMS_LMT</package-name>
+      <catalog-file>catalog.xml</catalog-file>
+      <wsimport-options>
+        <wsimport-option>
+          <wsimport-option-name>extension</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>verbose</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>fork</wsimport-option-name>
+          <wsimport-option-value>false</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>wsdlLocation</wsimport-option-name>
+          <wsimport-option-value>http://192.168.200.150:8282/Managesms-war/ServiceSMS?WSDL</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>xnocompile</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>xendorsed</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>package</wsimport-option-name>
+          <wsimport-option-value>ws_SMS_LMT</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>

@@ -36,6 +36,7 @@ public class BeanInitialisation {
     public static List<String> listTypeStatut;
 
     public static boolean SMS_ENVOYER = false;
+    
 
     /**
      * verrifie la disponibilité des agents et met à jour le statu dans le cas
@@ -81,6 +82,38 @@ public class BeanInitialisation {
         }
     }
 
+    @Schedule(minute = "*/14", hour = "*")
+    public void verrifieConnection() throws InterruptedException{
+        //getAllListNumero();
+        //getAllLlisteEmail();
+        //on verrifie que la connection internet passe
+        System.out.println("verrifie la connection internet");
+        boolean connectioOK = false;
+        int i = 0;
+        do{
+            connectioOK = bean.pinger("8.8.8.8", 5);
+            Thread.sleep(10*1000);
+            i++;
+            
+        }while(i<4 && !connectioOK);
+        
+        if (connectioOK) {//la connection passe
+            SMS_ENVOYER = false;//on met à jour la variable pour dire que la connection passe
+        } else {//la connection ne passe pas
+            if (SMS_ENVOYER) {//on a déja envoyer le sms d'alerte
+                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "La connexion internet ne passe pas : le sms d’alerte a déjà été envoyer ");
+            } else//on n'a pas encore envoyer le msg d'alerte
+            {
+                if (bean.envoieSMS("La connexion internet ne passe pas (" + new Date() + ")", bean.getAllListNumero(), false)) {//le sms d'alerte à été envoyer
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas : le sms d’alerte vient d’être envoyé");
+                    SMS_ENVOYER = true;
+                } else {//le sms d'alerte n'a pas pus être envoyer
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas : le sms d’alerte n’a pas pu être envoyer ");
+                }
+            }
+        }
+
+    }
     /**
      * renvoie les alertes des machine et met à jour le statu dans le cas où la
      * machine es de nouveau accessible
@@ -179,7 +212,7 @@ public class BeanInitialisation {
 
         resultat += "\ncreation de la machine :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.DEFAUL_DESCRIPTION_PERIODE_CHECK_MACHINE, Bean.OSWINDOWS, "KEF", niveauAlerte);
 
-        resultat += "\ncreation de la tache DD :-> " + bean.creerTacheSurveilleDD(adresse, periodecheck, descriptionPeriod, "c:", SEUIL_ALERT_DD, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
+        resultat += "\ncreation de la tache DD :-> " + bean.creerTacheSurveilleDD(adresse, periodecheck, descriptionPeriod, "c:", SEUIL_ALERT_DD, Bean.START, alerteMail, alerteSMS, "Vérifie la partition C :", niveauAlerte);
         resultat += "\ncreation de la tache redémarrage :-> " + bean.creerTacheUptimeMachine(adresse, periodecheck, "Une fois par jour", SEUIL_ALERT_UPTIME, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, periodecheck, descriptionPeriod, "vlc.exe", attenteEtRepetitionProcessus, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
         resultat += "\ncreation de la tache Service :-> " + bean.creerTacheSurveilleService(adresse, periodecheck, descriptionPeriod, "Connectify", Bean.START, true, alerteMail, alerteSMS, "", niveauAlerte);

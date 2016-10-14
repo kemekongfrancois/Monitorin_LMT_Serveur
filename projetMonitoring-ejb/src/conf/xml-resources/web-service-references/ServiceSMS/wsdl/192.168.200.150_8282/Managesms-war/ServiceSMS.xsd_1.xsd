@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.1.1-b09 (branches/2.1-6834; 2011-07-16T17:14:48+0000) JAXWS-RI/2.2.5-promoted-b04 JAXWS/2.2. --><xs:schema xmlns:tns="http://service.managesms.nexxys.com/" xmlns:ns1="http://jaxb.dev.java.net/array" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://service.managesms.nexxys.com/">
+
+<xs:import namespace="http://jaxb.dev.java.net/array" schemaLocation="http://192.168.200.150:8282/Managesms-war/ServiceSMS?xsd=2"/>
+
+<xs:element name="changePassword" type="tns:changePassword"/>
+
+<xs:element name="changePasswordResponse" type="tns:changePasswordResponse"/>
+
+<xs:element name="consulterSolde" type="tns:consulterSolde"/>
+
+<xs:element name="consulterSoldeResponse" type="tns:consulterSoldeResponse"/>
+
+<xs:element name="crypter" type="tns:crypter"/>
+
+<xs:element name="crypterResponse" type="tns:crypterResponse"/>
+
+<xs:element name="emailValidator" type="tns:emailValidator"/>
+
+<xs:element name="emailValidatorResponse" type="tns:emailValidatorResponse"/>
+
+<xs:element name="envoyerSMS" type="tns:envoyerSMS"/>
+
+<xs:element name="envoyerSMSAFB" type="tns:envoyerSMSAFB"/>
+
+<xs:element name="envoyerSMSAFBResponse" type="tns:envoyerSMSAFBResponse"/>
+
+<xs:element name="envoyerSMSNew" type="tns:envoyerSMSNew"/>
+
+<xs:element name="envoyerSMSNewResponse" type="tns:envoyerSMSNewResponse"/>
+
+<xs:element name="envoyerSMSResponse" type="tns:envoyerSMSResponse"/>
+
+<xs:element name="envoyerSMSURL" type="tns:envoyerSMSURL"/>
+
+<xs:element name="envoyerSMSURLResponse" type="tns:envoyerSMSURLResponse"/>
+
+<xs:element name="formatTel" type="tns:formatTel"/>
+
+<xs:element name="formatTelResponse" type="tns:formatTelResponse"/>
+
+<xs:element name="genererPWD" type="tns:genererPWD"/>
+
+<xs:element name="genererPWDResponse" type="tns:genererPWDResponse"/>
+
+<xs:element name="listContactsUser" type="tns:listContactsUser"/>
+
+<xs:element name="listContactsUserResponse" type="tns:listContactsUserResponse"/>
+
+<xs:element name="phoneValidator" type="tns:phoneValidator"/>
+
+<xs:element name="phoneValidatorResponse" type="tns:phoneValidatorResponse"/>
+
+<xs:complexType name="envoyerSMSNew">
+<xs:sequence>
+<xs:element name="userLogoin" type="xs:string" minOccurs="0"/>
+<xs:element name="userpassword" type="xs:string" minOccurs="0"/>
+<xs:element name="destinataires" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="messages" type="xs:string" minOccurs="0"/>
+<xs:element name="numeroCourt" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="envoyerSMSNewResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="envoyerSMS">
+<xs:sequence>
+<xs:element name="userLogoin" type="xs:string" minOccurs="0"/>
+<xs:element name="userpassword" type="xs:string" minOccurs="0"/>
+<xs:element name="destinataires" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="messages" type="xs:string" minOccurs="0"/>
+<xs:element name="numeroCourt" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="envoyerSMSResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="crypter">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="crypterResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:base64Binary" nillable="true" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="formatTel">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="formatTelResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="phoneValidator">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="phoneValidatorResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="genererPWD">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="genererPWDResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listContactsUser">
+<xs:sequence>
+<xs:element name="userLogoin" type="xs:string" minOccurs="0"/>
+<xs:element name="userpassword" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listContactsUserResponse">
+<xs:sequence>
+<xs:element name="return" type="ns1:stringArray" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="envoyerSMSAFB">
+<xs:sequence>
+<xs:element name="userLogoin" type="xs:string" minOccurs="0"/>
+<xs:element name="userpassword" type="xs:string" minOccurs="0"/>
+<xs:element name="destinataires" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="messages" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="numeroCourt" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="envoyerSMSAFBResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="consulterSolde">
+<xs:sequence>
+<xs:element name="userLogin" type="xs:string" minOccurs="0"/>
+<xs:element name="userpassword" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="consulterSoldeResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="emailValidator">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="emailValidatorResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="changePassword">
+<xs:sequence>
+<xs:element name="userLogin" type="xs:string" minOccurs="0"/>
+<xs:element name="userpassword" type="xs:string" minOccurs="0"/>
+<xs:element name="newpassword" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="changePasswordResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="envoyerSMSURL">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+<xs:element name="arg2" type="xs:string" minOccurs="0"/>
+<xs:element name="arg3" type="xs:string" minOccurs="0"/>
+<xs:element name="arg4" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="envoyerSMSURLResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
