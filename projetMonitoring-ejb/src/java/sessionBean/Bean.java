@@ -68,7 +68,7 @@ public class Bean {
     public static final String DEFAUL_PERIODE_CHECK_MACHINE = "0 0 7,10,13,16,21 ? * MON-SAT";//represente la valeur par defaut de la période de check des machines 
     public static final String DEFAUL_DESCRIPTION_PERIODE_CHECK_MACHINE = "De Lun-Sam: 7H, 10H, 13H, 16H et 21H";
     public static final int NB_TENTATIVE_PING_LOCAL = 2;
-    public static final int TEMP_ATTENT_TELNET_SECOND = 5;//le temps es en secomde
+    public static final int TEMP_ATTENT_TELNET_SECOND = 5;//le temps est en secomde
     public static final int NIVEAU_ALERTE = 2;
     
 
@@ -79,9 +79,10 @@ public class Bean {
     public static final String ECHEC_ECRITURE_BD = "enregistrement dans la BD impossible";
     public static final String ADRESSE_UTILISE = "adresse ip utilise";
     public static final String NUMERO_COUR_INVALIDE = "senderID invalide";
-    public static final String INFO_DEJA_EXISTANT_EN_BD = "le login ou la boite mail ou le numero de téléphone es déja utilisé";
+    public static final String INFO_DEJA_EXISTANT_EN_BD = "le login ou la boite mail ou le numero de téléphone est déjà utilisé";
     public static final String ADREESSE_TELNET_INVALIDE = "Adresse Telnet invalide. l’adresse et le port doivent être séparer par un double point (:)";
-
+    public static final String AdresseDuServerEtPort = "192.168.100.81:8080";
+    
     public static final String ERREUR_PARTITION_DD = "Il n’existe pas de partition de ce type sur la machine";
     public String OS_MACHINE;
     //public static final String expresRegulierNumeroTel = "(\\+?237)?\\d{9}";
@@ -126,12 +127,12 @@ public class Bean {
      * @param periodeCheck
      * @param nonOS
      * @param nomMachine
-     * @return null si ladresse ip es déja donnée à une machine
+     * @return null si ladresse ip est déjà donnée à une machine
      */
     public String creerMachine(String AdresIP, String port, String periodeCheck, String descriptionPeriode, String nonOS, String nomMachine, int niveauDAlerte) {
         Machine machine = getMachineByIP(AdresIP);
-        if (machine != null) {//l'adresse ip es déja utilisé
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, AdresIP + ": cette adresse es déja utilisé");
+        if (machine != null) {//l'adresse ip est déjà utilisé
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, AdresIP + ": cette adresse est déjà utilisé");
             return ADRESSE_UTILISE;
         }
         machine = new Machine();
@@ -221,8 +222,8 @@ public class Bean {
             String adressIpMachineCourante = machine.getAdresseIP();
             Machine machinePrecedente = getMachineByIP(adressIpMachineCourante);
             if (machinePrecedente != null) {
-                if (machinePrecedente.getIdMachine() != machine.getIdMachine()) {//l'adresse ip es déja utilisé sur une autre machine
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, adressIpMachineCourante + ": cette adresse es déja utilisé");
+                if (machinePrecedente.getIdMachine() != machine.getIdMachine()) {//l'adresse ip est déjà utilisé sur une autre machine
+                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, adressIpMachineCourante + ": cette adresse est déjà utilisé");
                     return ADRESSE_UTILISE;
                 }
             }
@@ -259,7 +260,7 @@ public class Bean {
     }
 
     /**
-     * retournne toute les machines donc le statut es passé en paramettre
+     * retournne toute les machines donc le statut est passé en paramettre
      *
      * @param statut
      * @return
@@ -271,7 +272,7 @@ public class Bean {
     }
 
     /**
-     * cette fonction verifi si la machine (donc l'adresse es pris en
+     * cette fonction verifi si la machine (donc l'adresse est pris en
      * paramettre) possède une tache avec le nom et le type pris en paramettre
      *
      * @param adresIpMachine
@@ -350,7 +351,7 @@ public class Bean {
 
     /**
      * cette fonction retourne la liste des adresse mail des utilisateur donc
-     * leur niveau d'alerte es inférieur ou égal à la valeur pris en paramettre
+     * leur niveau d'alerte est inférieur ou égal à la valeur pris en paramettre
      *
      * @param niveauDAlerte
      * @return
@@ -440,7 +441,7 @@ public class Bean {
 
     /**
      * cette fonction retourne la liste des numéros des utilisateur donc leur
-     * niveau d'alerte es inférieur ou égal à la valeur pris en paramettre
+     * niveau d'alerte est inférieur ou égal à la valeur pris en paramettre
      *
      * @param niveauDAlerte
      * @return
@@ -494,17 +495,17 @@ public class Bean {
                     //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " La lettre de partition ne correspond à aucune partition ou elle est invalide : <<" + tache.getNom() + " >>";
                     corpsEmail = "La lettre de partition ne correspond à aucune partition ou elle est invalide: \"" + tache.getNom() + " \"";
                 } else {
-                    //corpsEmailEtSMS = " espace restant du disque <<" + tache.getNom() + ">>" + "de la machine<<" + tache.getIdMachine().getAdresseIP() + ">> es faible ";
-                    corpsEmail = "Espace restant du disque \"" + tache.getNom() + "\" es faible ";
+                    //corpsEmailEtSMS = " espace restant du disque <<" + tache.getNom() + ">>" + "de la machine<<" + tache.getIdMachine().getAdresseIP() + ">> est faible ";
+                    corpsEmail = "Espace restant du disque \"" + tache.getNom() + "\" est faible ";
                 }
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 break;
             case TACHE_PROCESSUS:
                 if (codeErreur == 0) {
-                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> es arreté";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> est arreté";
                     corpsEmail = "Le processus : \"" + tache.getNom() + " \" est arrêté";
-                } else {//cas où la valeur es 1: il ya un pb
-                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> n'es pas reconnue";
+                } else {//cas où la valeur est 1: il ya un pb
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le processus : <<" + tache.getNom() + " >> n'est pas reconnue";
                     corpsEmail = "Le processus : \"" + tache.getNom() + " \" n’est pas reconnue ou il a généré une exception";
                 }
                 Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
@@ -512,7 +513,7 @@ public class Bean {
             case TACHE_SERVICE:
                 switch (codeErreur) {
                     case 0:
-                        //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + ">> es arreté";
+                        //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + ">> est arreté";
                         corpsEmail = "Le service : \"" + tache.getNom() + "\" est arrêté";
                         break;
                     case -1:
@@ -520,7 +521,7 @@ public class Bean {
                         corpsEmail = "Le service : \"" + tache.getNom() + " \" a été redémarrer par l'agent";
                         break;
                     default:
-                        //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + " >> n'es pas reconnue";
+                        //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le service : <<" + tache.getNom() + " >> n'est pas reconnue";
                         corpsEmail = "Le service : \"" + tache.getNom() + " \" n'est pas reconnue";
                         break;
                 }
@@ -538,15 +539,15 @@ public class Bean {
                 break;
             case TACHE_TAILLE_FICHIER:
                 if (codeErreur == -1) {
-                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> n'est pas valide ou il y'a un problème inconue";
                     corpsEmail = "Le fichier : \"" + tache.getNom() + "\" n'est pas valide ou il y'a un problème inconnue";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
-                } else if (tache.getSeuilAlerte() < 0) {//cas où on verrifie que le fichier à surveille es toujour plus grand que le seuil
-                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es inférieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
+                } else if (tache.getSeuilAlerte() < 0) {//cas où on verrifie que le fichier à surveille est toujour plus grand que le seuil
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> est inférieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
                     corpsEmail = "Le fichier : \"" + tache.getNom() + "\" est inférieure à la taille autorisé";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
-                } else {//cas où on verrifie que le fichier à surveille es toujour plus petit que le seuil
-                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> es supérieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
+                } else {//cas où on verrifie que le fichier à surveille est toujour plus petit que le seuil
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le fichier : <<" + tache.getNom() + ">> est supérieure à la taille autorisé: seuil=" + tache.getSeuilAlerte();
                     corpsEmail = "Le fichier : \"" + tache.getNom() + "\" est supérieure à la taille autorisé";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 }
@@ -554,11 +555,11 @@ public class Bean {
                 break;
             case TACHE_DATE_MODIFICATION_DERNIER_FICHIER:
                 if (codeErreur == -1) {
-                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le repertoir : <<" + tache.getNom() + ">> n'es pas valide ou il y'a un problème inconue";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " le repertoir : <<" + tache.getNom() + ">> n'est pas valide ou il y'a un problème inconue";
                     corpsEmail = "Le répertoire : \"" + tache.getNom() + "\" n'est pas valide ou il y'a un problème inconnu";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 } else {
-                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'es pas valide";
+                    //corpsEmailEtSMS = "sur la machine: " + tache.getIdMachine().getAdresseIP() + " la date de modification du dernier fichier contenue dans le repertoire <<" + tache.getNom() + ">> n'est pas valide";
                     corpsEmail = "La date de modification du dernier fichier contenue dans le répertoire \"" + tache.getNom() + "\" n'est pas valide";
                     Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, corpsEmail);
                 }
@@ -603,9 +604,9 @@ public class Bean {
     }
 
     /**
-     * cette fonction es invoque lorsque une tache qui avais un pb ne l'a plus,
+     * cette fonction est invoque lorsque une tache qui avais un pb ne l'a plus,
      * elle permet d'informer les administrateur qu'un problème précédament
-     * signalé es de nouveau normal
+     * signalé est de nouveau normal
      *
      * @param idTache
      * @return
@@ -640,12 +641,12 @@ public class Bean {
     private boolean envoiMessageAlertePourTache(Tache tache, String corpsEmail, String sms, String sujetEmail) {
         Serveur serveur = getServeurOuInitialiseBD();
         if (!serveur.getEnvoialerteSMS() && !serveur.getEnvoieAlerteMail()) {//cas où les msg d'alerte sont désactivé au niveau serveur (à ne pas suprimer)
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alerte SMS et MAIL es désactivé au niveau serveur");
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alerte SMS et MAIL est désactivé au niveau serveur");
             //tache.setStatut(ALERTE);
             return true;
         }
         if (!tache.getEnvoiyerAlerteMail() && !tache.getEnvoyerAlerteSms()) {//cas où les msg d'alerte sont désactivé au niveau de la tache (à ne pas suprimer)
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alerte SMS et MAIL es désactivé au niveau de la tache");
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alerte SMS et MAIL est désactivé au niveau de la tache");
             //tache.setStatut(ALERTE);
             return true;
         }
@@ -698,20 +699,20 @@ public class Bean {
         //envoie de l'alerte aux administrateur (si les mail ou les SMS on pus être envoyer alors le problème à été traité)
         Serveur serveur = getServeurOuInitialiseBD();
         if (!serveur.getEnvoialerteSMS() && !serveur.getEnvoieAlerteMail()) {
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alerte SMS et MAIL es désactivé");
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alerte SMS et MAIL est désactivé");
             return true;
         }
         boolean envoiMail = false;
         if (serveur.getEnvoieAlerteMail()) {
             envoiMail = envoieDeMail(getLlisteEmail(niveauDAlert), corpsEmail, sujetMail);
         } else {
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alertes mail es désactivé");
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alertes mail est désactivé");
         }
         boolean envoiSMS = false;
         if (serveur.getEnvoialerteSMS()) {
             envoiSMS = envoieSMS(sms, getListNumero(niveauDAlert), true);
         } else {
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alertes SMS es désactivé");
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "l'envoie des alertes SMS est désactivé");
         }
 
         if (envoiMail || envoiSMS) {
@@ -786,7 +787,7 @@ public class Bean {
     }
 
     /**
-     * retourne la liste des tache d'une machine donc l'adresse es prise en
+     * retourne la liste des tache d'une machine donc l'adresse est prise en
      * paramettre
      *
      * @param ipAdresse
@@ -807,7 +808,7 @@ public class Bean {
             Query query = em.createQuery("SELECT t FROM Tache t WHERE t.idMachine = :idMachine", Tache.class);
             query.setParameter("idMachine", machine);
             listTacheMachine = query.getResultList();
-            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la liste des Taches es envoyé à la machine " + ipAdresse + ": nombre de taches =" + listTacheMachine.size());
+            Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la liste des Taches est envoyé à la machine " + ipAdresse + ": nombre de taches =" + listTacheMachine.size());
             return listTacheMachine;
         } else {
             return null;
@@ -838,20 +839,20 @@ public class Bean {
     listTacheMachine = machine.getTacheList();
     
     if (verifiStatutTache) {//si on veux verrifié le statut des taches
-    if (testConnectionMachine(machine).equals(START)) {//la machine es en fonction
+    if (testConnectionMachine(machine).equals(START)) {//la machine est en fonction
     for (Tache tache : listTacheMachine) {
-    if (tache.getStatut().equals(START)) {//on ne fait le traitement que si le statut es START
+    if (tache.getStatut().equals(START)) {//on ne fait le traitement que si le statut est START
     WSClientMonitoring ws = appelWSMachineClient(machine.getAdresseIP(), machine.getPortEcoute());
     if (ws != null) {
     if(!ws.jobExiste(tache.getIdTache()+"", tache.getIdMachine().getAdresseIP())){
-    tache.setStatut(PB);//ceci es un cas anormal car le job n'es pas fonctionnel sur la machine
+    tache.setStatut(PB);//ceci est un cas anormal car le job n'est pas fonctionnel sur la machine
     }
     }
     }
     }
     } else {//le statut de la machine ne permet pas de connaitre celui des taches
     for (Tache tache : listTacheMachine) {
-    if (tache.getStatut().equals(START)) {//on ne fait le traitement que si le statut es START
+    if (tache.getStatut().equals(START)) {//on ne fait le traitement que si le statut est START
     tache.setStatut("inconue");
     }
     }
@@ -859,7 +860,7 @@ public class Bean {
     }
     em.clear();//permet de déconnecter l'entity manager de la BD ainsi les modification apporté au entity ne seront plus enregistré en BD
     
-    Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la liste des Taches es envoyé à la machine" + ipAdresse + ": nombre de taches=" + listTacheMachine.size());
+    Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la liste des Taches est envoyé à la machine" + ipAdresse + ": nombre de taches=" + listTacheMachine.size());
     return listTacheMachine;
     } else {
     return null;
@@ -868,8 +869,8 @@ public class Bean {
      */
     public String creerTacheSurveilleDD(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String lettre_partition, int seuil, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_DD;
-        if (verifiNomTacheSurMachine(adresIpMachine, lettre_partition, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, lettre_partition + ": cette partition es déja surveillé sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, lettre_partition, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, lettre_partition + ": cette partition est déjà surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, lettre_partition, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -878,7 +879,7 @@ public class Bean {
     public String creerTacheUptimeMachine(String adresIpMachine, String periodeVerrification, String descriptionPeriode, int seuil, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String nomUptime = "redémarrage";
         String typeTache = TACHE_UPTIME_MACHINE;
-        if (verifiNomTacheSurMachine(adresIpMachine, nomUptime, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
+        if (verifiNomTacheSurMachine(adresIpMachine, nomUptime, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "la tâche " + nomUptime + " existe déjà sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
@@ -887,8 +888,8 @@ public class Bean {
 
     public String creerTacheSurveilleProcessus(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String nomProcessus, int nbTentative, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_PROCESSUS;
-        if (verifiNomTacheSurMachine(adresIpMachine, nomProcessus, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, nomProcessus + ": ce processus es déja surveillé sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, nomProcessus, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, nomProcessus + ": ce processus est déjà surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, nomProcessus, nbTentative, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -896,8 +897,8 @@ public class Bean {
 
     public String creerTacheSurveilleService(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String nomService, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, boolean redemarer_auto_service, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_SERVICE;
-        if (verifiNomTacheSurMachine(adresIpMachine, nomService, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, nomService + ": ce service es déja surveillé sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, nomService, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, nomService + ": ce service est déjà surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, nomService, 0, statut, envoiyer_alerte_mail, envoyer_alerte_sms, redemarer_auto_service, niveauDAlerte);
@@ -905,8 +906,8 @@ public class Bean {
 
     public String creerTachePing(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String adresseAPinger, int nbTentative, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_PING;
-        if (verifiNomTacheSurMachine(adresIpMachine, adresseAPinger, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le ping vers: " + adresseAPinger + " es déja créer sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, adresseAPinger, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le ping vers: " + adresseAPinger + " est déjà créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, adresseAPinger, nbTentative, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -914,8 +915,8 @@ public class Bean {
 
     public String creerTacheTestLien(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String lien, int nbTentative, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_TEST_LIEN;
-        if (verifiNomTacheSurMachine(adresIpMachine, lien, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le Test du lien : " + lien + " est déja créer sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, lien, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le Test du lien : " + lien + " est déjà créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, lien, nbTentative, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -923,8 +924,8 @@ public class Bean {
 
     public String creerTacheSurveilleFichierExist(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String cheminFIchier, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_FICHIER_EXISTE;
-        if (verifiNomTacheSurMachine(adresIpMachine, cheminFIchier, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminFIchier + ": ce fichier es déja surveillé sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, cheminFIchier, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminFIchier + ": ce fichier est déjà surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, cheminFIchier, 0, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -932,8 +933,8 @@ public class Bean {
 
     public String creerTacheSurveilleTailleFichier(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String cheminFIchier, int seuil, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_TAILLE_FICHIER;
-        if (verifiNomTacheSurMachine(adresIpMachine, cheminFIchier, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminFIchier + ": ce fichier es déja surveillé sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, cheminFIchier, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminFIchier + ": ce fichier est déjà surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, cheminFIchier, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -941,8 +942,8 @@ public class Bean {
 
     public String creerTacheDateModificationDernierFichier(String adresIpMachine, String periodeVerrification, String descriptionPeriode, String cheminRepertoire, int seuil, String statut, boolean envoiyer_alerte_mail, boolean envoyer_alerte_sms, String description_tache, int niveauDAlerte) {
         String typeTache = TACHE_DATE_MODIFICATION_DERNIER_FICHIER;
-        if (verifiNomTacheSurMachine(adresIpMachine, cheminRepertoire, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminRepertoire + ": ce repertoire es déja surveillé sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, cheminRepertoire, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, cheminRepertoire + ": ce repertoire est déjà surveillé sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, cheminRepertoire, seuil, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -955,8 +956,8 @@ public class Bean {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "l'adresse pour le telnet est invalide: " + adresseEtPort + " l'adresse et le port doivent être séparer par un double point (:) ");
             return ADREESSE_TELNET_INVALIDE;
         }
-        if (verifiNomTacheSurMachine(adresIpMachine, adresseEtPort, typeTache)) {//si parmit les tache de la machine il existe déja une taches ayant ce nom on ne créer plus la tache
-            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le telnet vers: " + adresseEtPort + " es déja créer sur la machine: " + adresIpMachine);
+        if (verifiNomTacheSurMachine(adresIpMachine, adresseEtPort, typeTache)) {//si parmit les tache de la machine il existe déjà une taches ayant ce nom on ne créer plus la tache
+            Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "le telnet vers: " + adresseEtPort + " est déjà créer sur la machine: " + adresIpMachine);
             return TACHE_EXISTE_DEJA;
         }
         return creerTache(adresIpMachine, typeTache, description_tache, periodeVerrification, descriptionPeriode, adresseEtPort, nbTentative, statut, envoiyer_alerte_mail, envoyer_alerte_sms, false, niveauDAlerte);
@@ -1055,7 +1056,7 @@ public class Bean {
 
     /**
      * permet de faire le telnet. il sera util pour verrifié que la connection
-     * avec les agent es OK
+     * avec les agent est OK
      *
      * @return
      */
@@ -1123,12 +1124,12 @@ public class Bean {
         }
         String adresse = machine.getAdresseIP();
         String statutMachine = testConnectionMachine(machine);
-        if (!statutMachine.equals(START)) {//si la machine n'es pas en cour de fonctionnement on ne peut pas actualisé une tache deçu
+        if (!statutMachine.equals(START)) {//si la machine n'est pas en cours de fonctionnement on ne peut pas actualisé une tache deçu
             return false;
         }
         WSClientMonitoring ws = appelWSMachineClient(adresse, tache.getIdMachine().getPortEcoute());
         if (ws == null) {
-            return false;//ne doit normalement pas arrivé car la fonction "testConnectionMachine" es passé
+            return false;//ne doit normalement pas arrivé car la fonction "testConnectionMachine" est passé
         }
         //tache.setStatut(START);
 //        if (!ws.demarerMetAJourOUStopperTache(tacheServeurToTacheClient(tache))) {
@@ -1355,7 +1356,7 @@ public class Bean {
 
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, msgAlerte);
             if (envoiMailPB) {
-                envoieDeMail(getAllLlisteEmail(), msgAlerte, "Échec lors de l'envoie");//on envoi une alerte mail pour dire que l'envoi de SMS n'es pas possible
+                envoieDeMail(getAllLlisteEmail(), msgAlerte, "Échec lors de l'envoie");//on envoi une alerte mail pour dire que l'envoi de SMS n'est pas possible
             }
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
@@ -1439,9 +1440,9 @@ public class Bean {
         do {
             // System.out.println(i + ": ping à l'adresse " + adres);
             char param;
-            if (OS_MACHINE.equals(OSWINDOWS)) {//on es sur une machine windows
+            if (OS_MACHINE.equals(OSWINDOWS)) {//on est sur une machine windows
                 param = 'n';
-            } else {//on es sur une machine linux
+            } else {//on est sur une machine linux
                 param = 'c';
             }
             String commande = "ping -" + param + " 1 " + adres;
@@ -1481,7 +1482,7 @@ public class Bean {
             }
             input.close();
 
-            //Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la commande <<" + commande + ">> c'es bien exécuté");
+            //Logger.getLogger(Bean.class.getName()).log(Level.INFO, "la commande <<" + commande + ">> c'est bien exécuté");
             return processes;
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "impossible d'exécuter la command <<" + commande + ">>\n", e);
@@ -1500,8 +1501,8 @@ public class Bean {
         List<Machine> listeMachine = getAllMachine();
         em.clear();//permet de déconnecter l'entity manager de la BD ainsi les modification apporté au entity ne seront plus enregistré en BD
         for (Machine machine : listeMachine) {
-            if (!machine.getStatut().equals(STOP)) {//on met à jour le statut si le statut n'es pas STOP
-                //if (machine.getStatut().equals(START)) {//on met à jour le statut si le statut es à START
+            if (!machine.getStatut().equals(STOP)) {//on met à jour le statut si le statut n'est pas STOP
+                //if (machine.getStatut().equals(START)) {//on met à jour le statut si le statut est à START
                 machine.setStatut(testConnectionMachine(machine));
             }
         }
@@ -1511,8 +1512,8 @@ public class Bean {
     public Machine getMachineAvecBonStatut(String adresse) {
         Machine machine = getMachineByIP(adresse);
         em.clear();
-        if (!machine.getStatut().equals(STOP)) {//on met à jour le statut si le statut n'es pas STOP
-            //if (machine.getStatut().equals(START)) {//on met à jour le statut si le statut es à START
+        if (!machine.getStatut().equals(STOP)) {//on met à jour le statut si le statut n'est pas STOP
+            //if (machine.getStatut().equals(START)) {//on met à jour le statut si le statut est à START
             machine.setStatut(testConnectionMachine(machine));
         }
         return machine;
@@ -1671,6 +1672,7 @@ public class Bean {
                 + "	<TR>"
                 + "		<TD>ID</TD> <TD>" + tache.getIdTache() + "</TD> "
                 + "	</TR>"
-                + "</TABLE>";
+                + "</TABLE>"
+                + "<a href=\"http://"+AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+tache.getIdMachine().getAdresseIP()+"\">Interface de monitoring de la "+tache.getIdMachine().getAdresseIP()+"</a>";
     }
 }

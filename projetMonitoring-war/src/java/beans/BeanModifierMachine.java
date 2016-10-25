@@ -51,7 +51,7 @@ public class BeanModifierMachine implements Serializable {
     public String enregistreMachine() {
 
         if (machine == null) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Gros Problème", "le beans es null: cause inconue");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Gros Problème", "le beans est null: cause inconue");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }

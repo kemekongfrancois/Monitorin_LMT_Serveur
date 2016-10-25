@@ -49,7 +49,7 @@ public class BeanModifierTache implements Serializable{
     public String enregistreTache() {
 
         if (tache == null) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,"Gros Problème", "le beans es null: cause inconue");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,"Gros Problème", "le beans est null: cause inconue");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }

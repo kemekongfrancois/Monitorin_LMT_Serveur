@@ -28,7 +28,7 @@ public class Until {
 
     /**
      * cette fonction prend en entre un fichier et retourne son contenu dans une liste
-     * chaque élèment de la liste es une ligne du fichier
+     * chaque élèment de la liste est une ligne du fichier
      *
      * @param nomFichier
      * @return "null" si le fichier n'existe pas

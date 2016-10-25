@@ -40,7 +40,7 @@ public class BeanInitialisation {
 
     /**
      * verrifie la disponibilité des agents et met à jour le statu dans le cas
-     * où la machine es de nouveau accessible
+     * où la machine est de nouveau accessible
      *
      */
     @Schedule(minute = "*/5", hour = "*")//cette tache vas s'exécuté toute les 5 minute
@@ -51,10 +51,11 @@ public class BeanInitialisation {
         List<Machine> listMAchineAvecStatut = bean.getAllMachineAvecBonStatut();
         for (Machine machine : listMAchineAvecStatut) {
             Machine machineBD = bean.getMachineByIP(machine.getAdresseIP());//on recupére la machine réel en BD avec le statut
-            if (machineBD.getStatut().equals(Bean.ALERTE)) {//on verrifie si on avait déja envoyer cette alerte
-                if (machine.getStatut().equals(Bean.START)) {//la machine es de nouveau accessible
+            if (machineBD.getStatut().equals(Bean.ALERTE)) {//on verrifie si on avait déjà envoyer cette alerte
+                if (machine.getStatut().equals(Bean.START)) {//la machine est de nouveau accessible
                     sujet = "La machine : <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
-                    msg = sujet + " (" + new Date() + ")";
+                    msg = sujet + " (" + new Date() + ")"
+                            + "<br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
                     Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
                     if (bean.envoiMessageAlerte(sujet, msg, msg, machine.getNiveauDAlerte())) {//on envoie le msg 
                         machine.setStatut(Bean.START);
@@ -62,15 +63,16 @@ public class BeanInitialisation {
                     }
 
                     //continue;
-                } else {//alerte déja envoyer
-                    Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le message d'alerte à déja été envoyé pour la machine: <<" + machine.getAdresseIP() + ">>");
+                } else {//alerte déjà envoyer
+                    Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le message d'alerte à déjà été envoyé pour la machine: <<" + machine.getAdresseIP() + ">>");
                 }
             } else if (machine.getStatut().equals(Bean.START) || machine.getStatut().equals(Bean.STOP)) {
-                Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le statut de: <<" + machine.getAdresseIP() + ">> es OK. STATUT= " + machine.getStatut());
-            } else {//le statut es imppossible de joindre l'agent ou machine inaccessible
+                Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, "le statut de: <<" + machine.getAdresseIP() + ">> est OK. STATUT= " + machine.getStatut());
+            } else {//le statut est imppossible de joindre l'agent ou machine inaccessible
                 //l'alerte n'avait pas encore été envoyer on le fait donc
                 sujet = "Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + machine.getStatut();
-                msg = "le statut de: <<" + machine.getAdresseIP() + ">> n'est pas bon!!!. STATUT= " + machine.getStatut() + " (" + new Date() + ")";
+                msg = "le statut de: <<" + machine.getAdresseIP() + ">> n'est pas bon!!!. STATUT= " + machine.getStatut() + " (" + new Date() + ")"
+                            + "<br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.SEVERE, msg);
                 if (bean.envoiMessageAlerte(sujet, msg, msg, machine.getNiveauDAlerte())) {//on envoie le msg d'alerte et on met le statut à alerte
                     machine.setStatut(Bean.ALERTE);
@@ -100,7 +102,7 @@ public class BeanInitialisation {
         if (connectioOK) {//la connection passe
             SMS_ENVOYER = false;//on met à jour la variable pour dire que la connection passe
         } else {//la connection ne passe pas
-            if (SMS_ENVOYER) {//on a déja envoyer le sms d'alerte
+            if (SMS_ENVOYER) {//on a déjà envoyer le sms d'alerte
                 Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "La connexion internet ne passe pas : le sms d’alerte a déjà été envoyer ");
             } else//on n'a pas encore envoyer le msg d'alerte
             {
@@ -116,7 +118,7 @@ public class BeanInitialisation {
     }
     /**
      * renvoie les alertes des machine et met à jour le statu dans le cas où la
-     * machine es de nouveau accessible
+     * machine est de nouveau accessible
      */
     @Schedule(hour = "7,12,16,21", dayOfWeek = "Mon-Sat")//cette tache vas s'exécuté de lundi à samedi à 7,12,16 et 21 heure
     //@Schedule(second = "30", minute = "*", hour = "*")
@@ -128,13 +130,15 @@ public class BeanInitialisation {
                     statut = bean.testConnectionMachine(machine);
             if (statut.equals(Bean.START)) {//si le statut de la machine à changé
                 sujet = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
-                msg = sujet + " (" + new Date() + ")";
+                msg = sujet + " (" + new Date() + ")"
+                            + " <br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
                 machine.setStatut(Bean.START);
                 bean.updateMachie(machine);
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
-            } else {//la machine es toujour inaccessible, on revoie le message d'alerte
+            } else {//la machine est toujour inaccessible, on revoie le message d'alerte
                 sujet = "Rappel Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + statut;
-                msg = "La machine: <<" + machine.getAdresseIP() + ">> n'est toujours pas accessible: STATUT= " + statut + " (" + new Date() + ")";
+                msg = "La machine: <<" + machine.getAdresseIP() + ">> n'est toujours pas accessible: STATUT= " + statut + " (" + new Date() + ")"
+                            + " <br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.WARNING, msg);
             }
             bean.envoiMessageAlerte(sujet, msg, sujet, machine.getNiveauDAlerte());
@@ -308,7 +312,7 @@ public class BeanInitialisation {
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 " + (i += 2) + " * * * ?", descriptionPeriodeProcessus, "BulkSimpleSMS_Sonel_2015_V5.exe", attenteEtRepetitionProcessus, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
         resultat += "\ncreation de la tache processus :-> " + bean.creerTacheSurveilleProcessus(adresse, "0 " + (i += 2) + " * * * ?", descriptionPeriodeProcessus, "Advans_BulkMessaging_SansTraitementdoublons.exe", attenteEtRepetitionProcessus, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
         resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 " + (i += 2) + " 12 ? * TUE-SAT", descriptionPeriodeLastDate, "D:/vas/web/bulk/upload/sgbcmbanking/sgbcfile", seuilDateModif, Bean.START, alerteMail, alerteSMS, "SGBC", niveauAlerte);
-        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 " + (i += 2) + " 12 * * ?", descriptionPeriodeUptime, "D:/vas/web/bulk/upload/Tout/BGFI", seuilDateModif, Bean.START, alerteMail, alerteSMS, "BGFI", niveauAlerte);
+        resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 " + (i += 2) + " 12 ? * MON-SAT", "De Lun-Sam : Une fois par jour", "D:/vas/web/bulk/upload/Tout/BGFI", seuilDateModif, Bean.START, alerteMail, alerteSMS, "BGFI", niveauAlerte);
         resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 " + (i += 2) + " 12 ? * TUE-SAT", descriptionPeriodeLastDate, "D:/vas/bicec/mBanking-Alerte/info", seuilDateModif, Bean.START, alerteMail, alerteSMS, "BICEC", niveauAlerte);
         resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 " + (i += 2) + " 12 ? * TUE-SAT", descriptionPeriodeLastDate, "D:/vas/bicec/mBanking-Balance/info", seuilDateModif, Bean.START, alerteMail, alerteSMS, "BICEC", niveauAlerte);
         resultat += "\ncreation de la tache verrifie date modification dernier fichier :-> " + bean.creerTacheDateModificationDernierFichier(adresse, "0 " + (i += 2) + " 12 ? * TUE-SAT", descriptionPeriodeLastDate, "D:/vas/bicec/mBanking-History/info", seuilDateModif, Bean.START, alerteMail, alerteSMS, "BICEC", niveauAlerte);

@@ -72,7 +72,7 @@ public class BeansMachine implements Serializable {
         String resultat = beanLocal.redemarerTachePrincipaleEtSousTache(machineLocal);
         if (resultat.equals(Bean.OK)) {
             //machine.setStatut(statut);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la machine <" + machineLocal.getAdresseIP() + "> es :" + machineLocal.getStatut(), " Les modification ont été enregistrer");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la machine <" + machineLocal.getAdresseIP() + "> est :" + machineLocal.getStatut(), " Les modification ont été enregistrer");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return;
         }

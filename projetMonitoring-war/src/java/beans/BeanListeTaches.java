@@ -67,7 +67,7 @@ public class BeanListeTaches implements Serializable {
 
         boolean resultat = beanLocal.startRefreshStopTacheSurMachinePhy(tache.getIdTache());
         if (resultat) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la tache <" + tache.getIdTache() + "> es :" + tache.getStatut(), " Les modification ont été enregistrer");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Le statut de la tache <" + tache.getIdTache() + "> est :" + tache.getStatut(), " Les modification ont été enregistrer");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return;
         }
@@ -88,7 +88,7 @@ public class BeanListeTaches implements Serializable {
     }
 
     /**
-     * cette fonction sera réutilisable dans d'autre beans vue quelle es static.
+     * cette fonction sera réutilisable dans d'autre beans vue quelle est static.
      * elle permettra de tester les fonctions
      *
      * @param beanLocal
