@@ -36,7 +36,6 @@ public class BeanInitialisation {
     public static List<String> listTypeStatut;
 
     public static boolean SMS_ENVOYER = false;
-    
 
     /**
      * verrifie la disponibilité des agents et met à jour le statu dans le cas
@@ -55,7 +54,7 @@ public class BeanInitialisation {
                 if (machine.getStatut().equals(Bean.START)) {//la machine est de nouveau accessible
                     sujet = "La machine : <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
                     msg = sujet + " (" + new Date() + ")"
-                            + "<br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
+                            + "<br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                     Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
                     if (bean.envoiMessageAlerte(sujet, msg, msg, machine.getNiveauDAlerte())) {//on envoie le msg 
                         machine.setStatut(Bean.START);
@@ -72,7 +71,7 @@ public class BeanInitialisation {
                 //l'alerte n'avait pas encore été envoyer on le fait donc
                 sujet = "Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + machine.getStatut();
                 msg = "le statut de: <<" + machine.getAdresseIP() + ">> n'est pas bon!!!. STATUT= " + machine.getStatut() + " (" + new Date() + ")"
-                            + "<br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
+                        + "<br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.SEVERE, msg);
                 if (bean.envoiMessageAlerte(sujet, msg, msg, machine.getNiveauDAlerte())) {//on envoie le msg d'alerte et on met le statut à alerte
                     machine.setStatut(Bean.ALERTE);
@@ -85,37 +84,44 @@ public class BeanInitialisation {
     }
 
     @Schedule(minute = "*/14", hour = "*")
-    public void verrifieConnection() throws InterruptedException{
+    public void verrifieConnection() throws InterruptedException {
         //getAllListNumero();
         //getAllLlisteEmail();
         //on verrifie que la connection internet passe
         System.out.println("verrifie la connection internet");
         boolean connectioOK = false;
         int i = 0;
-        do{
+        do {
             connectioOK = bean.pinger("8.8.8.8", 5);
-            Thread.sleep(10*1000);
+            Thread.sleep(10 * 1000);
             i++;
-            
-        }while(i<4 && !connectioOK);
-        
+
+        } while (i < 4 && !connectioOK);
+
         if (connectioOK) {//la connection passe
-            SMS_ENVOYER = false;//on met à jour la variable pour dire que la connection passe
-        } else {//la connection ne passe pas
-            if (SMS_ENVOYER) {//on a déjà envoyer le sms d'alerte
-                Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "La connexion internet ne passe pas : le sms d’alerte a déjà été envoyer ");
-            } else//on n'a pas encore envoyer le msg d'alerte
-            {
-                if (bean.envoieSMS("La connexion internet ne passe pas (" + new Date() + ")", bean.getAllListNumero(), false)) {//le sms d'alerte à été envoyer
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas : le sms d’alerte vient d’être envoyé");
-                    SMS_ENVOYER = true;
+            if (SMS_ENVOYER) {//la connexion internet ne passait pas précédament
+                SMS_ENVOYER = false;//on met à jour la variable pour dire que la connection passe
+                if (bean.envoieSMS("La connexion internet est rétablie (" + new Date() + ")", bean.getAllListNumero(), true)) {//le sms a été envoyer
+                    Logger.getLogger(Bean.class.getName()).log(Level.INFO, "La connexion internet est rétablie ");
                 } else {//le sms d'alerte n'a pas pus être envoyer
-                    Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas : le sms d’alerte n’a pas pu être envoyer ");
+                    Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "La connexion internet est rétablie : le sms d’alerte n’a pas pu être envoyer ");
                 }
+            } else {
+                System.out.println("La connexion internet est UP ");
+            }
+        } else//la connection ne passe pas
+        if (SMS_ENVOYER) {//on a déjà envoyer le sms d'alerte
+            Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "La connexion internet ne passe pas : le sms d’alerte a déjà été envoyer ");
+        } else {//on n'a pas encore envoyer le msg d'alerte
+            SMS_ENVOYER = true;
+            if (bean.envoieSMS("La connexion internet ne passe pas (" + new Date() + ")", bean.getAllListNumero(), false)) {//le sms d'alerte à été envoyer
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas");
+            } else {//le sms d'alerte n'a pas pus être envoyer
+                Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, "La connexion internet ne passe pas : le sms d’alerte n’a pas pu être envoyé ");
             }
         }
-
     }
+
     /**
      * renvoie les alertes des machine et met à jour le statu dans le cas où la
      * machine est de nouveau accessible
@@ -131,14 +137,14 @@ public class BeanInitialisation {
             if (statut.equals(Bean.START)) {//si le statut de la machine à changé
                 sujet = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
                 msg = sujet + " (" + new Date() + ")"
-                            + " <br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
+                        + " <br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                 machine.setStatut(Bean.START);
                 bean.updateMachie(machine);
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
             } else {//la machine est toujour inaccessible, on revoie le message d'alerte
                 sujet = "Rappel Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + statut;
                 msg = "La machine: <<" + machine.getAdresseIP() + ">> n'est toujours pas accessible: STATUT= " + statut + " (" + new Date() + ")"
-                            + " <br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+machine.getAdresseIP()+"\">Interface de monitoring</a>";
+                        + " <br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.WARNING, msg);
             }
             bean.envoiMessageAlerte(sujet, msg, sujet, machine.getNiveauDAlerte());
@@ -208,7 +214,7 @@ public class BeanInitialisation {
 
         String resultat = "";
 
-        resultat += "\ninitialisation du serveur :-> " + bean.creerOuModifierServeur("monitoringlmtgroupe@gmail.com", "kefmonitoring", "testali", "OnAEyotL", "Alert LMT", false, true);
+        resultat += "\ninitialisation du serveur :-> " + bean.creerOuModifierServeur("monitoringlmtgroupe@gmail.com", "kefmonitoring", "monitoring", "m0nit@r!ng", "Alert LMT", false, true);
         //resultat += "\ncreation de la machine qui sera situe sur le serveur :-> " + creerMachine(ADRESSE_MACHINE_SERVEUR, portEcoute, DEFAUL_PERIODE_CHECK_MACHINE, OSWINDOWS, "machine Serveur");
 
         resultat += "\ncreation du 1er utilisateur :-> " + bean.creerUtilisateur("kef", "0000", "kemekong", "francois", Bean.TYPE_COMPTE_SUPADMIN, "237699667694", "kemekongfrancois@gmail.com", 1);
