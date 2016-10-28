@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
 import javax.ejb.Startup;
+import javax.ejb.Timeout;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 /**
  *
@@ -83,29 +87,34 @@ public class BeanInitialisation {
         }
     }
 
-    @Schedule(minute = "*/14", hour = "*")
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @Timeout //cette anotation donne la possibilité à la méthode de s'éxécuter pendant longtemps. sans elle si la methode traine trop le bean va générer un timeOut exception ce qui vas supprimer le bean et donc empécher que la méthode soit exécuter
+    @Schedule(minute = "*/13", hour = "*")
     public void verrifieConnection() throws InterruptedException {
         //getAllListNumero();
         //getAllLlisteEmail();
         //on verrifie que la connection internet passe
         System.out.println("verrifie la connection internet");
+        String adresse = "8.8.8.8";
         boolean connectioOK = false;
         int i = 0;
         do {
-            connectioOK = bean.pinger("8.8.8.8", 5);
+            connectioOK = bean.pinger(adresse, 5);
             Thread.sleep(10 * 1000);
             i++;
-
+            System.out.println(i + "- tentative ping à l'adresse "+adresse);
         } while (i < 4 && !connectioOK);
 
         if (connectioOK) {//la connection passe
             if (SMS_ENVOYER) {//la connexion internet ne passait pas précédament
                 SMS_ENVOYER = false;//on met à jour la variable pour dire que la connection passe
-                if (bean.envoieSMS("La connexion internet est rétablie (" + new Date() + ")", bean.getAllListNumero(), true)) {//le sms a été envoyer
+                String msg = "La connexion internet est rétablie (" + new Date() + ")";
+                if (bean.envoieSMS(msg, bean.getAllListNumero(), true)) {//le sms a été envoyer
                     Logger.getLogger(Bean.class.getName()).log(Level.INFO, "La connexion internet est rétablie ");
                 } else {//le sms d'alerte n'a pas pus être envoyer
                     Logger.getLogger(Bean.class.getName()).log(Level.WARNING, "La connexion internet est rétablie : le sms d’alerte n’a pas pu être envoyer ");
                 }
+                bean.envoieDeMail(bean.getAllEmail(), msg, msg);
             } else {
                 System.out.println("La connexion internet est UP ");
             }

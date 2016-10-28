@@ -376,7 +376,7 @@ public class Bean {
      *
      * @return
      */
-    private List<String> getAllLlisteEmail() {
+    public List<String> getAllEmail() {
         List<String> listEmail = new ArrayList<>();
         Query query = em.createQuery("SELECT u.boiteMail FROM Utilisateur u", Utilisateur.class);
         listEmail = query.getResultList();
@@ -459,6 +459,7 @@ public class Bean {
             }*/
         return listeNumero;
     }
+    
 
     /**
      * retourne la liste de tous les numéro de téléphone
@@ -1268,7 +1269,7 @@ public class Bean {
      * @param message
      * @param sujet
      */
-    private boolean envoieDeMail(List<String> listAdresseDestinataires, String message, String sujet) {
+    public boolean envoieDeMail(List<String> listAdresseDestinataires, String message, String sujet) {
         
         try {
             Serveur serveur = getServeurOuInitialiseBD();
@@ -1356,7 +1357,7 @@ public class Bean {
 
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, msgAlerte);
             if (envoiMailPB) {
-                envoieDeMail(getAllLlisteEmail(), msgAlerte, "Échec lors de l'envoie");//on envoi une alerte mail pour dire que l'envoi de SMS n'est pas possible
+                envoieDeMail(getAllEmail(), msgAlerte, "Échec lors de l'envoie");//on envoi une alerte mail pour dire que l'envoi de SMS n'est pas possible
             }
         } catch (Exception e) {
             Logger.getLogger(Bean.class.getName()).log(Level.SEVERE, null, e);
@@ -1456,7 +1457,7 @@ public class Bean {
                 }
             }
             i++;
-            System.out.println(i + "- tentative ping à l'adresse " + adres);
+            //System.out.println(i + "- tentative ping à l'adresse " + adres);
         } while (i < nbTentative );
         //System.out.println("le nombre es: " + valeurDeRetour);
         return false;
