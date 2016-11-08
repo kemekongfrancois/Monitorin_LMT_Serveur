@@ -1674,6 +1674,7 @@ public class Bean {
                 + "		<TD>ID</TD> <TD>" + tache.getIdTache() + "</TD> "
                 + "	</TR>"
                 + "</TABLE>"
-                + "<a href=\"http://"+AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+tache.getIdMachine().getAdresseIP()+"\">Interface de monitoring de la "+tache.getIdMachine().getAdresseIP()+"</a>";
+                + "<a href=\"http://"+AdresseDuServerEtPort+"/projetMonitoring-war/\">Interface de monitoring</a>";
+                //+ "<a href=\"http://"+AdresseDuServerEtPort+"/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine="+tache.getIdMachine().getAdresseIP()+"\">Interface de monitoring de la "+tache.getIdMachine().getAdresseIP()+"</a>";
     }
 }

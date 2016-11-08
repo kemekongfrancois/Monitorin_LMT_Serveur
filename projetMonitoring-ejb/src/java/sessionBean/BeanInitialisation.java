@@ -57,8 +57,8 @@ public class BeanInitialisation {
             if (machineBD.getStatut().equals(Bean.ALERTE)) {//on verrifie si on avait déjà envoyer cette alerte
                 if (machine.getStatut().equals(Bean.START)) {//la machine est de nouveau accessible
                     sujet = "La machine : <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
-                    msg = sujet + " (" + new Date() + ")"
-                            + "<br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
+                    msg = sujet + " (" + new Date() + ")" + lienInterfaceMonitoring();
+                            //+ "<br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                     Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
                     if (bean.envoiMessageAlerte(sujet, msg, msg, machine.getNiveauDAlerte())) {//on envoie le msg 
                         machine.setStatut(Bean.START);
@@ -74,8 +74,8 @@ public class BeanInitialisation {
             } else {//le statut est imppossible de joindre l'agent ou machine inaccessible
                 //l'alerte n'avait pas encore été envoyer on le fait donc
                 sujet = "Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + machine.getStatut();
-                msg = "le statut de: <<" + machine.getAdresseIP() + ">> n'est pas bon!!!. STATUT= " + machine.getStatut() + " (" + new Date() + ")"
-                        + "<br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
+                msg = "le statut de: <<" + machine.getAdresseIP() + ">> n'est pas bon!!!. STATUT= " + machine.getStatut() + " (" + new Date() + ")" + lienInterfaceMonitoring();
+                        //+ "<br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.SEVERE, msg);
                 if (bean.envoiMessageAlerte(sujet, msg, msg, machine.getNiveauDAlerte())) {//on envoie le msg d'alerte et on met le statut à alerte
                     machine.setStatut(Bean.ALERTE);
@@ -131,6 +131,9 @@ public class BeanInitialisation {
         }
     }
 
+    public String lienInterfaceMonitoring(){
+        return  "<br/> <a href=\"http://"+Bean.AdresseDuServerEtPort+"/projetMonitoring-war/\">Interface de monitoring</a>";
+    }
     /**
      * renvoie les alertes des machine et met à jour le statu dans le cas où la
      * machine est de nouveau accessible
@@ -145,15 +148,15 @@ public class BeanInitialisation {
                     statut = bean.testConnectionMachine(machine);
             if (statut.equals(Bean.START)) {//si le statut de la machine à changé
                 sujet = "La machine: <<" + machine.getAdresseIP() + ">> est de nouveau accessible ";
-                msg = sujet + " (" + new Date() + ")"
-                        + " <br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
+                msg = sujet + " (" + new Date() + ")" + lienInterfaceMonitoring();
+                        //+ " <br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                 machine.setStatut(Bean.START);
                 bean.updateMachie(machine);
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.INFO, msg);
             } else {//la machine est toujour inaccessible, on revoie le message d'alerte
                 sujet = "Rappel Alerte machine: <<" + machine.getAdresseIP() + ">> STATUT = " + statut;
-                msg = "La machine: <<" + machine.getAdresseIP() + ">> n'est toujours pas accessible: STATUT= " + statut + " (" + new Date() + ")"
-                        + " <br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
+                msg = "La machine: <<" + machine.getAdresseIP() + ">> n'est toujours pas accessible: STATUT= " + statut + " (" + new Date() + ")" + lienInterfaceMonitoring();
+                        //+ " <br/> <a href=\"http://" + Bean.AdresseDuServerEtPort + "/projetMonitoring-war/faces/listTachesMachine.xhtml?adresseMachine=" + machine.getAdresseIP() + "\">Interface de monitoring</a>";
                 Logger.getLogger(BeanInitialisation.class.getName()).log(Level.WARNING, msg);
             }
             bean.envoiMessageAlerte(sujet, msg, sujet, machine.getNiveauDAlerte());
@@ -342,7 +345,7 @@ public class BeanInitialisation {
         resultat += "\ncreation de la machine " + adresse + " :-> " + bean.creerMachine(adresse, portEcoute, Bean.DEFAUL_PERIODE_CHECK_MACHINE, Bean.DEFAUL_DESCRIPTION_PERIODE_CHECK_MACHINE, Bean.OSLinux, "SICAP", niveauAlerte);
         resultat += "\ncreation de la tache DD /home -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", descriptionPeriodeDD, "/home", SEUIL_ALERT_DD, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
         resultat += "\ncreation de la tache DD / -> " + bean.creerTacheSurveilleDD(adresse, "0 " + (i += 2) + " * * * ?", descriptionPeriodeDD, "/", SEUIL_ALERT_DD, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
-        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", descriptionPeriodeTelnet, "192.168.16.38:5016", nbTentativeTelnet, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
+        resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", descriptionPeriodeTelnet, "192.168.16.38:5016", nbTentativeTelnet, Bean.START, alerteMail, alerteSMS, "CAMTEL", niveauAlerte);
         //resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, "0 "+(i+=2)+" * * * ?", "217.113.69.8",nbTentativeTelnet , 9000, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", descriptionPeriodeTelnet, "131.166.253.49:7004", nbTentativeTelnet, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
         resultat += "\ncreation de la tache faire telnet :-> " + bean.creerTacheTelnet(adresse, (i += 2) + " */10 * * * ?", descriptionPeriodeTelnet, "10.32.251.240:3700", nbTentativeTelnet, Bean.START, alerteMail, alerteSMS, "", niveauAlerte);
