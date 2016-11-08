@@ -15,4 +15,7 @@
     <system systemId="http://192.168.200.150:8282/Managesms-war/ServiceSMS?WSDL" uri="wsdl/192.168.200.150_8282/Managesms-war/ServiceSMS.wsdl"/>
     <system systemId="http://192.168.200.150:8282/Managesms-war/ServiceSMS?xsd=1" uri="wsdl/192.168.200.150_8282/Managesms-war/ServiceSMS.xsd_1.xsd"/>
     <system systemId="http://192.168.200.150:8282/Managesms-war/ServiceSMS?xsd=2" uri="wsdl/192.168.200.150_8282/Managesms-war/ServiceSMS.xsd_2.xsd"/>
+    <system systemId="http://41.204.94.29:8282/Managesms-war/ServiceSMS?WSDL" uri="wsdl/41.204.94.29_8282/Managesms-war/ServiceSMS.wsdl"/>
+    <system systemId="http://41.204.94.29:8282/Managesms-war/ServiceSMS?xsd=1" uri="wsdl/41.204.94.29_8282/Managesms-war/ServiceSMS.xsd_1.xsd"/>
+    <system systemId="http://41.204.94.29:8282/Managesms-war/ServiceSMS?xsd=2" uri="wsdl/41.204.94.29_8282/Managesms-war/ServiceSMS.xsd_2.xsd"/>
 </catalog>

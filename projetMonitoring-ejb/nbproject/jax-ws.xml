@@ -39,8 +39,8 @@
       </wsimport-options>
     </client>
     <client name="ServiceSMS">
-      <wsdl-url>http://192.168.200.150:8282/Managesms-war/ServiceSMS?WSDL</wsdl-url>
-      <local-wsdl-file>192.168.200.150_8282/Managesms-war/ServiceSMS.wsdl</local-wsdl-file>
+      <wsdl-url>http://41.204.94.29:8282/Managesms-war/ServiceSMS?WSDL</wsdl-url>
+      <local-wsdl-file>41.204.94.29_8282/Managesms-war/ServiceSMS.wsdl</local-wsdl-file>
       <package-name forceReplace="true">ws_SMS_LMT</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
@@ -58,7 +58,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://192.168.200.150:8282/Managesms-war/ServiceSMS?WSDL</wsimport-option-value>
+          <wsimport-option-value>http://41.204.94.29:8282/Managesms-war/ServiceSMS?WSDL</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>

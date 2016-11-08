@@ -43,8 +43,8 @@
     </target>
     <target name="wsimport-client-ServiceSMS" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
-        <property name="wsdl-ServiceSMS" location="${meta.inf}/xml-resources/web-service-references/ServiceSMS/wsdl/192.168.200.150_8282/Managesms-war/ServiceSMS.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ServiceSMS" destdir="${build.generated.dir}/jax-wsCache/ServiceSMS" wsdl="${wsdl-ServiceSMS}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://192.168.200.150:8282/Managesms-war/ServiceSMS?WSDL" xnocompile="true" xendorsed="true" package="ws_SMS_LMT">
+        <property name="wsdl-ServiceSMS" location="${meta.inf}/xml-resources/web-service-references/ServiceSMS/wsdl/41.204.94.29_8282/Managesms-war/ServiceSMS.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ServiceSMS" destdir="${build.generated.dir}/jax-wsCache/ServiceSMS" wsdl="${wsdl-ServiceSMS}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://41.204.94.29:8282/Managesms-war/ServiceSMS?WSDL" xnocompile="true" xendorsed="true" package="ws_SMS_LMT">
             <depends file="${wsdl-ServiceSMS}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/ServiceSMS"/>
         </wsimport>
